@@ -31,7 +31,7 @@
             background-color: var(--dark-bg);
             color: var(--text-bright);
             font-family: 'Rajdhani', sans-serif;
-            overflow: hidden; /* Evita scrolls globales para mantener diseño exacto por sección */
+            overflow: hidden; 
             min-height: 100vh;
             position: relative;
         }
@@ -79,14 +79,14 @@
             transition: opacity 0.1s ease;
         }
 
-        /* --- BARRA DE NAVEGACIÓN (Oculta al inicio) --- */
+        /* --- BARRA DE NAVEGACIÓN --- */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 1px solid var(--sw-border);
             z-index: 900;
-            display: none; /* Controlado dinámicamente por JS */
+            display: none; 
             flex-direction: column;
             align-items: center;
         }
@@ -97,13 +97,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px 20px;
+            padding: 15px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        /* Ajuste de Tamaño del Logotipo solicitado */
         .nav-logo-img {
-            height: 50px;
+            height: 90px;
+            margin: 5px 0;
             object-fit: contain;
+            filter: drop-shadow(0px 0px 8px rgba(0, 243, 255, 0.2));
         }
 
         .nav-menu {
@@ -126,7 +129,7 @@
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            padding: 12px 25px;
+            padding: 14px 25px;
             transition: all 0.2s ease;
             letter-spacing: 1px;
         }
@@ -142,15 +145,14 @@
             display: none;
             height: 100vh;
             width: 100vw;
-            padding: 120px 40px 40px 40px;
+            padding: 160px 40px 40px 40px;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
-            overflow-y: auto; /* Permite scroll interno solo si el dispositivo es muy pequeño */
+            overflow-y: auto; 
         }
 
-        /* Sección de Inicio específica ocupando toda la pantalla y centrada */
         #hero-section {
             display: flex;
             flex-direction: column;
@@ -240,7 +242,7 @@
         .product-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
         .product-price { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
 
-        /* --- PORTAL QR REFORMADO --- */
+        /* --- PORTAL QR REFORMADO (ESTADOS DE FLUJO CORREGIDOS) --- */
         .qr-container {
             max-width: 600px;
             margin: 0 auto;
@@ -262,7 +264,6 @@
             align-items: center;
         }
 
-        /* Contenedor interno donde se renderiza el video de la cámara */
         #camera-reader {
             width: 100% !important;
             border: none !important;
@@ -280,6 +281,23 @@
             display: none;
         }
 
+        .scan-idle-placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255,255,255,0.15);
+            font-size: 3.5rem;
+            gap: 15px;
+        }
+        .scan-idle-placeholder p {
+            font-size: 1rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
         .scan-message {
             position: absolute;
             background: rgba(0,0,0,0.95);
@@ -293,7 +311,7 @@
         }
         .scan-message.show { transform: translateY(0); }
 
-        /* --- SISTEMA DE 7 CÓMICS EXCLUSIVOS --- */
+        /* --- SISTEMA DE CÓMICS --- */
         .comics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -320,16 +338,26 @@
 
         .comic-tag { font-size: 0.75rem; color: var(--neon-cyan); font-weight: 700; margin-bottom: 5px; }
         .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
+        .lock-icon { font-size: 2rem; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+
+        /* --- NEXO Y MAPA DE LA GALAXIA LEJANA --- */
+        .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
         
-        .lock-icon {
-            font-size: 2rem;
-            color: rgba(255,255,255,0.3);
-            margin-bottom: 10px;
+        .map-hud-box { 
+            background: #050708; 
+            border: 1px solid var(--sw-border); 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column;
+        }
+        
+        .map-frame {
+            width: 100%;
+            height: 280px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            filter: grayscale(1) invert(0.9) sepia(0.2) hue-rotate(140deg); /* Efecto holograma cian estilo Star Wars */
         }
 
-        /* --- SECCIÓN CONTACTO --- */
-        .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .map-container { background: #111; border: 1px solid var(--sw-border); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; }
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
@@ -352,7 +380,8 @@
             .hero-title { font-size: 2.8rem; }
             .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); }
             .nav-item { border: 1px solid var(--sw-border) !important; }
-            .app-section { padding-top: 160px; }
+            .app-section { padding-top: 220px; }
+            .contact-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -408,13 +437,19 @@
     <section id="phygital-section" class="app-section">
         <h2 class="section-title">Escaner Holocrón</h2>
         <div class="qr-container">
-            <p style="color: var(--text-muted); margin-bottom: 10px;">Permite el acceso a la cámara para escanear el QR de tu empaque físico.</p>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">Alinea el código del empaque físico frente al capturador óptico.</p>
             <div class="scanner-viewport">
                 <div class="scanner-laser" id="laser-line"></div>
+                
+                <div class="scan-idle-placeholder" id="idle-placeholder">
+                    <i class="fa-solid fa-expand"></i>
+                    <p>Sensor fuera de línea</p>
+                </div>
+
                 <div id="camera-reader"></div>
                 
                 <div class="scan-message" id="scan-result">
-                    <i class="fa-solid fa-square-rss" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px; animation: pulse 1s infinite;"></i>
+                    <i class="fa-solid fa-square-rss" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
                     <h3 class="product-name" style="color: var(--neon-cyan);">¡TRANSMISIÓN DESBLOQUEADA!</h3>
                     <p style="font-size: 0.95rem; color: #ffffff;" id="unlock-notification">Un nuevo archivo de cómic se ha añadido a tu base de datos.</p>
                     <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="resetScannerContainer()">Confirmar Enlace</button>
@@ -433,10 +468,10 @@
     <section id="contact-section" class="app-section">
         <h2 class="section-title">Nexo de Comunicación</h2>
         <div class="contact-layout">
-            <div class="map-container">
-                <i class="fa-solid fa-map-location-dot" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-                <h3 class="product-name">Coordenadas</h3>
-                <p style="color: var(--text-muted);">Sector Urbano:<br><strong>San Luis Potosí, México</strong></p>
+            <div class="map-hud-box">
+                <h3 class="product-name" style="color: var(--neon-cyan); margin-bottom: 4px;"><i class="fa-solid fa-shuttle-space"></i> Puesto de Avanzada: Borde Exterior</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Transmisión originada desde el sistema Politécnica, coordenadas C. Urbano Villalón 500, La Ladrillera, San Luis Potosí.</p>
+                <iframe class="map-frame" src="https://maps.google.com/maps?q=Universidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD,%20Urbano%20Villal%C3%B3n%20500&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="console-form">
                 <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
@@ -513,16 +548,16 @@
         initStars(); animateStars();
 
         /* ==========================================
-           ARQUITECTURA DE DATOS: SISTEMA DE 7 CÓMICS
+           SISTEMA DE 7 CÓMICS EXCLUSIVOS
            ========================================== */
         const baseDeComics = [
-            { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen secreto de la receta estabilizada en los laboratorios del sector San Luis Potosí.", unlocked: true },
-            { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Las tropas de asalto rompen protocolos tras el aroma de las raciones chewy.", unlocked: false },
-            { id: 3, title: "Vol 3: El Juicio del Lord", desc: "La sombra del imperio confronta al comandante por la deserción masiva.", unlocked: false },
-            { id: 4, title: "Vol 4: Hiperespacio Mental", desc: "El impacto cerebral de sabor que cambió el destino de la orden comercial.", unlocked: false },
-            { id: 5, title: "Vol 5: Alianza Clandestina", desc: "Líneas de distribución secretas operando bajo el amparo de la fuerza.", unlocked: false },
-            { id: 6, title: "Vol 6: La Costra Galáctica", desc: "Análisis técnico de la densidad molecular y recubrimientos térmicos perfectos.", unlocked: false },
-            { id: 7, title: "Vol 7: Imperio del Sabor", desc: "El dominio absoluto de The Dark Side Brownies en todos los cuadrantes conocidos.", unlocked: false }
+            { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen secreto de la receta de alta ingeniería gastronómica en el sector San Luis Potosí.", unlocked: true },
+            { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Las tropas imperiales rompen filas de forma masiva tras percibir el aroma del empaque.", unlocked: false },
+            { id: 3, title: "Vol 3: El Juicio del Lord", desc: "La imponente silueta oscura confronta al comandante por alterar el orden de la base.", unlocked: false },
+            { id: 4, title: "Vol 4: Hiperespacio Mental", desc: "La explosión sensorial y salto de luz que obligó a duplicar la producción del sector.", unlocked: false },
+            { id: 5, title: "Vol 5: Alianza Clandestina", desc: "Rutas de suministro secretas establecidas para distribuir los brownies a nivel masivo.", unlocked: false },
+            { id: 6, title: "Vol 6: La Costra Galáctica", desc: "Análisis pormenorizado de la densidad molecular de la costra crujiente perfecta.", unlocked: false },
+            { id: 7, title: "Vol 7: Imperio del Sabor", desc: "El dominio irreversible del sabor amargo y chewy en todos los confines conocidos.", unlocked: false }
         ];
 
         function renderComics() {
@@ -545,7 +580,7 @@
                         <div class="comic-placeholder">
                             <i class="fa-solid fa-lock lock-icon"></i>
                             <h3 class="comic-title" style="color: var(--text-muted);">Bloqueado</h3>
-                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requiere Escaneo QR</span>
+                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requierre Escaneo QR</span>
                         </div>
                     `;
                 }
@@ -554,25 +589,22 @@
         }
 
         /* ==========================================
-           GESTOR DE NAVEGACIÓN Y CAPAS ESTRICTAS
+           GESTOR DE NAVEGACIÓN Y SECUENCIAS
            ========================================== */
         const globalNav = document.getElementById('global-nav');
         const heroSection = document.getElementById('hero-section');
         const sections = document.querySelectorAll('.app-section');
         const flashOverlay = document.getElementById('flash-overlay');
 
-        // Botón Inicial de Acceso (De Imagen 1 a Imagen 2)
         document.getElementById('btn-enter').addEventListener('click', () => {
             executeJumpSequence(() => {
                 heroSection.style.display = 'none';
                 globalNav.style.display = 'flex';
-                const firstSection = document.getElementById('catalog-section');
-                firstSection.style.display = 'block';
+                document.getElementById('catalog-section').style.display = 'block';
                 document.querySelector('[data-target="catalog-section"]').classList.add('active-tab');
             });
         });
 
-        // Navegación entre pestañas independientes (Pestañas limpias estilo Imagen 3)
         const tabButtons = document.querySelectorAll('.nav-menu button');
         tabButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -591,7 +623,7 @@
 
         function executeJumpSequence(uiCallback) {
             isJumping = true;
-            canvas.style.zIndex = "9995"; // Canvas al frente absoluto
+            canvas.style.zIndex = "9995"; 
             targetSpeed = 75;
 
             setTimeout(() => { flashOverlay.style.opacity = '1'; }, 900);
@@ -604,35 +636,35 @@
             setTimeout(() => {
                 flashOverlay.style.opacity = '0';
                 targetSpeed = 0.6;
-                canvas.style.zIndex = "-1"; // Canvas regresa al fondo para liberar interacción
+                canvas.style.zIndex = "-1"; 
                 isJumping = false;
             }, 1300);
         }
 
         /* ==========================================
-           SISTEMA DE ESCANEO QR POR CÁMARA NATIVA
+           FLUJO DE ESCANEO QR REESTRUCTURADO
            ========================================== */
         let html5QrScanner = null;
 
         function initQrCamera() {
+            // Ocultar placeholder de inactividad y botón
+            document.getElementById('idle-placeholder').style.display = 'none';
             document.getElementById('btn-start-camera').style.display = 'none';
             document.getElementById('laser-line').style.display = 'block';
 
             html5QrScanner = new Html5Qrcode("camera-reader");
             
             const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-                // Detener escaneo tras lectura exitosa
                 html5QrScanner.stop().then(() => {
                     triggerUnlockAnimation();
-                }).catch(err => console.error("Error al pausar visor óptico.", err));
+                }).catch(err => console.error("Error al pausar lector óptico.", err));
             };
 
             const config = { fps: 15, qrbox: { width: 180, height: 180 } };
             
-            // Activa cámara trasera por defecto
             html5QrScanner.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
             .catch(err => {
-                alert("Error de acceso al hardware óptico. Permisos denegados.");
+                alert("Error de acceso al hardware de cámara.");
                 resetScannerContainer();
             });
         }
@@ -640,7 +672,6 @@
         function triggerUnlockAnimation() {
             document.getElementById('laser-line').style.display = 'none';
             
-            // Buscar siguiente cómic bloqueado para activar en sesión
             const nextLockedComic = baseDeComics.find(c => !c.unlocked);
             if(nextLockedComic) {
                 nextLockedComic.unlocked = true;
@@ -649,7 +680,6 @@
                 document.getElementById('unlock-notification').innerText = "Todos los registros de holocrones en tu poder ya se encuentran completamente descifrados.";
             }
 
-            // Animación HUD de éxito
             setTimeout(() => {
                 document.getElementById('scan-result').classList.add('show');
                 renderComics();
@@ -659,10 +689,11 @@
         function resetScannerContainer() {
             document.getElementById('scan-result').classList.remove('show');
             document.getElementById('btn-start-camera').style.display = 'inline-block';
+            document.getElementById('idle-placeholder').style.display = 'flex';
             document.getElementById('camera-reader').innerHTML = "";
         }
 
-        // Modales e Inicialización
+        // Modales
         function openComic(title, bodyText) {
             document.getElementById('modal-title').innerText = title.toUpperCase();
             document.getElementById('modal-body').innerText = bodyText;
@@ -670,7 +701,7 @@
         }
         function closeComic() { document.getElementById('comic-modal').style.display = 'none'; }
 
-        // Inicializar los cómics por defecto al cargar
+        // Inicialización
         renderComics();
     </script>
 </body>
