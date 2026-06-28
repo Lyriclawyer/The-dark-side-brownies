@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
-        /* --- CONFIGURACIÓN DE ESTILOS E INTERFAZ INSPIRADA EN STARWARS.COM --- */
         :root {
             --neon-cyan: #00f3ff;
             --dark-bg: #000000;
@@ -31,30 +31,27 @@
             background-color: var(--dark-bg);
             color: var(--text-bright);
             font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden; /* Evita scrolls globales para mantener diseño exacto por sección */
             min-height: 100vh;
             position: relative;
         }
 
-        /* Efecto de líneas HUD muy sutiles de fondo */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.02) 50%);
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.01) 50%);
             z-index: 99;
             background-size: 100% 4px;
             pointer-events: none;
         }
 
-        /* --- TIPOGRAFÍA ESTILO STAR WARS CON RELLENO DE ESTRELLAS --- */
         .sw-font {
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -1px;
-            /* Máscara de fondo animada para simular el relleno galáctico de la imagen */
             background-image: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(180deg, #ffffff 30%, #a6b8c7 100%);
             background-color: #000;
             -webkit-background-clip: text;
@@ -62,14 +59,12 @@
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
         }
 
-        /* --- CANVAS DINÁMICO DEL HIPERESPACIO --- */
+        /* --- CANVAS HIPERESPACIO --- */
         #hyperspace {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Comienza por detrás en estado de reposo */
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
             pointer-events: none;
             transition: z-index 0.1s step-end;
         }
@@ -84,16 +79,14 @@
             transition: opacity 0.1s ease;
         }
 
-        /* --- BARRA DE NAVEGACIÓN ESTILO STARWARS.COM --- */
+        /* --- BARRA DE NAVEGACIÓN (Oculta al inicio) --- */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.95);
             border-bottom: 1px solid var(--sw-border);
             z-index: 900;
-            display: flex;
+            display: none; /* Controlado dinámicamente por JS */
             flex-direction: column;
             align-items: center;
         }
@@ -104,14 +97,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 15px 20px;
+            padding: 10px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .nav-logo {
-            font-size: 1.8rem;
-            letter-spacing: -2px;
-            line-height: 1;
+        .nav-logo-img {
+            height: 50px;
+            object-fit: contain;
         }
 
         .nav-menu {
@@ -122,12 +114,8 @@
             justify-content: center;
         }
 
-        .nav-item {
-            border-left: 1px solid var(--sw-border);
-        }
-        .nav-item:last-child {
-            border-right: 1px solid var(--sw-border);
-        }
+        .nav-item { border-left: 1px solid var(--sw-border); }
+        .nav-item:last-child { border-right: 1px solid var(--sw-border); }
 
         .nav-btn {
             background: transparent;
@@ -143,63 +131,39 @@
             letter-spacing: 1px;
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover, .nav-btn.active-tab {
             color: var(--text-bright);
             background: rgba(255, 255, 255, 0.03);
             box-shadow: inset 0 -3px 0 var(--neon-cyan);
         }
 
-        /* --- CONTENEDORES Y ESTRUCTURA DE BLOQUES --- */
+        /* --- CONTENEDORES INDEPENDIENTES (Full Viewport) --- */
         .app-section {
             display: none;
-            min-height: 100vh;
-            padding: 140px 20px 60px 20px;
-            max-width: 1100px;
+            height: 100vh;
+            width: 100vw;
+            padding: 120px 40px 40px 40px;
+            max-width: 1200px;
             margin: 0 auto;
             position: relative;
-            z-index: 10; /* Asegura que el contenido esté por encima si el canvas está atrás */
-            animation: fadeIn 0.4s ease forwards;
+            z-index: 10;
+            overflow-y: auto; /* Permite scroll interno solo si el dispositivo es muy pequeño */
         }
 
-        .app-section.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Botón Estilo Panel Oficial */
-        .btn-sw {
-            background: #fade4b; /* Amarillo StarWars icónico para llamadas a la acción importantes */
-            border: none;
-            color: #000000;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            padding: 12px 30px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-        .btn-sw:hover {
-            background: #ffffff;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
-
-        /* --- SECCIÓN 1: HERO / INICIO --- */
+        /* Sección de Inicio específica ocupando toda la pantalla y centrada */
         #hero-section {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 0 20px;
+            max-width: 100vw;
+            height: 100vh;
         }
 
         .hero-title {
-            font-size: 4.5rem;
+            font-size: 4.8rem;
             line-height: 0.9;
             margin-bottom: 15px;
         }
@@ -208,310 +172,200 @@
             font-size: 1.6rem;
             color: var(--text-bright);
             font-style: italic;
-            margin-bottom: 35px;
-            letter-spacing: 1px;
+            margin-bottom: 40px;
             font-weight: 500;
         }
 
-        /* --- SECCIÓN 2: CATÁLOGO --- */
+        .btn-sw {
+            background: #fade4b;
+            border: none;
+            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            padding: 14px 35px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-sw:hover {
+            background: #ffffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+
         .section-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
             font-size: 2rem;
             text-transform: uppercase;
             letter-spacing: -1px;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             border-left: 4px solid var(--neon-cyan);
             padding-left: 15px;
         }
 
+        /* --- CATÁLOGO --- */
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .product-card {
             background: var(--sw-gray);
             border: 1px solid var(--sw-border);
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .product-card:hover {
-            border-color: var(--neon-cyan);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-
         .product-img-placeholder {
-            width: 100%;
-            height: 200px;
+            width: 100%; height: 160px;
             background: #252525;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3.5rem;
-            color: rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 3rem; color: rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid var(--sw-border);
         }
-        .product-card:hover .product-img-placeholder {
-            color: var(--neon-cyan);
-        }
 
-        .product-info {
-            padding: 20px;
-        }
-
+        .product-info { padding: 20px; }
         .product-name {
             font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
+            font-weight: 900; font-size: 1.2rem;
+            text-transform: uppercase; margin-bottom: 8px;
         }
+        .product-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; margin-bottom: 15px; }
+        .product-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+        .product-price { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
 
-        .product-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 15px;
-        }
-
-        .product-price {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.2rem;
-            color: #ffffff;
-        }
-
-        /* --- SECCIÓN 3: PORTAL PHYGITAL (QR) --- */
+        /* --- PORTAL QR REFORMADO --- */
         .qr-container {
-            max-width: 550px;
+            max-width: 600px;
             margin: 0 auto;
             background: var(--sw-gray);
             border: 1px solid var(--sw-border);
-            padding: 40px;
+            padding: 30px;
             text-align: center;
         }
 
         .scanner-viewport {
             width: 100%;
-            height: 260px;
+            min-height: 280px;
             background: #0b0b0b;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin: 25px 0;
+            border: 1px solid var(--sw-border);
+            margin: 20px 0;
             position: relative;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
+        /* Contenedor interno donde se renderiza el video de la cámara */
+        #camera-reader {
+            width: 100% !important;
+            border: none !important;
+        }
+        #camera-reader video { object-fit: cover; }
 
         .scanner-laser {
             position: absolute;
-            width: 100%;
-            height: 2px;
+            width: 100%; height: 2px;
             background: var(--neon-cyan);
             box-shadow: 0 0 10px var(--neon-cyan);
             top: 0; left: 0;
+            z-index: 100;
             animation: laserScan 2.5s linear infinite;
             display: none;
-        }
-
-        .scanner-reticle {
-            width: 130px;
-            height: 130px;
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.1);
-            font-size: 2rem;
-        }
-
-        @keyframes laserScan {
-            0% { top: 0%; }
-            50% { top: 100%; }
-            100% { top: 0%; }
         }
 
         .scan-message {
             position: absolute;
             background: rgba(0,0,0,0.95);
             top: 0; left: 0; width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
             padding: 20px;
+            z-index: 110;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
         .scan-message.show { transform: translateY(0); }
 
-        /* --- SECCIÓN 4: CÓMICS EXCLUSIVOS --- */
+        /* --- SISTEMA DE 7 CÓMICS EXCLUSIVOS --- */
         .comics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
         }
 
         .comic-card {
             background: var(--sw-gray);
             border: 1px solid var(--sw-border);
-            cursor: pointer;
+            position: relative;
             transition: all 0.3s ease;
         }
-        .comic-card:hover {
-            border-color: #ffffff;
-            transform: scale(1.02);
-        }
+
+        .comic-card.unlocked { cursor: pointer; }
+        .comic-card.unlocked:hover { border-color: var(--neon-cyan); transform: scale(1.02); }
+        .comic-card.locked { opacity: 0.4; }
 
         .comic-placeholder {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(180deg, #1c1c1c 0%, #0d0d0d 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
+            width: 100%; height: 260px;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 20px; text-align: center;
         }
 
-        .comic-tag {
-            font-size: 0.75rem;
-            color: var(--neon-cyan);
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+        .comic-tag { font-size: 0.75rem; color: var(--neon-cyan); font-weight: 700; margin-bottom: 5px; }
+        .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
+        
+        .lock-icon {
+            font-size: 2rem;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 10px;
         }
 
-        .comic-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-        }
+        /* --- SECCIÓN CONTACTO --- */
+        .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .map-container { background: #111; border: 1px solid var(--sw-border); padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
+        .form-input { width: 100%; background: #000; border: 1px solid var(--sw-border); padding: 10px 15px; color: #ffffff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; }
+        .form-input:focus { outline: none; border-color: #ffffff; }
 
-        /* Modal Base de Datos */
+        /* Modales */
         .galaxy-modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.9);
-            z-index: 995;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            z-index: 995; display: none;
+            justify-content: center; align-items: center; padding: 20px;
             backdrop-filter: blur(8px);
         }
-
-        .modal-content {
-            background: var(--sw-gray);
-            border: 1px solid var(--sw-border);
-            width: 100%;
-            max-width: 600px;
-            padding: 35px;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 1.6rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .close-modal:hover { color: #ffffff; }
-
-        /* --- SECCIÓN 5: UBICACIÓN Y CONTACTO --- */
-        .contact-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
-
-        .map-container {
-            background: #111;
-            border: 1px solid var(--sw-border);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 300px;
-            text-align: center;
-        }
-
-        .console-form {
-            background: var(--sw-gray);
-            border: 1px solid var(--sw-border);
-            padding: 35px;
-        }
-
-        .form-group { margin-bottom: 20px; }
-
-        .form-label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            width: 100%;
-            background: #000000;
-            border: 1px solid var(--sw-border);
-            padding: 12px 15px;
-            color: #ffffff;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.05rem;
-            transition: border-color 0.3s;
-        }
-        .form-input:focus {
-            outline: none;
-            border-color: #ffffff;
-        }
+        .modal-content { background: var(--sw-gray); border: 1px solid var(--sw-border); width: 100%; max-width: 550px; padding: 30px; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.6rem; color: var(--text-muted); cursor: pointer; }
 
         @media(max-width: 768px) {
             .hero-title { font-size: 2.8rem; }
-            .hero-slogan { font-size: 1.2rem; }
-            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
-            .nav-item { border: 1px solid var(--sw-border) !important; text-align: center; }
-            .nav-btn { width: 100%; padding: 10px 5px; font-size: 0.85rem; }
+            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); }
+            .nav-item { border: 1px solid var(--sw-border) !important; }
+            .app-section { padding-top: 160px; }
         }
     </style>
 </head>
 <body>
 
     <div id="flash-overlay"></div>
-    
     <canvas id="hyperspace"></canvas>
 
-    <nav class="navbar">
+    <nav class="navbar" id="global-nav">
         <div class="nav-top">
-            <div class="nav-logo sw-font">Star // Wars</div>
+            <img src="LOGO TDB.png" alt="LOGO TDB" class="nav-logo-img">
         </div>
         <ul class="nav-menu">
-            <li class="nav-item"><button class="nav-btn" data-target="hero-section">Inicio</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="catalog-section">Menú</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="phygital-section">Holocrón</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="comics-section">Cómics</button></li>
@@ -519,10 +373,10 @@
         </ul>
     </nav>
 
-    <section id="hero-section" class="app-section active">
+    <section id="hero-section">
         <h1 class="hero-title sw-font">The Dark Side<br>Brownies</h1>
         <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
-        <button class="btn-sw nav-hook-btn" data-target="catalog-section">Entrar al Lado Oscuro</button>
+        <button class="btn-sw" id="btn-enter">Entrar al Lado Oscuro</button>
     </section>
 
     <section id="catalog-section" class="app-section">
@@ -533,108 +387,63 @@
                     <div class="product-img-placeholder"><i class="fa-solid fa-jedi"></i></div>
                     <div class="product-info">
                         <h3 class="product-name">The Vader</h3>
-                        <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Un sabor denso y estructurado para los paladares más exigentes de la galaxia.</p>
+                        <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Sabor denso y estructurado.</p>
                     </div>
                 </div>
-                <div class="product-info" style="padding-top: 0;">
-                    <div class="product-meta">
-                        <span class="product-price">$45.00</span>
-                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
-                    </div>
-                </div>
+                <div class="product-info" style="padding-top: 0;"><div class="product-meta"><span class="product-price">$45.00</span><button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button></div></div>
             </div>
             <div class="product-card">
                 <div>
                     <div class="product-img-placeholder"><i class="fa-solid fa-bolt"></i></div>
                     <div class="product-info">
                         <h3 class="product-name">The Trooper</h3>
-                        <p class="product-desc">Brownie clásico balanceado con un impecable topping de chocolate con leche y líneas concéntricas de glacé blanco. Fiel a la orden.</p>
+                        <p class="product-desc">Brownie clásico balanceado con topping de chocolate con leche y líneas concéntricas de glacé blanco.</p>
                     </div>
                 </div>
-                <div class="product-info" style="padding-top: 0;">
-                    <div class="product-meta">
-                        <span class="product-price">$40.00</span>
-                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div>
-                    <div class="product-img-placeholder"><i class="fa-solid fa-globe"></i></div>
-                    <div class="product-info">
-                        <h3 class="product-name">The Death Star</h3>
-                        <p class="product-desc">Edición esférica especial con núcleo de fudge fundido a alta presión térmica. Una explosión masiva de sabor en el núcleo.</p>
-                    </div>
-                </div>
-                <div class="product-info" style="padding-top: 0;">
-                    <div class="product-meta">
-                        <span class="product-price">$55.00</span>
-                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
-                    </div>
-                </div>
+                <div class="product-info" style="padding-top: 0;"><div class="product-meta"><span class="product-price">$40.00</span><button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button></div></div>
             </div>
         </div>
     </section>
 
     <section id="phygital-section" class="app-section">
-        <h2 class="section-title">Portal Phygital</h2>
+        <h2 class="section-title">Escaner Holocrón</h2>
         <div class="qr-container">
-            <p style="color: var(--text-muted); margin-bottom: 10px;">Alinea el código de tu Cubo Holocrón frente a los sensores ópticos.</p>
+            <p style="color: var(--text-muted); margin-bottom: 10px;">Permite el acceso a la cámara para escanear el QR de tu empaque físico.</p>
             <div class="scanner-viewport">
-                <div class="scanner-laser"></div>
-                <div class="scanner-reticle"><i class="fa-solid fa-qrcode"></i></div>
+                <div class="scanner-laser" id="laser-line"></div>
+                <div id="camera-reader"></div>
+                
                 <div class="scan-message" id="scan-result">
-                    <i class="fa-solid fa-circle-check" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
-                    <h3 class="product-name">Sincronización Exitosa</h3>
-                    <p style="font-size: 0.95rem; color: var(--text-muted);">Cargando filtro holográfico de Realidad Aumentada...</p>
-                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="closeScanner()">Desconectar</button>
+                    <i class="fa-solid fa-square-rss" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px; animation: pulse 1s infinite;"></i>
+                    <h3 class="product-name" style="color: var(--neon-cyan);">¡TRANSMISIÓN DESBLOQUEADA!</h3>
+                    <p style="font-size: 0.95rem; color: #ffffff;" id="unlock-notification">Un nuevo archivo de cómic se ha añadido a tu base de datos.</p>
+                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="resetScannerContainer()">Confirmar Enlace</button>
                 </div>
             </div>
-            <button class="btn-sw" id="btn-scan" onclick="startScanner()">Vincular Holocrón</button>
+            <button class="btn-sw" id="btn-start-camera" onclick="initQrCamera()">Activar Escáner Óptico</button>
         </div>
     </section>
 
     <section id="comics-section" class="app-section">
-        <h2 class="section-title">Archivos de Cómics</h2>
-        <div class="comics-grid">
-            <div class="comic-card" onclick="openComic('Fase de Carga', 'Crónicas del Lado Oscuro - Volumen I: La Revelación de la Receta. Los laboratorios de manufactura en San Luis Potosí han estabilizado una aleación de cacao capaz de alterar los niveles de la Fuerza.')">
-                <div class="comic-placeholder">
-                    <span class="comic-tag">DATA-LOG #01</span>
-                    <h3 class="comic-title">La Revelación</h3>
-                </div>
+        <h2 class="section-title">Base de Cómics Colectivos</h2>
+        <div class="comics-grid" id="grid-comics-container">
             </div>
-            <div class="comic-card" onclick="openComic('Asalto al Hangar', 'Crónicas del Lado Oscuro - Volumen II: El Robo del Holocrón. Las raciones cúbicas de almacenamiento de brownies han sido desplegadas en el patio del hangar, desatando una rebelión por el sabor chewy.')">
-                <div class="comic-placeholder">
-                    <span class="comic-tag">DATA-LOG #02</span>
-                    <h3 class="comic-title">El Robo</h3>
-                </div>
-            </div>
-        </div>
     </section>
 
     <section id="contact-section" class="app-section">
-        <h2 class="section-title">Canal de Transmisión</h2>
+        <h2 class="section-title">Nexo de Comunicación</h2>
         <div class="contact-layout">
             <div class="map-container">
                 <i class="fa-solid fa-map-location-dot" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
-                <h3 class="product-name" style="margin-bottom: 5px;">Coordenadas</h3>
-                <p style="color: var(--text-muted); font-size: 1rem;">Sector Central:<br><strong>San Luis Potosí, México</strong></p>
+                <h3 class="product-name">Coordenadas</h3>
+                <p style="color: var(--text-muted);">Sector Urbano:<br><strong>San Luis Potosí, México</strong></p>
             </div>
             <div class="console-form">
                 <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
-                    <div class="form-group">
-                        <label class="form-label">Identificación (Nombre)</label>
-                        <input type="text" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Dirección de Holored (Correo)</label>
-                        <input type="email" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Mensaje Cifrado</label>
-                        <textarea class="form-input" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-sw" style="width: 100%; border-radius: 0;">Enviar Transmisión</button>
+                    <div class="form-group"><label class="form-label">Identificación</label><input type="text" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">Dirección Holored</label><input type="email" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-input" rows="3" required></textarea></div>
+                    <button type="submit" class="btn-sw" style="width: 100%;">Transmitir</button>
                 </form>
             </div>
         </div>
@@ -644,24 +453,22 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeComic()">&times;</span>
             <h3 class="product-name" id="modal-title" style="margin-bottom: 15px; color: var(--neon-cyan);"></h3>
-            <p id="modal-body" style="line-height: 1.6; color: #ffffff; text-align: justify;"></p>
+            <p id="modal-body" style="line-height: 1.6; text-align: justify;"></p>
         </div>
     </div>
 
     <script>
         /* ==========================================
-           SISTEMA CANVAS DEL HIPERESPACIO 3D
+           MOTOR GRÁFICO HIPERESPACIO 3D
            ========================================== */
         const canvas = document.getElementById('hyperspace');
         const ctx = canvas.getContext('2d');
-
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
         const numStars = 200;
         let stars = [];
-        let speed = 0.6; 
-        let targetSpeed = 0.6;
+        let speed = 0.6; let targetSpeed = 0.6;
         let isJumping = false;
 
         function initStars() {
@@ -679,124 +486,192 @@
         function animateStars() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
             ctx.fillRect(0, 0, width, height);
-
             speed += (targetSpeed - speed) * 0.08;
 
             for (let i = 0; i < numStars; i++) {
-                let star = stars[i];
-                star.z -= speed;
-
+                let star = stars[i]; star.z -= speed;
                 if (star.z <= 0) {
                     star.x = Math.random() * width - width / 2;
                     star.y = Math.random() * height - height / 2;
                     star.z = width;
                 }
-
                 let k = 400 / star.z;
-                let px = star.x * k + width / 2;
-                let py = star.y * k + height / 2;
-
+                let px = star.x * k + width / 2; let py = star.y * k + height / 2;
                 if (px >= 0 && px <= width && py >= 0 && py <= height) {
                     let size = (1 - star.z / width) * 2.5;
                     let stretch = isJumping ? speed * 0.75 : 1;
-
-                    ctx.beginPath();
-                    ctx.strokeStyle = star.color;
+                    ctx.beginPath(); ctx.strokeStyle = star.color;
                     ctx.lineWidth = size < 1 ? 1 : size;
-
                     let prevK = 400 / (star.z + stretch);
-                    let pXOld = star.x * prevK + width / 2;
-                    let pYOld = star.y * prevK + height / 2;
-
-                    ctx.moveTo(px, py);
-                    ctx.lineTo(pXOld, pYOld);
+                    ctx.moveTo(px, py); ctx.lineTo(star.x * prevK + width / 2, star.y * prevK + height / 2);
                     ctx.stroke();
                 }
             }
             requestAnimationFrame(animateStars);
         }
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initStars();
-        });
-
-        initStars();
-        animateStars();
+        window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; initStars(); });
+        initStars(); animateStars();
 
         /* ==========================================
-           GESTIÓN PHYGITAL / INTERRUPCIÓN CAPAS HUD
+           ARQUITECTURA DE DATOS: SISTEMA DE 7 CÓMICS
            ========================================== */
-        const navButtons = document.querySelectorAll('.nav-menu button, .nav-hook-btn');
+        const baseDeComics = [
+            { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen secreto de la receta estabilizada en los laboratorios del sector San Luis Potosí.", unlocked: true },
+            { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Las tropas de asalto rompen protocolos tras el aroma de las raciones chewy.", unlocked: false },
+            { id: 3, title: "Vol 3: El Juicio del Lord", desc: "La sombra del imperio confronta al comandante por la deserción masiva.", unlocked: false },
+            { id: 4, title: "Vol 4: Hiperespacio Mental", desc: "El impacto cerebral de sabor que cambió el destino de la orden comercial.", unlocked: false },
+            { id: 5, title: "Vol 5: Alianza Clandestina", desc: "Líneas de distribución secretas operando bajo el amparo de la fuerza.", unlocked: false },
+            { id: 6, title: "Vol 6: La Costra Galáctica", desc: "Análisis técnico de la densidad molecular y recubrimientos térmicos perfectos.", unlocked: false },
+            { id: 7, title: "Vol 7: Imperio del Sabor", desc: "El dominio absoluto de The Dark Side Brownies en todos los cuadrantes conocidos.", unlocked: false }
+        ];
+
+        function renderComics() {
+            const container = document.getElementById('grid-comics-container');
+            container.innerHTML = "";
+            baseDeComics.forEach(comic => {
+                const card = document.createElement('div');
+                card.className = `comic-card ${comic.unlocked ? 'unlocked' : 'locked'}`;
+                
+                if(comic.unlocked) {
+                    card.onclick = () => openComic(comic.title, comic.desc);
+                    card.innerHTML = `
+                        <div class="comic-placeholder">
+                            <span class="comic-tag">TRANSMISIÓN ACTIVA</span>
+                            <h3 class="comic-title">${comic.title}</h3>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="comic-placeholder">
+                            <i class="fa-solid fa-lock lock-icon"></i>
+                            <h3 class="comic-title" style="color: var(--text-muted);">Bloqueado</h3>
+                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requiere Escaneo QR</span>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+        }
+
+        /* ==========================================
+           GESTOR DE NAVEGACIÓN Y CAPAS ESTRICTAS
+           ========================================== */
+        const globalNav = document.getElementById('global-nav');
+        const heroSection = document.getElementById('hero-section');
         const sections = document.querySelectorAll('.app-section');
         const flashOverlay = document.getElementById('flash-overlay');
 
-        navButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetId = button.getAttribute('data-target');
-                if (isJumping) return;
-
-                isJumping = true;
-                
-                // CRÍTICO: Poner el canvas EN PRIMER PLANO por delante de la web
-                canvas.style.zIndex = "9995"; 
-                targetSpeed = 70; // Velocidad extrema
-
-                // Clímax: Destello óptico blanco
-                setTimeout(() => {
-                    flashOverlay.style.opacity = '1';
-                }, 900);
-
-                // Relevo de secciones en la oscuridad del flash
-                setTimeout(() => {
-                    sections.forEach(section => {
-                        section.classList.remove('active');
-                        if (section.id === targetId) {
-                            section.classList.add('active');
-                        }
-                    });
-                    window.scrollTo(0, 0);
-                }, 1100);
-
-                // Normalización: Enviar el canvas DE VUELTA AL FONDO para interactuar
-                setTimeout(() => {
-                    flashOverlay.style.opacity = '0';
-                    targetSpeed = 0.6;
-                    canvas.style.zIndex = "-1"; 
-                    isJumping = false;
-                }, 1300);
+        // Botón Inicial de Acceso (De Imagen 1 a Imagen 2)
+        document.getElementById('btn-enter').addEventListener('click', () => {
+            executeJumpSequence(() => {
+                heroSection.style.display = 'none';
+                globalNav.style.display = 'flex';
+                const firstSection = document.getElementById('catalog-section');
+                firstSection.style.display = 'block';
+                document.querySelector('[data-target="catalog-section"]').classList.add('active-tab');
             });
         });
 
-        // Simulación interactiva del Portal QR
-        function startScanner() {
-            const laser = document.querySelector('.scanner-laser');
-            const result = document.getElementById('scan-result');
-            document.getElementById('btn-scan').style.display = 'none';
-            laser.style.display = 'block';
+        // Navegación entre pestañas independientes (Pestañas limpias estilo Imagen 3)
+        const tabButtons = document.querySelectorAll('.nav-menu button');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                if (isJumping || document.getElementById(targetId).style.display === 'block') return;
+
+                tabButtons.forEach(b => b.classList.remove('active-tab'));
+                btn.classList.add('active-tab');
+
+                executeJumpSequence(() => {
+                    sections.forEach(s => s.style.display = 'none');
+                    document.getElementById(targetId).style.display = 'block';
+                });
+            });
+        });
+
+        function executeJumpSequence(uiCallback) {
+            isJumping = true;
+            canvas.style.zIndex = "9995"; // Canvas al frente absoluto
+            targetSpeed = 75;
+
+            setTimeout(() => { flashOverlay.style.opacity = '1'; }, 900);
 
             setTimeout(() => {
-                laser.style.display = 'none';
-                result.classList.add('show');
-            }, 2500);
+                uiCallback();
+                window.scrollTo(0, 0);
+            }, 1100);
+
+            setTimeout(() => {
+                flashOverlay.style.opacity = '0';
+                targetSpeed = 0.6;
+                canvas.style.zIndex = "-1"; // Canvas regresa al fondo para liberar interacción
+                isJumping = false;
+            }, 1300);
         }
 
-        function closeScanner() {
+        /* ==========================================
+           SISTEMA DE ESCANEO QR POR CÁMARA NATIVA
+           ========================================== */
+        let html5QrScanner = null;
+
+        function initQrCamera() {
+            document.getElementById('btn-start-camera').style.display = 'none';
+            document.getElementById('laser-line').style.display = 'block';
+
+            html5QrScanner = new Html5Qrcode("camera-reader");
+            
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                // Detener escaneo tras lectura exitosa
+                html5QrScanner.stop().then(() => {
+                    triggerUnlockAnimation();
+                }).catch(err => console.error("Error al pausar visor óptico.", err));
+            };
+
+            const config = { fps: 15, qrbox: { width: 180, height: 180 } };
+            
+            // Activa cámara trasera por defecto
+            html5QrScanner.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+            .catch(err => {
+                alert("Error de acceso al hardware óptico. Permisos denegados.");
+                resetScannerContainer();
+            });
+        }
+
+        function triggerUnlockAnimation() {
+            document.getElementById('laser-line').style.display = 'none';
+            
+            // Buscar siguiente cómic bloqueado para activar en sesión
+            const nextLockedComic = baseDeComics.find(c => !c.unlocked);
+            if(nextLockedComic) {
+                nextLockedComic.unlocked = true;
+                document.getElementById('unlock-notification').innerText = `¡Se ha sincronizado con éxito el "${nextLockedComic.title}"! Accede desde tu visor de Base de Datos.`;
+            } else {
+                document.getElementById('unlock-notification').innerText = "Todos los registros de holocrones en tu poder ya se encuentran completamente descifrados.";
+            }
+
+            // Animación HUD de éxito
+            setTimeout(() => {
+                document.getElementById('scan-result').classList.add('show');
+                renderComics();
+            }, 500);
+        }
+
+        function resetScannerContainer() {
             document.getElementById('scan-result').classList.remove('show');
-            document.getElementById('btn-scan').style.display = 'inline-block';
+            document.getElementById('btn-start-camera').style.display = 'inline-block';
+            document.getElementById('camera-reader').innerHTML = "";
         }
 
-        // Modales de la Base de Datos
+        // Modales e Inicialización
         function openComic(title, bodyText) {
             document.getElementById('modal-title').innerText = title.toUpperCase();
             document.getElementById('modal-body').innerText = bodyText;
             document.getElementById('comic-modal').style.display = 'flex';
         }
+        function closeComic() { document.getElementById('comic-modal').style.display = 'none'; }
 
-        function closeComic() {
-            document.getElementById('comic-modal').style.display = 'none';
-        }
+        // Inicializar los cómics por defecto al cargar
+        renderComics();
     </script>
 </body>
 </html>
