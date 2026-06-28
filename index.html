@@ -7,17 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- ESTILOS GENERALES Y CONFIGURACIÓN HUD --- */
+        /* --- CONFIGURACIÓN DE ESTILOS E INTERFAZ INSPIRADA EN STARWARS.COM --- */
         :root {
             --neon-cyan: #00f3ff;
             --dark-bg: #000000;
-            --hud-gray: #12161a;
+            --sw-gray: #151515;
+            --sw-border: rgba(255, 255, 255, 0.15);
             --text-bright: #ffffff;
-            --neon-glow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
-            --neon-border: 1px solid rgba(0, 243, 255, 0.4);
+            --text-muted: #999999;
         }
 
         * {
@@ -36,43 +36,43 @@
             position: relative;
         }
 
-        /* Scanlines - Efecto Lente Realidad Virtual / Casco Imperial */
+        /* Efecto de líneas HUD muy sutiles de fondo */
         body::before {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.06) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 999;
-            background-size: 100% 4px, 6px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.02) 50%);
+            z-index: 99;
+            background-size: 100% 4px;
             pointer-events: none;
         }
 
-        /* Esquinas HUD Estáticas del Visor */
-        .hud-corner {
+        /* --- TIPOGRAFÍA ESTILO STAR WARS CON RELLENO DE ESTRELLAS --- */
+        .sw-font {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            /* Máscara de fondo animada para simular el relleno galáctico de la imagen */
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(180deg, #ffffff 30%, #a6b8c7 100%);
+            background-color: #000;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+        }
+
+        /* --- CANVAS DINÁMICO DEL HIPERESPACIO --- */
+        #hyperspace {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--neon-cyan);
-            z-index: 990;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Comienza por detrás en estado de reposo */
             pointer-events: none;
-            filter: drop-shadow(var(--neon-glow));
+            transition: z-index 0.1s step-end;
         }
-        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-        .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
-        .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
-        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
-
-        /* --- MOTOR DE ANIMACIÓN FIXED --- */
-      #hyperspace {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* Esto envía la animación detrás de la página */
-    pointer-events: none;
-}
 
         #flash-overlay {
             position: fixed;
@@ -84,107 +84,109 @@
             transition: opacity 0.1s ease;
         }
 
-        /* --- NAVEGACIÓN --- */
+        /* --- BARRA DE NAVEGACIÓN ESTILO STARWARS.COM --- */
         .navbar {
             position: fixed;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1200px;
-            background: rgba(0, 0, 0, 0.75);
-            border-bottom: var(--neon-border);
-            backdrop-filter: blur(5px);
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid var(--sw-border);
             z-index: 900;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 10px 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+        }
+
+        .nav-top {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .nav-logo {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-cyan);
-            font-size: 1.2rem;
-            font-weight: 900;
-            text-shadow: var(--neon-glow);
-            letter-spacing: 1px;
+            font-size: 1.8rem;
+            letter-spacing: -2px;
+            line-height: 1;
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            justify-content: center;
+        }
+
+        .nav-item {
+            border-left: 1px solid var(--sw-border);
+        }
+        .nav-item:last-child {
+            border-right: 1px solid var(--sw-border);
         }
 
         .nav-btn {
             background: transparent;
             border: none;
-            color: var(--text-bright);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            padding: 8px 12px;
-            transition: all 0.3s ease;
-            position: relative;
+            padding: 12px 25px;
+            transition: all 0.2s ease;
             letter-spacing: 1px;
         }
 
-        .nav-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 0; height: 2px;
-            background-color: var(--neon-cyan);
-            transition: width 0.3s ease;
-            box-shadow: var(--neon-glow);
+        .nav-btn:hover {
+            color: var(--text-bright);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: inset 0 -3px 0 var(--neon-cyan);
         }
 
-        .nav-btn:hover::after { width: 100%; }
-        .nav-btn:hover { color: var(--neon-cyan); text-shadow: var(--neon-glow); }
-
-        /* --- ARQUITECTURA SPA (SECCIONES) --- */
-.app-section {
-    position: relative;
-    z-index: 10;
-    display: none;
-    min-height: 100vh;
-    padding: 100px 20px 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease forwards;
-}
+        /* --- CONTENEDORES Y ESTRUCTURA DE BLOQUES --- */
+        .app-section {
+            display: none;
+            min-height: 100vh;
+            padding: 140px 20px 60px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10; /* Asegura que el contenido esté por encima si el canvas está atrás */
+            animation: fadeIn 0.4s ease forwards;
+        }
 
         .app-section.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* --- BOTÓN ESTILO COMANDO INTERACTIVO --- */
-        .btn-imperial {
-            background: rgba(0, 243, 255, 0.05);
-            border: var(--neon-border);
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
+        /* Botón Estilo Panel Oficial */
+        .btn-sw {
+            background: #fade4b; /* Amarillo StarWars icónico para llamadas a la acción importantes */
+            border: none;
+            color: #000000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            padding: 12px 28px;
+            padding: 12px 30px;
             cursor: pointer;
-            position: relative;
             letter-spacing: 1px;
-            clip-path: polygon(10px 0%, 100% 0%, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0% 100%, 0% 10px);
+            border-radius: 20px;
             transition: all 0.3s ease;
-            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
         }
-        .btn-imperial:hover {
-            background: var(--neon-cyan);
-            color: var(--dark-bg);
-            box-shadow: var(--neon-glow);
-            transform: translateY(-2px);
+        .btn-sw:hover {
+            background: #ffffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
 
         /* --- SECCIÓN 1: HERO / INICIO --- */
@@ -196,162 +198,119 @@
             text-align: center;
         }
 
-        .hero-hud-frame {
-            border: 1px solid rgba(0, 243, 255, 0.15);
-            padding: 40px 60px;
-            background: rgba(18, 22, 26, 0.4);
-            backdrop-filter: blur(4px);
-            border-radius: 4px;
-            position: relative;
-            max-width: 800px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9);
-        }
-
-        .hero-hud-frame::before {
-            content: "SYSTEM: ONLINE";
-            position: absolute;
-            top: -10px; left: 20px;
-            background: var(--dark-bg);
-            padding: 0 10px;
-            font-size: 0.8rem;
-            color: var(--neon-cyan);
-            font-family: 'Orbitron', sans-serif;
-        }
-
         .hero-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            background: linear-gradient(180deg, #ffffff 0%, #7d8a99 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 4.5rem;
+            line-height: 0.9;
+            margin-bottom: 15px;
         }
 
         .hero-slogan {
-            font-size: 1.5rem;
-            color: var(--neon-cyan);
+            font-size: 1.6rem;
+            color: var(--text-bright);
             font-style: italic;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-shadow: var(--neon-glow);
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+            font-weight: 500;
         }
 
-        /* --- SECCIÓN 2: MENÚ / CATÁLOGO --- */
+        /* --- SECCIÓN 2: CATÁLOGO --- */
         .section-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
             font-size: 2rem;
-            text-align: center;
-            margin-bottom: 40px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #ffffff;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            padding-bottom: 10px;
+            letter-spacing: -1px;
+            margin-bottom: 35px;
+            border-left: 4px solid var(--neon-cyan);
+            padding-left: 15px;
         }
 
         .catalog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .product-card {
-            background: var(--hud-gray);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-            padding: 25px;
-            position: relative;
-            transition: all 0.4s ease;
-            overflow: hidden;
+            background: var(--sw-gray);
+            border: 1px solid var(--sw-border);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        /* Indicador HUD de Tarjeta */
-        .product-card::before {
-            content: "▲ COGNITIVE TARGET";
-            position: absolute;
-            top: 8px; right: 12px;
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.3);
-            font-family: 'Orbitron', sans-serif;
-        }
-
         .product-card:hover {
             border-color: var(--neon-cyan);
-            box-shadow: var(--neon-glow), inset 0 0 15px rgba(0, 243, 255, 0.1);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
         .product-img-placeholder {
             width: 100%;
-            height: 180px;
-            background: linear-gradient(135deg, #15191e 0%, #050608 100%);
+            height: 200px;
+            background: #252525;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 3.5rem;
-            color: rgba(0, 243, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            margin-bottom: 20px;
-            border-radius: 2px;
-            transition: all 0.4s ease;
+            color: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--sw-border);
         }
         .product-card:hover .product-img-placeholder {
             color: var(--neon-cyan);
-            border-color: rgba(0, 243, 255, 0.3);
+        }
+
+        .product-info {
+            padding: 20px;
         }
 
         .product-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
 
         .product-desc {
-            color: #a3b2c2;
+            color: var(--text-muted);
             font-size: 0.95rem;
-            margin-bottom: 15px;
-            line-height: 1.4;
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .product-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
         }
 
         .product-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            color: var(--neon-cyan);
-            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            color: #ffffff;
         }
 
         /* --- SECCIÓN 3: PORTAL PHYGITAL (QR) --- */
-        .qr-scanner-container {
-            max-width: 500px;
+        .qr-container {
+            max-width: 550px;
             margin: 0 auto;
-            background: var(--hud-gray);
-            border: var(--neon-border);
-            padding: 30px;
-            border-radius: 4px;
+            background: var(--sw-gray);
+            border: 1px solid var(--sw-border);
+            padding: 40px;
             text-align: center;
-            box-shadow: var(--neon-glow);
         }
 
         .scanner-viewport {
             width: 100%;
-            height: 250px;
-            background: #05070a;
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            margin: 20px 0;
+            height: 260px;
+            background: #0b0b0b;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin: 25px 0;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -359,27 +318,26 @@
             align-items: center;
         }
 
-        /* Línea de escaneo láser */
         .scanner-laser {
             position: absolute;
             width: 100%;
             height: 2px;
             background: var(--neon-cyan);
-            box-shadow: 0 0 12px var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
             top: 0; left: 0;
             animation: laserScan 2.5s linear infinite;
             display: none;
         }
 
         .scanner-reticle {
-            width: 140px;
-            height: 140px;
-            border: 2px dashed rgba(0, 243, 255, 0.4);
+            width: 130px;
+            height: 130px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: rgba(0, 243, 255, 0.3);
+            color: rgba(255, 255, 255, 0.1);
             font-size: 2rem;
         }
 
@@ -389,9 +347,9 @@
             100% { top: 0%; }
         }
 
-        .scan-overlay-message {
+        .scan-message {
             position: absolute;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.95);
             top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
@@ -401,55 +359,54 @@
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
-        .scan-overlay-message.show { transform: translateY(0); }
+        .scan-message.show { transform: translateY(0); }
 
         /* --- SECCIÓN 4: CÓMICS EXCLUSIVOS --- */
-        .comics-container {
+        .comics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
         }
 
-        .comic-book {
-            background: #15191e;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 4px;
+        .comic-card {
+            background: var(--sw-gray);
+            border: 1px solid var(--sw-border);
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
         }
-        .comic-book:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: var(--neon-glow);
-            transform: scale(1.03);
+        .comic-card:hover {
+            border-color: #ffffff;
+            transform: scale(1.02);
         }
 
-        .comic-cover-placeholder {
+        .comic-placeholder {
             width: 100%;
-            height: 280px;
-            background: linear-gradient(0deg, #090c0f 0%, #1c232a 100%);
+            height: 300px;
+            background: linear-gradient(180deg, #1c1c1c 0%, #0d0d0d 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
         }
 
-        .comic-num {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
+        .comic-tag {
+            font-size: 0.75rem;
             color: var(--neon-cyan);
+            font-weight: 700;
+            letter-spacing: 1px;
             margin-bottom: 5px;
         }
 
         .comic-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
             font-size: 1.1rem;
-            font-weight: 700;
+            text-transform: uppercase;
         }
 
-        /* Modal / Base de Datos de Cómics */
+        /* Modal Base de Datos */
         .galaxy-modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -459,28 +416,28 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
-            background: var(--hud-gray);
-            border: var(--neon-border);
+            background: var(--sw-gray);
+            border: 1px solid var(--sw-border);
             width: 100%;
-            max-width: 650px;
-            padding: 30px;
-            border-radius: 4px;
+            max-width: 600px;
+            padding: 35px;
             position: relative;
-            box-shadow: var(--neon-glow);
-            animation: fadeIn 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
         }
 
         .close-modal {
             position: absolute;
             top: 15px; right: 20px;
-            font-size: 1.5rem;
-            color: var(--neon-cyan);
+            font-size: 1.6rem;
+            color: var(--text-muted);
             cursor: pointer;
+            transition: color 0.2s;
         }
+        .close-modal:hover { color: #ffffff; }
 
         /* --- SECCIÓN 5: UBICACIÓN Y CONTACTO --- */
         .contact-layout {
@@ -489,104 +446,83 @@
             gap: 40px;
         }
 
-        .hologram-map-box {
-            background: linear-gradient(180deg, rgba(0, 243, 255, 0.02) 0%, rgba(0,0,0,0.5) 100%);
-            border: var(--neon-border);
-            border-radius: 4px;
-            padding: 30px;
+        .map-container {
+            background: #111;
+            border: 1px solid var(--sw-border);
+            padding: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 300px;
-            position: relative;
             text-align: center;
         }
 
-        .holo-grid-lines {
-            position: absolute;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            background-size: 30px 30px;
-            background-image: linear-gradient(to right, rgba(0, 243, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            pointer-events: none;
-        }
-
         .console-form {
-            background: var(--hud-gray);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 30px;
-            border-radius: 4px;
+            background: var(--sw-gray);
+            border: 1px solid var(--sw-border);
+            padding: 35px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-label {
             display: block;
-            font-family: 'Orbitron', sans-serif;
             font-size: 0.8rem;
-            color: var(--neon-cyan);
-            margin-bottom: 6px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
             text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .form-input {
             width: 100%;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 15px;
+            background: #000000;
+            border: 1px solid var(--sw-border);
+            padding: 12px 15px;
             color: #ffffff;
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.05rem;
-            border-radius: 2px;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s;
         }
         .form-input:focus {
             outline: none;
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+            border-color: #ffffff;
         }
 
-        /* --- RESPONSIVE OPTIMIZATIONS --- */
         @media(max-width: 768px) {
-            .hero-title { font-size: 2.2rem; }
-            .hero-slogan { font-size: 1.1rem; }
-            .hero-hud-frame { padding: 30px 20px; }
-            .navbar { width: 100%; border-radius: 0; top: 0; }
-            .nav-menu { gap: 10px; }
-            .nav-btn { font-size: 0.75rem; padding: 6px 8px; }
+            .hero-title { font-size: 2.8rem; }
+            .hero-slogan { font-size: 1.2rem; }
+            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
+            .nav-item { border: 1px solid var(--sw-border) !important; text-align: center; }
+            .nav-btn { width: 100%; padding: 10px 5px; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="hud-corner top-left"></div>
-    <div class="hud-corner top-right"></div>
-    <div class="hud-corner bottom-left"></div>
-    <div class="hud-corner bottom-right"></div>
     <div id="flash-overlay"></div>
     
     <canvas id="hyperspace"></canvas>
 
     <nav class="navbar">
-        <div class="nav-logo">TDS // BROWNIES</div>
+        <div class="nav-top">
+            <div class="nav-logo sw-font">Star // Wars</div>
+        </div>
         <ul class="nav-menu">
-            <li><button class="nav-btn" data-target="hero-section">Inicio</button></li>
-            <li><button class="nav-btn" data-target="catalog-section">Menú</button></li>
-            <li><button class="nav-btn" data-target="phygital-section">Holocrón</button></li>
-            <li><button class="nav-btn" data-target="comics-section">Cómics</button></li>
-            <li><button class="nav-btn" data-target="contact-section">Nexo</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="hero-section">Inicio</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="catalog-section">Menú</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="phygital-section">Holocrón</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="comics-section">Cómics</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="contact-section">Nexo</button></li>
         </ul>
     </nav>
 
     <section id="hero-section" class="app-section active">
-        <div class="hero-hud-frame">
-            <h1 class="hero-title">The Dark Side Brownies</h1>
-            <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
-            <button class="btn-imperial nav-hook-btn" data-target="catalog-section">Iniciar Sistema / Entrar al Lado Oscuro</button>
-        </div>
+        <h1 class="hero-title sw-font">The Dark Side<br>Brownies</h1>
+        <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
+        <button class="btn-sw nav-hook-btn" data-target="catalog-section">Entrar al Lado Oscuro</button>
     </section>
 
     <section id="catalog-section" class="app-section">
@@ -594,41 +530,47 @@
         <div class="catalog-grid">
             <div class="product-card">
                 <div>
-                    <div class="product-img-placeholder">
-                        <i class="fa-solid fa-mask-ventilator"></i>
+                    <div class="product-img-placeholder"><i class="fa-solid fa-jedi"></i></div>
+                    <div class="product-info">
+                        <h3 class="product-name">The Vader</h3>
+                        <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Un sabor denso y estructurado para los paladares más exigentes de la galaxia.</p>
                     </div>
-                    <h3 class="product-name">The Vader</h3>
-                    <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Un sabor denso y estructurado para los paladares más exigentes de la galaxia.</p>
                 </div>
-                <div class="product-meta">
-                    <span class="product-price">$45.00</span>
-                    <button class="btn-imperial">Reclamar Porción</button>
+                <div class="product-info" style="padding-top: 0;">
+                    <div class="product-meta">
+                        <span class="product-price">$45.00</span>
+                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
+                    </div>
                 </div>
             </div>
             <div class="product-card">
                 <div>
-                    <div class="product-img-placeholder">
-                        <i class="fa-solid fa-helmet-safety"></i>
+                    <div class="product-img-placeholder"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="product-info">
+                        <h3 class="product-name">The Trooper</h3>
+                        <p class="product-desc">Brownie clásico balanceado con un impecable topping de chocolate con leche y líneas concéntricas de glacé blanco. Fiel a la orden.</p>
                     </div>
-                    <h3 class="product-name">The Trooper</h3>
-                    <p class="product-desc">Brownie clásico balanceado con un impecable topping de chocolate con leche y líneas concéntricas de glacé blanco. Fiel a la orden.</p>
                 </div>
-                <div class="product-meta">
-                    <span class="product-price">$40.00</span>
-                    <button class="btn-imperial">Reclamar Porción</button>
+                <div class="product-info" style="padding-top: 0;">
+                    <div class="product-meta">
+                        <span class="product-price">$40.00</span>
+                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
+                    </div>
                 </div>
             </div>
             <div class="product-card">
                 <div>
-                    <div class="product-img-placeholder">
-                        <i class="fa-solid fa-circle-radiation"></i>
+                    <div class="product-img-placeholder"><i class="fa-solid fa-globe"></i></div>
+                    <div class="product-info">
+                        <h3 class="product-name">The Death Star</h3>
+                        <p class="product-desc">Edición esférica especial con núcleo de fudge fundido a alta presión térmica. Una explosión masiva de sabor en el núcleo.</p>
                     </div>
-                    <h3 class="product-name">The Death Star</h3>
-                    <p class="product-desc">Edición esférica especial con núcleo de fudge fundido a alta presión térmica. Una explosión masiva de sabor en el núcleo.</p>
                 </div>
-                <div class="product-meta">
-                    <span class="product-price">$55.00</span>
-                    <button class="btn-imperial">Reclamar Porción</button>
+                <div class="product-info" style="padding-top: 0;">
+                    <div class="product-meta">
+                        <span class="product-price">$55.00</span>
+                        <button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;">Reclamar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -636,68 +578,63 @@
 
     <section id="phygital-section" class="app-section">
         <h2 class="section-title">Portal Phygital</h2>
-        <div class="qr-scanner-container">
-            <p style="color: #a3b2c2; margin-bottom: 15px;">Alinea el código de tu Cubo Holocrón físico frente a los sensores ópticos de tu dispositivo.</p>
+        <div class="qr-container">
+            <p style="color: var(--text-muted); margin-bottom: 10px;">Alinea el código de tu Cubo Holocrón frente a los sensores ópticos.</p>
             <div class="scanner-viewport">
                 <div class="scanner-laser"></div>
-                <div class="scanner-reticle">
-                    <i class="fa-solid fa-expand"></i>
-                </div>
-                <div class="scan-overlay-message" id="scan-result">
-                    <i class="fa-solid fa-circle-check" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 10px;"></i>
-                    <h4 class="nav-logo" style="margin-bottom: 5px;">Cubo Sincronizado</h4>
-                    <p style="font-size: 0.9rem; color: #ffffff;">Desplegando filtro de Realidad Aumentada de Don Bosco Stormtrooper...</p>
-                    <button class="btn-imperial" style="margin-top: 15px; padding: 6px 15px; font-size: 0.75rem;" onclick="closeScannerSimulation()">Cerrar Enlace</button>
+                <div class="scanner-reticle"><i class="fa-solid fa-qrcode"></i></div>
+                <div class="scan-message" id="scan-result">
+                    <i class="fa-solid fa-circle-check" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
+                    <h3 class="product-name">Sincronización Exitosa</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-muted);">Cargando filtro holográfico de Realidad Aumentada...</p>
+                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="closeScanner()">Desconectar</button>
                 </div>
             </div>
-            <button class="btn-imperial" id="btn-scan" onclick="triggerScannerSimulation()">Activar Escáner de Holocrón</button>
+            <button class="btn-sw" id="btn-scan" onclick="startScanner()">Vincular Holocrón</button>
         </div>
     </section>
 
     <section id="comics-section" class="app-section">
-        <h2 class="section-title">Archivos de Cómics Imperiales</h2>
-        <div class="comics-container">
-            <div class="comic-book" onclick="openComic('Fase de Carga', 'Crónicas del Lado Oscuro - Volumen I: La Tentación del Chocolate Primigenio. Los laboratorios de investigación del Sector San Luis Potosí han descubierto una receta capaz de alterar las frecuencias energéticas de la Fuerza. Los soldados desertan solo para probar una porción.')">
-                <div class="comic-cover-placeholder">
-                    <span class="comic-num">DATA-LOG #01</span>
-                    <h3 class="comic-title">La Revelación de la Receta</h3>
-                    <i class="fa-solid fa-book-open-reader" style="margin-top: 15px; color: rgba(0,243,255,0.4);"></i>
+        <h2 class="section-title">Archivos de Cómics</h2>
+        <div class="comics-grid">
+            <div class="comic-card" onclick="openComic('Fase de Carga', 'Crónicas del Lado Oscuro - Volumen I: La Revelación de la Receta. Los laboratorios de manufactura en San Luis Potosí han estabilizado una aleación de cacao capaz de alterar los niveles de la Fuerza.')">
+                <div class="comic-placeholder">
+                    <span class="comic-tag">DATA-LOG #01</span>
+                    <h3 class="comic-title">La Revelación</h3>
                 </div>
             </div>
-            <div class="comic-book" onclick="openComic('Asalto al Convoy', 'Crónicas del Lado Oscuro - Volumen II: El escape de los Troopers. Un cargamento completo de empaques cúbicos es interceptado en el hiperespacio. No hubo supervivientes, pero las cajas se encuentran a salvo listas para distribución.')">
-                <div class="comic-cover-placeholder">
-                    <span class="comic-num">DATA-LOG #02</span>
-                    <h3 class="comic-title">El Robo del Holocrón</h3>
-                    <i class="fa-solid fa-book-open-reader" style="margin-top: 15px; color: rgba(0,243,255,0.4);"></i>
+            <div class="comic-card" onclick="openComic('Asalto al Hangar', 'Crónicas del Lado Oscuro - Volumen II: El Robo del Holocrón. Las raciones cúbicas de almacenamiento de brownies han sido desplegadas en el patio del hangar, desatando una rebelión por el sabor chewy.')">
+                <div class="comic-placeholder">
+                    <span class="comic-tag">DATA-LOG #02</span>
+                    <h3 class="comic-title">El Robo</h3>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contact-section" class="app-section">
-        <h2 class="section-title">Nexo de Comunicación Cifrada</h2>
+        <h2 class="section-title">Canal de Transmisión</h2>
         <div class="contact-layout">
-            <div class="hologram-map-box">
-                <div class="holo-grid-lines"></div>
-                <i class="fa-solid fa-satellite-dish" style="font-size: 3rem; color: var(--neon-cyan); margin-bottom: 15px; filter: drop-shadow(var(--neon-glow));"></i>
-                <h3 font-family="Orbitron" style="letter-spacing: 1px; margin-bottom: 10px;">Coordenadas de Operación</h3>
-                <p style="color: #a3b2c2; max-width: 300px; font-size: 0.95rem;">Sector Urbano Base:<br><strong>San Luis Potosí, México</strong><br>Distribución centralizada mediante mensajería hiperespacial local.</p>
+            <div class="map-container">
+                <i class="fa-solid fa-map-location-dot" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
+                <h3 class="product-name" style="margin-bottom: 5px;">Coordenadas</h3>
+                <p style="color: var(--text-muted); font-size: 1rem;">Sector Central:<br><strong>San Luis Potosí, México</strong></p>
             </div>
             <div class="console-form">
-                <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada con Éxito al Remitente Imperial.');">
+                <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
                     <div class="form-group">
-                        <label class="form-label">Identificación del Remitente (Nombre)</label>
-                        <input type="text" class="form-input" required placeholder="Ej. Recluta Skywalker">
+                        <label class="form-label">Identificación (Nombre)</label>
+                        <input type="text" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Dirección de Holored (Correo Electrónico)</label>
-                        <input type="email" class="form-input" required placeholder="nombre@sector.com">
+                        <label class="form-label">Dirección de Holored (Correo)</label>
+                        <input type="email" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Frecuencia de Transmisión (Mensaje Encriptado)</label>
-                        <textarea class="form-input" rows="4" required placeholder="Escribe tu transmisión aquí..."></textarea>
+                        <label class="form-label">Mensaje Cifrado</label>
+                        <textarea class="form-input" rows="4" required></textarea>
                     </div>
-                    <button type="submit" class="btn-imperial" style="width: 100%;">Transmitir Datos Cifrados</button>
+                    <button type="submit" class="btn-sw" style="width: 100%; border-radius: 0;">Enviar Transmisión</button>
                 </form>
             </div>
         </div>
@@ -706,14 +643,14 @@
     <div class="galaxy-modal" id="comic-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeComic()">&times;</span>
-            <h3 class="nav-logo" id="modal-comic-title" style="margin-bottom: 15px; border-bottom: 1px solid var(--neon-cyan); padding-bottom: 5px;"></h3>
-            <p id="modal-comic-body" style="color: #ffffff; line-height: 1.6; font-size: 1.1rem; text-align: justify;"></p>
+            <h3 class="product-name" id="modal-title" style="margin-bottom: 15px; color: var(--neon-cyan);"></h3>
+            <p id="modal-body" style="line-height: 1.6; color: #ffffff; text-align: justify;"></p>
         </div>
     </div>
 
     <script>
         /* ==========================================
-           MOTOR CANVAS DEL HIPERESPACIO MATEMÁTICO
+           SISTEMA CANVAS DEL HIPERESPACIO 3D
            ========================================== */
         const canvas = document.getElementById('hyperspace');
         const ctx = canvas.getContext('2d');
@@ -721,13 +658,12 @@
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
-        const numStars = 180;
+        const numStars = 200;
         let stars = [];
-        let speed = 0.8; // Velocidad de crucero/reposo de fondo
-        let targetSpeed = 0.8;
+        let speed = 0.6; 
+        let targetSpeed = 0.6;
         let isJumping = false;
 
-        // Inicializador de propiedades tridimensionales
         function initStars() {
             stars = [];
             for (let i = 0; i < numStars; i++) {
@@ -735,46 +671,39 @@
                     x: Math.random() * width - width / 2,
                     y: Math.random() * height - height / 2,
                     z: Math.random() * width,
-                    color: Math.random() > 0.4 ? '#ffffff' : '#00f3ff'
+                    color: Math.random() > 0.35 ? '#ffffff' : '#00f3ff'
                 });
             }
         }
 
-        function updateAndRenderStars() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'; // rastro sutil de frames
+        function animateStars() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
             ctx.fillRect(0, 0, width, height);
 
-            // Interpolación suave de aceleración/desaceleración
             speed += (targetSpeed - speed) * 0.08;
 
             for (let i = 0; i < numStars; i++) {
                 let star = stars[i];
-                
-                // Avanzar la estrella en el eje Z de profundidad
                 star.z -= speed;
 
-                // Si la estrella rebasa la pantalla, relocalizarla al fondo
                 if (star.z <= 0) {
                     star.x = Math.random() * width - width / 2;
                     star.y = Math.random() * height - height / 2;
                     star.z = width;
                 }
 
-                // Proyección 3D a coordenadas 2D de pantalla
                 let k = 400 / star.z;
                 let px = star.x * k + width / 2;
                 let py = star.y * k + height / 2;
 
                 if (px >= 0 && px <= width && py >= 0 && py <= height) {
-                    // Cálculo de la longitud del vector según la velocidad (Efecto túnel del video)
-                    let size = (1 - star.z / width) * 3;
-                    let stretch = isJumping ? speed * 0.8 : 1; 
+                    let size = (1 - star.z / width) * 2.5;
+                    let stretch = isJumping ? speed * 0.75 : 1;
 
                     ctx.beginPath();
                     ctx.strokeStyle = star.color;
                     ctx.lineWidth = size < 1 ? 1 : size;
-                    
-                    // Dibujar vector de línea estirada desde el origen radial central
+
                     let prevK = 400 / (star.z + stretch);
                     let pXOld = star.x * prevK + width / 2;
                     let pYOld = star.y * prevK + height / 2;
@@ -784,7 +713,7 @@
                     ctx.stroke();
                 }
             }
-            requestAnimationFrame(updateAndRenderStars);
+            requestAnimationFrame(animateStars);
         }
 
         window.addEventListener('resize', () => {
@@ -794,29 +723,32 @@
         });
 
         initStars();
-        updateAndRenderStars();
+        animateStars();
 
         /* ==========================================
-           LOGICA DE ENTRADA Y CONTROL DE LA SPA
+           GESTIÓN PHYGITAL / INTERRUPCIÓN CAPAS HUD
            ========================================== */
         const navButtons = document.querySelectorAll('.nav-menu button, .nav-hook-btn');
         const sections = document.querySelectorAll('.app-section');
         const flashOverlay = document.getElementById('flash-overlay');
 
         navButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
+            button.addEventListener('click', () => {
                 const targetId = button.getAttribute('data-target');
-                if (isJumping) return; // Bloquear múltiples clics simultáneos
+                if (isJumping) return;
 
                 isJumping = true;
-                targetSpeed = 65; // Aceleración de salto hiperespacial exponencial
+                
+                // CRÍTICO: Poner el canvas EN PRIMER PLANO por delante de la web
+                canvas.style.zIndex = "9995"; 
+                targetSpeed = 70; // Velocidad extrema
 
-                // Sincronización precisa con el clímax tridimensional (1000ms)
+                // Clímax: Destello óptico blanco
                 setTimeout(() => {
-                    flashOverlay.style.opacity = '1'; // Destello blanco absoluto
-                }, 950);
+                    flashOverlay.style.opacity = '1';
+                }, 900);
 
-                // Relevo de visualización de vistas (1150ms)
+                // Relevo de secciones en la oscuridad del flash
                 setTimeout(() => {
                     sections.forEach(section => {
                         section.classList.remove('active');
@@ -825,44 +757,40 @@
                         }
                     });
                     window.scrollTo(0, 0);
-                }, 1150);
+                }, 1100);
 
-                // Desaceleración y retorno fluido a la normalidad espacial (1350ms)
+                // Normalización: Enviar el canvas DE VUELTA AL FONDO para interactuar
                 setTimeout(() => {
                     flashOverlay.style.opacity = '0';
-                    targetSpeed = 0.8;
+                    targetSpeed = 0.6;
+                    canvas.style.zIndex = "-1"; 
                     isJumping = false;
-                }, 1350);
+                }, 1300);
             });
         });
 
-        /* ==========================================
-           FUNCIONES AUXILIARES INTERACTIVAS (HUD)
-           ========================================== */
-        // Control de Escáner QR de mentira
-        function triggerScannerSimulation() {
+        // Simulación interactiva del Portal QR
+        function startScanner() {
             const laser = document.querySelector('.scanner-laser');
-            const resultBox = document.getElementById('scan-result');
-            const btn = document.getElementById('btn-scan');
-
-            btn.style.display = 'none';
+            const result = document.getElementById('scan-result');
+            document.getElementById('btn-scan').style.display = 'none';
             laser.style.display = 'block';
 
             setTimeout(() => {
                 laser.style.display = 'none';
-                resultBox.classList.add('show');
-            }, 3000); // 3 segundos simulando rastreo de matriz óptica
+                result.classList.add('show');
+            }, 2500);
         }
 
-        function closeScannerSimulation() {
+        function closeScanner() {
             document.getElementById('scan-result').classList.remove('show');
             document.getElementById('btn-scan').style.display = 'inline-block';
         }
 
-        // Control del visualizador de Cómics
+        // Modales de la Base de Datos
         function openComic(title, bodyText) {
-            document.getElementById('modal-comic-title').innerText = title.toUpperCase();
-            document.getElementById('modal-comic-body').innerText = bodyText;
+            document.getElementById('modal-title').innerText = title.toUpperCase();
+            document.getElementById('modal-body').innerText = bodyText;
             document.getElementById('comic-modal').style.display = 'flex';
         }
 
