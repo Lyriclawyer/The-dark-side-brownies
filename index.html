@@ -97,13 +97,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 15px 20px;
+            padding: 10px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Ajuste de Tamaño del Logotipo solicitado */
         .nav-logo-img {
-            height: 90px;
+            height: 75px;
             margin: 5px 0;
             object-fit: contain;
             filter: drop-shadow(0px 0px 8px rgba(0, 243, 255, 0.2));
@@ -140,12 +139,12 @@
             box-shadow: inset 0 -3px 0 var(--neon-cyan);
         }
 
-        /* --- CONTENEDORES INDEPENDIENTES (Full Viewport) --- */
+        /* --- CONTENEDORES INDEPENDIENTES --- */
         .app-section {
             display: none;
             height: 100vh;
             width: 100vw;
-            padding: 160px 40px 40px 40px;
+            padding: 180px 40px 40px 40px;
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
@@ -162,6 +161,8 @@
             padding: 0 20px;
             max-width: 100vw;
             height: 100vh;
+            position: relative;
+            z-index: 5;
         }
 
         .hero-title {
@@ -242,7 +243,7 @@
         .product-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
         .product-price { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
 
-        /* --- PORTAL QR REFORMADO (ESTADOS DE FLUJO CORREGIDOS) --- */
+        /* --- PORTAL QR --- */
         .qr-container {
             max-width: 600px;
             margin: 0 auto;
@@ -262,6 +263,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         #camera-reader {
@@ -279,6 +281,12 @@
             z-index: 100;
             animation: laserScan 2.5s linear infinite;
             display: none;
+        }
+
+        @keyframes laserScan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
         }
 
         .scan-idle-placeholder {
@@ -340,7 +348,7 @@
         .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
         .lock-icon { font-size: 2rem; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
 
-        /* --- NEXO Y MAPA DE LA GALAXIA LEJANA --- */
+        /* --- NEXO Y MAPA GALÁCTICO --- */
         .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
         
         .map-hud-box { 
@@ -355,7 +363,7 @@
             width: 100%;
             height: 280px;
             border: 1px solid rgba(0, 243, 255, 0.3);
-            filter: grayscale(1) invert(0.9) sepia(0.2) hue-rotate(140deg); /* Efecto holograma cian estilo Star Wars */
+            filter: grayscale(1) invert(0.9) sepia(0.2) hue-rotate(140deg); 
         }
 
         .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; }
@@ -378,9 +386,9 @@
 
         @media(max-width: 768px) {
             .hero-title { font-size: 2.8rem; }
-            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); }
+            .nav-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
             .nav-item { border: 1px solid var(--sw-border) !important; }
-            .app-section { padding-top: 220px; }
+            .app-section { padding-top: 240px; }
             .contact-layout { grid-template-columns: 1fr; }
         }
     </style>
@@ -470,8 +478,8 @@
         <div class="contact-layout">
             <div class="map-hud-box">
                 <h3 class="product-name" style="color: var(--neon-cyan); margin-bottom: 4px;"><i class="fa-solid fa-shuttle-space"></i> Puesto de Avanzada: Borde Exterior</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Transmisión originada desde el sistema Politécnica, coordenadas C. Urbano Villalón 500, La Ladrillera, San Luis Potosí.</p>
-                <iframe class="map-frame" src="https://maps.google.com/maps?q=Universidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD,%20Urbano%20Villal%C3%B3n%20500&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Coordenadas: C. Urbano Villalón 500, La Ladrillera, 78369 San Luis Potosí, S.L.P.</p>
+                <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.147573432328!2d-101.00845342417721!3d22.120355472493392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842aa236077ffdb3%3A0x7d6118d033e08f5d!2sUniversidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD!5e0!3m2!1ses!2smx!4v1710000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="console-form">
                 <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
@@ -486,7 +494,7 @@
 
     <div class="galaxy-modal" id="comic-modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeComic()">&times;</span>
+            <span class="close-modal" onclick="closeComic()">×</span>
             <h3 class="product-name" id="modal-title" style="margin-bottom: 15px; color: var(--neon-cyan);"></h3>
             <p id="modal-body" style="line-height: 1.6; text-align: justify;"></p>
         </div>
@@ -580,7 +588,7 @@
                         <div class="comic-placeholder">
                             <i class="fa-solid fa-lock lock-icon"></i>
                             <h3 class="comic-title" style="color: var(--text-muted);">Bloqueado</h3>
-                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requierre Escaneo QR</span>
+                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requiere Escaneo QR</span>
                         </div>
                     `;
                 }
