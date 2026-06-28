@@ -64,15 +64,15 @@
         .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
         /* --- MOTOR DE ANIMACIÓN FIXED --- */
-        #hyperspace {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9995;
-            pointer-events: none;
-        }
+      #hyperspace {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Esto envía la animación detrás de la página */
+    pointer-events: none;
+}
 
         #flash-overlay {
             position: fixed;
@@ -146,14 +146,16 @@
         .nav-btn:hover { color: var(--neon-cyan); text-shadow: var(--neon-glow); }
 
         /* --- ARQUITECTURA SPA (SECCIONES) --- */
-        .app-section {
-            display: none;
-            min-height: 100vh;
-            padding: 100px 20px 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeIn 0.5s ease forwards;
-        }
+.app-section {
+    position: relative;
+    z-index: 10;
+    display: none;
+    min-height: 100vh;
+    padding: 100px 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease forwards;
+}
 
         .app-section.active { display: block; }
 
