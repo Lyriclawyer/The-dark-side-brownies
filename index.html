@@ -1,753 +1,872 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>The Dark Side Brownies · VR HUD</title>
-  <!-- Font Awesome 6 (CDN) para iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* ============================================================
-       RESET Y ESTILOS GLOBALES · TEMÁTICA LADO OSCURO + VR HUD
-       ============================================================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dark Side Brownies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 
-    body {
-      background: #000000;
-      color: #fff;
-      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
-    }
+    <style>
+        /* --- ESTILOS GENERALES Y CONFIGURACIÓN HUD --- */
+        :root {
+            --neon-cyan: #00f3ff;
+            --dark-bg: #000000;
+            --hud-gray: #12161a;
+            --text-bright: #ffffff;
+            --neon-glow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
+            --neon-border: 1px solid rgba(0, 243, 255, 0.4);
+        }
 
-    /* líneas de escaneo (scanlines) sutiles en toda la pantalla */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      background: repeating-linear-gradient(0deg, rgba(0, 243, 255, 0.02) 0px, rgba(0, 243, 255, 0.02) 2px, transparent 2px, transparent 6px);
-      mix-blend-mode: screen;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
 
-    /* contenedor principal con leve curvatura / perspectiva 3D */
-    .app-wrapper {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.5rem 1.8rem 3rem;
-      position: relative;
-      perspective: 1200px;
-      transform: rotateX(0.3deg) rotateY(0.1deg);
-      transform-origin: center top;
-      transition: transform 0.2s ease;
-    }
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-bright);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
 
-    /* bordes HUD neón parpadeantes (simulan casco VR) */
-    .app-wrapper::before,
-    .app-wrapper::after {
-      content: '';
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      border: 1px solid rgba(0, 243, 255, 0.18);
-      box-shadow: 0 0 12px rgba(0, 243, 255, 0.1);
-      animation: flickerHUD 4s infinite alternate;
-    }
-    .app-wrapper::before {
-      top: 20px; left: 20px; right: 20px; bottom: 20px;
-      border-radius: 32px;
-    }
-    .app-wrapper::after {
-      top: 28px; left: 28px; right: 28px; bottom: 28px;
-      border-radius: 24px;
-      border-color: rgba(0, 243, 255, 0.08);
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.05);
-    }
+        /* Scanlines - Efecto Lente Realidad Virtual / Casco Imperial */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.06) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
 
-    @keyframes flickerHUD {
-      0% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
+        /* Esquinas HUD Estáticas del Visor */
+        .hud-corner {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-cyan);
+            z-index: 990;
+            pointer-events: none;
+            filter: drop-shadow(var(--neon-glow));
+        }
+        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
-    /* esquinas con vectores HUD (simulacro) */
-    .hud-corner {
-      position: fixed;
-      width: 40px; height: 40px;
-      border: 2px solid #00f3ff;
-      opacity: 0.5;
-      z-index: 9997;
-      filter: drop-shadow(0 0 6px #00f3ff);
-      pointer-events: none;
-    }
-    .hud-corner--tl { top: 24px; left: 24px; border-right: none; border-bottom: none; }
-    .hud-corner--tr { top: 24px; right: 24px; border-left: none; border-bottom: none; }
-    .hud-corner--bl { bottom: 24px; left: 24px; border-right: none; border-top: none; }
-    .hud-corner--br { bottom: 24px; right: 24px; border-left: none; border-top: none; }
+        /* --- MOTOR DE ANIMACIÓN FIXED --- */
+        #hyperspace {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9995;
+            pointer-events: none;
+        }
 
-    /* ============================================================
-       HIPERESPACIO · OVERLAY ANIMADO (JavaScript + CSS)
-       ============================================================ */
-    .hyperspace-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 99999;
-      pointer-events: none;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.1s ease;
-    }
-    .hyperspace-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .hyperspace-overlay .stars {
-      position: absolute;
-      width: 100%; height: 100%;
-      background: radial-gradient(circle at 50% 50%, #00f3ff 1px, transparent 1px);
-      background-size: 3px 3px;
-      opacity: 0.3;
-      animation: starWarp 1.2s linear forwards;
-    }
-    .hyperspace-overlay .lines {
-      position: absolute;
-      width: 100%; height: 100%;
-      background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0, 243, 255, 0.15) 40px, rgba(0, 243, 255, 0.25) 42px, transparent 42px, transparent 80px);
-      transform: scale(2);
-      animation: lineWarp 1.2s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
-    }
-    @keyframes starWarp {
-      0% { transform: scale(1) rotate(0deg); opacity: 0.2; }
-      100% { transform: scale(8) rotate(30deg); opacity: 0; }
-    }
-    @keyframes lineWarp {
-      0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
-      100% { transform: scale(3) rotate(10deg); opacity: 0; }
-    }
+        #flash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #ffffff;
+            opacity: 0;
+            z-index: 9999;
+            pointer-events: none;
+            transition: opacity 0.1s ease;
+        }
 
-    /* ============================================================
-       NAVEGACIÓN PRINCIPAL
-       ============================================================ */
-    .main-nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.8rem 1.8rem;
-      padding: 1.2rem 0.5rem 2rem;
-      border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-      margin-bottom: 2rem;
-      position: relative;
-    }
-    .main-nav a {
-      color: #ccc;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 0.3rem 0.6rem;
-      border: 1px solid transparent;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      background: transparent;
-      font-family: inherit;
-      position: relative;
-    }
-    .main-nav a i {
-      margin-right: 8px;
-      color: #00f3ff;
-    }
-    .main-nav a:hover {
-      color: #fff;
-      border-color: #00f3ff;
-      text-shadow: 0 0 12px #00f3ff;
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
-    }
+        /* --- NAVEGACIÓN --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.75);
+            border-bottom: var(--neon-border);
+            backdrop-filter: blur(5px);
+            z-index: 900;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+        }
 
-    /* ============================================================
-       SECCIONES (Scroll suave)
-       ============================================================ */
-    .section {
-      display: block;
-      padding: 2.5rem 0;
-      border-bottom: 1px solid rgba(0, 243, 255, 0.08);
-      transition: opacity 0.5s ease;
-      scroll-margin-top: 2rem;
-    }
-    .section:last-of-type { border-bottom: none; }
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-shadow: var(--neon-glow);
+            letter-spacing: 1px;
+        }
 
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 300;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: #fff;
-      margin-bottom: 2rem;
-      border-left: 4px solid #00f3ff;
-      padding-left: 1.2rem;
-      text-shadow: 0 0 20px rgba(0, 243, 255, 0.25);
-    }
-    .section-title i {
-      color: #00f3ff;
-      margin-right: 12px;
-    }
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
 
-    /* ============================================================
-       HERO
-       ============================================================ */
-    .hero {
-      text-align: center;
-      padding: 3rem 1rem 4rem;
-      position: relative;
-    }
-    .hero h1 {
-      font-size: clamp(2.8rem, 12vw, 6rem);
-      font-weight: 800;
-      letter-spacing: 8px;
-      background: linear-gradient(180deg, #fff 0%, #00f3ff 90%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
-      margin-bottom: 0.8rem;
-      font-family: 'Segoe UI', 'Arial Black', sans-serif;
-    }
-    .hero .tagline {
-      font-size: clamp(1.2rem, 4vw, 2rem);
-      color: #aadcff;
-      letter-spacing: 6px;
-      font-weight: 200;
-      text-shadow: 0 0 30px #00f3ff55;
-      margin-bottom: 2.5rem;
-      opacity: 0.9;
-    }
-    .btn-primary {
-      background: transparent;
-      border: 2px solid #00f3ff;
-      color: #fff;
-      padding: 0.9rem 2.8rem;
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
-      border-radius: 4px;
-      background: rgba(0, 243, 255, 0.02);
-      backdrop-filter: blur(2px);
-    }
-    .btn-primary:hover {
-      background: #00f3ff;
-      color: #000;
-      box-shadow: 0 0 60px #00f3ff;
-      transform: scale(1.03);
-    }
-    .btn-primary i { margin-right: 12px; }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-bright);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            letter-spacing: 1px;
+        }
 
-    /* ============================================================
-       CATÁLOGO · TARJETAS FLOTANTES
-       ============================================================ */
-    .catalog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2rem;
-      margin-top: 1rem;
-    }
-    .product-card {
-      background: rgba(10, 10, 20, 0.7);
-      backdrop-filter: blur(6px);
-      border: 1px solid #00f3ff33;
-      border-radius: 24px;
-      padding: 1.8rem 1.2rem 1.5rem;
-      text-align: center;
-      transition: all 0.4s ease;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-      transform: translateY(0);
-      cursor: default;
-      position: relative;
-    }
-    .product-card:hover {
-      transform: translateY(-12px) scale(1.02);
-      border-color: #00f3ff;
-      box-shadow: 0 0 50px rgba(0, 243, 255, 0.15);
-      background: rgba(0, 243, 255, 0.03);
-    }
-    .product-card .icon {
-      font-size: 3.2rem;
-      color: #00f3ff;
-      margin-bottom: 0.6rem;
-      filter: drop-shadow(0 0 10px #00f3ff55);
-    }
-    .product-card h3 {
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-      margin: 0.3rem 0;
-    }
-    .product-card .price {
-      color: #00f3ff;
-      font-size: 1.3rem;
-      font-weight: 300;
-      margin: 0.6rem 0;
-      letter-spacing: 2px;
-    }
-    .product-card .desc {
-      font-size: 0.9rem;
-      color: #aab;
-      margin-bottom: 1.2rem;
-    }
-    .btn-claim {
-      background: transparent;
-      border: 1px solid #00f3ff;
-      color: #00f3ff;
-      padding: 0.4rem 1.5rem;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      font-weight: 600;
-      background: rgba(0, 243, 255, 0.02);
-    }
-    .btn-claim:hover {
-      background: #00f3ff;
-      color: #000;
-      box-shadow: 0 0 30px #00f3ff;
-    }
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--neon-cyan);
+            transition: width 0.3s ease;
+            box-shadow: var(--neon-glow);
+        }
 
-    /* ============================================================
-       PORTAL PHYGITAL (QR / ESCÁNER)
-       ============================================================ */
-    .scanner-box {
-      background: #0a0a12;
-      border: 1px solid #00f3ff55;
-      border-radius: 48px;
-      padding: 3rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 60px rgba(0, 243, 255, 0.05);
-    }
-    .scanner-box .scan-frame {
-      width: 180px;
-      height: 180px;
-      margin: 0 auto 1.2rem;
-      border: 2px solid #00f3ff;
-      border-radius: 18px;
-      position: relative;
-      box-shadow: 0 0 40px #00f3ff33;
-    }
-    .scanner-box .scan-frame::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 4px;
-      background: #00f3ff;
-      box-shadow: 0 0 30px #00f3ff;
-      animation: scanLine 2.2s infinite linear;
-    }
-    @keyframes scanLine {
-      0% { top: 0; }
-      100% { top: 100%; }
-    }
-    .scanner-box .scan-frame i {
-      font-size: 5rem;
-      color: #00f3ff55;
-      line-height: 180px;
-    }
-    .btn-scanner {
-      background: #00f3ff22;
-      border: 2px solid #00f3ff;
-      color: #fff;
-      padding: 0.9rem 2.2rem;
-      font-size: 1.2rem;
-      border-radius: 60px;
-      letter-spacing: 2px;
-      transition: 0.3s;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-    }
-    .btn-scanner:hover {
-      background: #00f3ff;
-      color: #000;
-      box-shadow: 0 0 60px #00f3ff;
-    }
+        .nav-btn:hover::after { width: 100%; }
+        .nav-btn:hover { color: var(--neon-cyan); text-shadow: var(--neon-glow); }
 
-    /* ============================================================
-       CÓMICS (CARRUSEL / MODAL)
-       ============================================================ */
-    .comics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1.8rem;
-    }
-    .comic-item {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 20px;
-      padding: 1.2rem 0.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .comic-item:hover {
-      border-color: #00f3ff;
-      transform: scale(1.03);
-      box-shadow: 0 0 40px #00f3ff22;
-    }
-    .comic-item i {
-      font-size: 3.6rem;
-      color: #00f3ff;
-      margin-bottom: 0.5rem;
-    }
-    .comic-item h4 { font-weight: 300; letter-spacing: 1px; }
+        /* --- ARQUITECTURA SPA (SECCIONES) --- */
+        .app-section {
+            display: none;
+            min-height: 100vh;
+            padding: 100px 20px 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease forwards;
+        }
 
-    /* MODAL (estilo base de datos galáctica) */
-    .modal-comic {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(10px);
-      z-index: 99999;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-    .modal-comic.open {
-      display: flex;
-    }
-    .modal-content {
-      background: #0b0b14;
-      border: 1px solid #00f3ff;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 40px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 0 80px #00f3ff22;
-      position: relative;
-    }
-    .modal-content .close-modal {
-      position: absolute;
-      top: 16px; right: 24px;
-      font-size: 2rem;
-      color: #00f3ff;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .modal-content .close-modal:hover { transform: scale(1.2); }
-    .modal-content h2 { color: #00f3ff; letter-spacing: 3px; margin-bottom: 1rem; }
-    .modal-content p { color: #ccc; line-height: 1.7; }
+        .app-section.active { display: block; }
 
-    /* ============================================================
-       UBICACIÓN Y CONTACTO
-       ============================================================ */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-    .map-holo {
-      background: #0a0a14;
-      border: 1px solid #00f3ff55;
-      border-radius: 30px;
-      padding: 1.8rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.02);
-    }
-    .map-holo i { font-size: 3.6rem; color: #00f3ff; margin-bottom: 0.8rem; }
-    .contact-form {
-      background: #0a0a14;
-      border: 1px solid #00f3ff33;
-      border-radius: 30px;
-      padding: 2rem 1.8rem;
-    }
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      background: transparent;
-      border: 1px solid #333;
-      padding: 0.8rem 1.2rem;
-      margin-bottom: 1.2rem;
-      color: #fff;
-      border-radius: 40px;
-      transition: 0.3s;
-      font-family: inherit;
-    }
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      border-color: #00f3ff;
-      outline: none;
-      box-shadow: 0 0 30px #00f3ff22;
-    }
-    .contact-form button {
-      background: transparent;
-      border: 2px solid #00f3ff;
-      color: #fff;
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: 0.3s;
-      width: 100%;
-    }
-    .contact-form button:hover {
-      background: #00f3ff;
-      color: #000;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
-    @media (max-width: 700px) {
-      .app-wrapper { padding: 0.8rem; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .main-nav a { font-size: 0.85rem; padding: 0.2rem 0.4rem; }
-      .section-title { font-size: 1.6rem; }
-      .hero h1 { letter-spacing: 4px; }
-      .hud-corner { display: none; }
-    }
-    @media (max-width: 480px) {
-      .catalog-grid { grid-template-columns: 1fr; }
-      .comics-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+        /* --- BOTÓN ESTILO COMANDO INTERACTIVO --- */
+        .btn-imperial {
+            background: rgba(0, 243, 255, 0.05);
+            border: var(--neon-border);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px 28px;
+            cursor: pointer;
+            position: relative;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0%, 100% 0%, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0% 100%, 0% 10px);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+        .btn-imperial:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            box-shadow: var(--neon-glow);
+            transform: translateY(-2px);
+        }
+
+        /* --- SECCIÓN 1: HERO / INICIO --- */
+        #hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-hud-frame {
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            padding: 40px 60px;
+            background: rgba(18, 22, 26, 0.4);
+            backdrop-filter: blur(4px);
+            border-radius: 4px;
+            position: relative;
+            max-width: 800px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+        }
+
+        .hero-hud-frame::before {
+            content: "SYSTEM: ONLINE";
+            position: absolute;
+            top: -10px; left: 20px;
+            background: var(--dark-bg);
+            padding: 0 10px;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #7d8a99 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-slogan {
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            font-style: italic;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: var(--neon-glow);
+        }
+
+        /* --- SECCIÓN 2: MENÚ / CATÁLOGO --- */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--hud-gray);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            padding: 25px;
+            position: relative;
+            transition: all 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Indicador HUD de Tarjeta */
+        .product-card::before {
+            content: "▲ COGNITIVE TARGET";
+            position: absolute;
+            top: 8px; right: 12px;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .product-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: var(--neon-glow), inset 0 0 15px rgba(0, 243, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .product-img-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #15191e 0%, #050608 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            color: rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 20px;
+            border-radius: 2px;
+            transition: all 0.4s ease;
+        }
+        .product-card:hover .product-img-placeholder {
+            color: var(--neon-cyan);
+            border-color: rgba(0, 243, 255, 0.3);
+        }
+
+        .product-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .product-desc {
+            color: #a3b2c2;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        /* --- SECCIÓN 3: PORTAL PHYGITAL (QR) --- */
+        .qr-scanner-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--hud-gray);
+            border: var(--neon-border);
+            padding: 30px;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: var(--neon-glow);
+        }
+
+        .scanner-viewport {
+            width: 100%;
+            height: 250px;
+            background: #05070a;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Línea de escaneo láser */
+        .scanner-laser {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 12px var(--neon-cyan);
+            top: 0; left: 0;
+            animation: laserScan 2.5s linear infinite;
+            display: none;
+        }
+
+        .scanner-reticle {
+            width: 140px;
+            height: 140px;
+            border: 2px dashed rgba(0, 243, 255, 0.4);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(0, 243, 255, 0.3);
+            font-size: 2rem;
+        }
+
+        @keyframes laserScan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+
+        .scan-overlay-message {
+            position: absolute;
+            background: rgba(0,0,0,0.85);
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+        .scan-overlay-message.show { transform: translateY(0); }
+
+        /* --- SECCIÓN 4: CÓMICS EXCLUSIVOS --- */
+        .comics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .comic-book {
+            background: #15191e;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .comic-book:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: var(--neon-glow);
+            transform: scale(1.03);
+        }
+
+        .comic-cover-placeholder {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(0deg, #090c0f 0%, #1c232a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .comic-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 5px;
+        }
+
+        .comic-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* Modal / Base de Datos de Cómics */
+        .galaxy-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.9);
+            z-index: 995;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--hud-gray);
+            border: var(--neon-border);
+            width: 100%;
+            max-width: 650px;
+            padding: 30px;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: var(--neon-glow);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            cursor: pointer;
+        }
+
+        /* --- SECCIÓN 5: UBICACIÓN Y CONTACTO --- */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .hologram-map-box {
+            background: linear-gradient(180deg, rgba(0, 243, 255, 0.02) 0%, rgba(0,0,0,0.5) 100%);
+            border: var(--neon-border);
+            border-radius: 4px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            position: relative;
+            text-align: center;
+        }
+
+        .holo-grid-lines {
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(0, 243, 255, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            pointer-events: none;
+        }
+
+        .console-form {
+            background: var(--hud-gray);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        /* --- RESPONSIVE OPTIMIZATIONS --- */
+        @media(max-width: 768px) {
+            .hero-title { font-size: 2.2rem; }
+            .hero-slogan { font-size: 1.1rem; }
+            .hero-hud-frame { padding: 30px 20px; }
+            .navbar { width: 100%; border-radius: 0; top: 0; }
+            .nav-menu { gap: 10px; }
+            .nav-btn { font-size: 0.75rem; padding: 6px 8px; }
+        }
+    </style>
 </head>
 <body>
-  <!-- ===== ESQUINAS HUD ===== -->
-  <div class="hud-corner hud-corner--tl"></div>
-  <div class="hud-corner hud-corner--tr"></div>
-  <div class="hud-corner hud-corner--bl"></div>
-  <div class="hud-corner hud-corner--br"></div>
 
-  <!-- ===== HYPERSPACE OVERLAY ===== -->
-  <div id="hyperspaceOverlay" class="hyperspace-overlay">
-    <div class="stars"></div>
-    <div class="lines"></div>
-  </div>
+    <div class="hud-corner top-left"></div>
+    <div class="hud-corner top-right"></div>
+    <div class="hud-corner bottom-left"></div>
+    <div class="hud-corner bottom-right"></div>
+    <div id="flash-overlay"></div>
+    
+    <canvas id="hyperspace"></canvas>
 
-  <!-- ===== MODAL CÓMIC ===== -->
-  <div id="comicModal" class="modal-comic">
-    <div class="modal-content">
-      <span class="close-modal" id="closeModalBtn">&times;</span>
-      <h2><i class="fas fa-jedi"></i> Archivo Imperial</h2>
-      <p><strong>Viñeta exclusiva:</strong> En los confines del sector, el lado oscuro del brownie se manifiesta en cada bocado. La receta Sith ha sido transmitida por generaciones...</p>
-      <p style="margin-top: 1rem; color: #00f3ff;">— El Imperio del Chocolate</p>
-    </div>
-  </div>
-
-  <div class="app-wrapper">
-    <!-- ===== NAVEGACIÓN ===== -->
-    <nav class="main-nav" id="mainNav">
-      <a data-section="hero"><i class="fas fa-home"></i> Inicio</a>
-      <a data-section="catalogo"><i class="fas fa-box"></i> Catálogo</a>
-      <a data-section="phygital"><i class="fas fa-qrcode"></i> Phygital</a>
-      <a data-section="comics"><i class="fas fa-book"></i> Cómics</a>
-      <a data-section="contacto"><i class="fas fa-map-pin"></i> Contacto</a>
+    <nav class="navbar">
+        <div class="nav-logo">TDS // BROWNIES</div>
+        <ul class="nav-menu">
+            <li><button class="nav-btn" data-target="hero-section">Inicio</button></li>
+            <li><button class="nav-btn" data-target="catalog-section">Menú</button></li>
+            <li><button class="nav-btn" data-target="phygital-section">Holocrón</button></li>
+            <li><button class="nav-btn" data-target="comics-section">Cómics</button></li>
+            <li><button class="nav-btn" data-target="contact-section">Nexo</button></li>
+        </ul>
     </nav>
 
-    <!-- ===== SECCIÓN HERO ===== -->
-    <section id="hero" class="section hero">
-      <h1>THE DARK SIDE</h1>
-      <h1 style="font-size: clamp(2rem, 10vw, 4.5rem); margin-top: -0.4rem;">BROWNIES</h1>
-      <p class="tagline">⚡ Tan oscuro que te hará caer en la tentación ⚡</p>
-      <button class="btn-primary" id="btnHero"><i class="fas fa-eye"></i> Iniciar Sistema</button>
+    <section id="hero-section" class="app-section active">
+        <div class="hero-hud-frame">
+            <h1 class="hero-title">The Dark Side Brownies</h1>
+            <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
+            <button class="btn-imperial nav-hook-btn" data-target="catalog-section">Iniciar Sistema / Entrar al Lado Oscuro</button>
+        </div>
     </section>
 
-    <!-- ===== CATÁLOGO ===== -->
-    <section id="catalogo" class="section">
-      <h2 class="section-title"><i class="fas fa-crown"></i> Catálogo Galáctico</h2>
-      <div class="catalog-grid">
-        <div class="product-card">
-          <div class="icon"><i class="fas fa-meteor"></i></div>
-          <h3>The Vader</h3>
-          <div class="price">₿ 12.99</div>
-          <div class="desc">Chocolate amargo intenso · pureza Sith</div>
-          <button class="btn-claim"><i class="fas fa-utensils"></i> Reclamar porción</button>
+    <section id="catalog-section" class="app-section">
+        <h2 class="section-title">Catálogo Galáctico</h2>
+        <div class="catalog-grid">
+            <div class="product-card">
+                <div>
+                    <div class="product-img-placeholder">
+                        <i class="fa-solid fa-mask-ventilator"></i>
+                    </div>
+                    <h3 class="product-name">The Vader</h3>
+                    <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Un sabor denso y estructurado para los paladares más exigentes de la galaxia.</p>
+                </div>
+                <div class="product-meta">
+                    <span class="product-price">$45.00</span>
+                    <button class="btn-imperial">Reclamar Porción</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div>
+                    <div class="product-img-placeholder">
+                        <i class="fa-solid fa-helmet-safety"></i>
+                    </div>
+                    <h3 class="product-name">The Trooper</h3>
+                    <p class="product-desc">Brownie clásico balanceado con un impecable topping de chocolate con leche y líneas concéntricas de glacé blanco. Fiel a la orden.</p>
+                </div>
+                <div class="product-meta">
+                    <span class="product-price">$40.00</span>
+                    <button class="btn-imperial">Reclamar Porción</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div>
+                    <div class="product-img-placeholder">
+                        <i class="fa-solid fa-circle-radiation"></i>
+                    </div>
+                    <h3 class="product-name">The Death Star</h3>
+                    <p class="product-desc">Edición esférica especial con núcleo de fudge fundido a alta presión térmica. Una explosión masiva de sabor en el núcleo.</p>
+                </div>
+                <div class="product-meta">
+                    <span class="product-price">$55.00</span>
+                    <button class="btn-imperial">Reclamar Porción</button>
+                </div>
+            </div>
         </div>
-        <div class="product-card">
-          <div class="icon"><i class="fas fa-shield-halved"></i></div>
-          <h3>The Trooper</h3>
-          <div class="price">₿ 9.99</div>
-          <div class="desc">Topping de leche con líneas blancas</div>
-          <button class="btn-claim"><i class="fas fa-utensils"></i> Reclamar porción</button>
-        </div>
-        <div class="product-card">
-          <div class="icon"><i class="fas fa-circle"></i></div>
-          <h3>The Death Star</h3>
-          <div class="price">₿ 15.49</div>
-          <div class="desc">Edición redonda · núcleo fundido</div>
-          <button class="btn-claim"><i class="fas fa-utensils"></i> Reclamar porción</button>
-        </div>
-      </div>
     </section>
 
-    <!-- ===== PORTAL PHYGITAL ===== -->
-    <section id="phygital" class="section">
-      <h2 class="section-title"><i class="fas fa-qrcode"></i> Portal Phygital</h2>
-      <div class="scanner-box">
-        <div class="scan-frame">
-          <i class="fas fa-camera-retro"></i>
+    <section id="phygital-section" class="app-section">
+        <h2 class="section-title">Portal Phygital</h2>
+        <div class="qr-scanner-container">
+            <p style="color: #a3b2c2; margin-bottom: 15px;">Alinea el código de tu Cubo Holocrón físico frente a los sensores ópticos de tu dispositivo.</p>
+            <div class="scanner-viewport">
+                <div class="scanner-laser"></div>
+                <div class="scanner-reticle">
+                    <i class="fa-solid fa-expand"></i>
+                </div>
+                <div class="scan-overlay-message" id="scan-result">
+                    <i class="fa-solid fa-circle-check" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 10px;"></i>
+                    <h4 class="nav-logo" style="margin-bottom: 5px;">Cubo Sincronizado</h4>
+                    <p style="font-size: 0.9rem; color: #ffffff;">Desplegando filtro de Realidad Aumentada de Don Bosco Stormtrooper...</p>
+                    <button class="btn-imperial" style="margin-top: 15px; padding: 6px 15px; font-size: 0.75rem;" onclick="closeScannerSimulation()">Cerrar Enlace</button>
+                </div>
+            </div>
+            <button class="btn-imperial" id="btn-scan" onclick="triggerScannerSimulation()">Activar Escáner de Holocrón</button>
         </div>
-        <p style="color: #88bbdd; letter-spacing: 2px; margin-bottom: 1.5rem;">🔍 Escaneo de Holocrón en curso...</p>
-        <button class="btn-scanner" id="btnScanner"><i class="fas fa-hologram"></i> Activar Escáner de Holocrón</button>
-        <div id="scannerFeedback" style="margin-top: 1.2rem; color: #00f3ff; font-size: 0.95rem; min-height: 2rem;"></div>
-      </div>
     </section>
 
-    <!-- ===== CÓMICS ===== -->
-    <section id="comics" class="section">
-      <h2 class="section-title"><i class="fas fa-book-open"></i> Cómics Imperiales</h2>
-      <div class="comics-grid" id="comicsGrid">
-        <div class="comic-item" data-comic="1"><i class="fas fa-skull"></i><h4>El Despertar Sith</h4></div>
-        <div class="comic-item" data-comic="2"><i class="fas fa-helmet-battle"></i><h4>Trooper & Brownie</h4></div>
-        <div class="comic-item" data-comic="3"><i class="fas fa-satellite-dish"></i><h4>Estrella de la Muerte</h4></div>
-        <div class="comic-item" data-comic="4"><i class="fas fa-bolt"></i><h4>Receta del Lado Oscuro</h4></div>
-      </div>
+    <section id="comics-section" class="app-section">
+        <h2 class="section-title">Archivos de Cómics Imperiales</h2>
+        <div class="comics-container">
+            <div class="comic-book" onclick="openComic('Fase de Carga', 'Crónicas del Lado Oscuro - Volumen I: La Tentación del Chocolate Primigenio. Los laboratorios de investigación del Sector San Luis Potosí han descubierto una receta capaz de alterar las frecuencias energéticas de la Fuerza. Los soldados desertan solo para probar una porción.')">
+                <div class="comic-cover-placeholder">
+                    <span class="comic-num">DATA-LOG #01</span>
+                    <h3 class="comic-title">La Revelación de la Receta</h3>
+                    <i class="fa-solid fa-book-open-reader" style="margin-top: 15px; color: rgba(0,243,255,0.4);"></i>
+                </div>
+            </div>
+            <div class="comic-book" onclick="openComic('Asalto al Convoy', 'Crónicas del Lado Oscuro - Volumen II: El escape de los Troopers. Un cargamento completo de empaques cúbicos es interceptado en el hiperespacio. No hubo supervivientes, pero las cajas se encuentran a salvo listas para distribución.')">
+                <div class="comic-cover-placeholder">
+                    <span class="comic-num">DATA-LOG #02</span>
+                    <h3 class="comic-title">El Robo del Holocrón</h3>
+                    <i class="fa-solid fa-book-open-reader" style="margin-top: 15px; color: rgba(0,243,255,0.4);"></i>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- ===== UBICACIÓN Y CONTACTO ===== -->
-    <section id="contacto" class="section">
-      <h2 class="section-title"><i class="fas fa-map-location-dot"></i> Coordenadas & Contacto</h2>
-      <div class="contact-grid">
-        <div class="map-holo">
-          <i class="fas fa-globe"></i>
-          <h3 style="color: #00f3ff; letter-spacing: 2px;">Sector: San Luis Potosí</h3>
-          <p style="color: #99aacc;">📍 Base Imperial · Zona 4</p>
-          <div style="margin-top: 0.8rem; font-size: 0.8rem; opacity: 0.7;">📡 Señal holográfica activa</div>
+    <section id="contact-section" class="app-section">
+        <h2 class="section-title">Nexo de Comunicación Cifrada</h2>
+        <div class="contact-layout">
+            <div class="hologram-map-box">
+                <div class="holo-grid-lines"></div>
+                <i class="fa-solid fa-satellite-dish" style="font-size: 3rem; color: var(--neon-cyan); margin-bottom: 15px; filter: drop-shadow(var(--neon-glow));"></i>
+                <h3 font-family="Orbitron" style="letter-spacing: 1px; margin-bottom: 10px;">Coordenadas de Operación</h3>
+                <p style="color: #a3b2c2; max-width: 300px; font-size: 0.95rem;">Sector Urbano Base:<br><strong>San Luis Potosí, México</strong><br>Distribución centralizada mediante mensajería hiperespacial local.</p>
+            </div>
+            <div class="console-form">
+                <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada con Éxito al Remitente Imperial.');">
+                    <div class="form-group">
+                        <label class="form-label">Identificación del Remitente (Nombre)</label>
+                        <input type="text" class="form-input" required placeholder="Ej. Recluta Skywalker">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dirección de Holored (Correo Electrónico)</label>
+                        <input type="email" class="form-input" required placeholder="nombre@sector.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Frecuencia de Transmisión (Mensaje Encriptado)</label>
+                        <textarea class="form-input" rows="4" required placeholder="Escribe tu transmisión aquí..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-imperial" style="width: 100%;">Transmitir Datos Cifrados</button>
+                </form>
+            </div>
         </div>
-        <div class="contact-form">
-          <form id="contactForm">
-            <input type="text" placeholder="🔹 Nombre de combate" required>
-            <input type="email" placeholder="🔹 Correo imperial" required>
-            <textarea rows="2" placeholder="🔹 Frecuencia de transmisión (mensaje)"></textarea>
-            <button type="submit"><i class="fas fa-arrow-right"></i> Enviar mensaje cifrado</button>
-          </form>
-        </div>
-      </div>
     </section>
-  </div>
 
-  <!-- ============================================================
-    SCRIPTS
-  ============================================================ -->
-  <script>
-    (function() {
-      "use strict";
+    <div class="galaxy-modal" id="comic-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeComic()">&times;</span>
+            <h3 class="nav-logo" id="modal-comic-title" style="margin-bottom: 15px; border-bottom: 1px solid var(--neon-cyan); padding-bottom: 5px;"></h3>
+            <p id="modal-comic-body" style="color: #ffffff; line-height: 1.6; font-size: 1.1rem; text-align: justify;"></p>
+        </div>
+    </div>
 
-      // ---------- ELEMENTOS ----------
-      const overlay = document.getElementById('hyperspaceOverlay');
-      const navLinks = document.querySelectorAll('.main-nav a');
-      const heroBtn = document.getElementById('btnHero');
-      const scannerBtn = document.getElementById('btnScanner');
-      const scannerFeedback = document.getElementById('scannerFeedback');
-      const comicItems = document.querySelectorAll('.comic-item');
-      const comicModal = document.getElementById('comicModal');
-      const closeModal = document.getElementById('closeModalBtn');
+    <script>
+        /* ==========================================
+           MOTOR CANVAS DEL HIPERESPACIO MATEMÁTICO
+           ========================================== */
+        const canvas = document.getElementById('hyperspace');
+        const ctx = canvas.getContext('2d');
 
-      // ---------- FUNCIÓN HIPERESPACIO (JUMP) ----------
-      function hyperspaceJump(callback) {
-        // activar overlay
-        overlay.classList.add('active');
-        // forzar reflow
-        void overlay.offsetWidth;
-        // después de 1.2s desactivar y ejecutar callback
-        setTimeout(() => {
-          overlay.classList.remove('active');
-          if (typeof callback === 'function') callback();
-        }, 1200);
-      }
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
 
-      // ---------- SCROLL A SECCIÓN (con hyperspace) ----------
-      function scrollToSection(sectionId) {
-        const target = document.getElementById(sectionId);
-        if (!target) return;
-        hyperspaceJump(() => {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
+        const numStars = 180;
+        let stars = [];
+        let speed = 0.8; // Velocidad de crucero/reposo de fondo
+        let targetSpeed = 0.8;
+        let isJumping = false;
 
-      // ---------- EVENTOS NAVEGACIÓN + BOTÓN HERO ----------
-      function handleNavClick(e) {
-        const link = e.currentTarget;
-        const sectionId = link.getAttribute('data-section');
-        if (sectionId) {
-          e.preventDefault();
-          scrollToSection(sectionId);
+        // Inicializador de propiedades tridimensionales
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width - width / 2,
+                    y: Math.random() * height - height / 2,
+                    z: Math.random() * width,
+                    color: Math.random() > 0.4 ? '#ffffff' : '#00f3ff'
+                });
+            }
         }
-      }
 
-      navLinks.forEach(link => {
-        link.addEventListener('click', handleNavClick);
-      });
+        function updateAndRenderStars() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'; // rastro sutil de frames
+            ctx.fillRect(0, 0, width, height);
 
-      heroBtn.addEventListener('click', function() {
-        // al hacer clic en "Iniciar Sistema" va a catálogo
-        scrollToSection('catalogo');
-      });
+            // Interpolación suave de aceleración/desaceleración
+            speed += (targetSpeed - speed) * 0.08;
 
-      // ---------- ESCÁNER PHYGITAL (simulación) ----------
-      scannerBtn.addEventListener('click', function() {
-        scannerFeedback.innerHTML = '📷 Escáner activado · Realidad Aumentada: <span style="color: #fff;">Filtro Sith aplicado</span> 🧬';
-        // efecto visual de "escaneo"
-        scannerBtn.style.boxShadow = '0 0 80px #00f3ff';
-        setTimeout(() => {
-          scannerBtn.style.boxShadow = '';
-        }, 1200);
-        // mensaje extra
-        setTimeout(() => {
-          scannerFeedback.innerHTML += '<br>🔮 Holocrón detectado · Brownie Imperial registrado.';
-        }, 400);
-      });
+            for (let i = 0; i < numStars; i++) {
+                let star = stars[i];
+                
+                // Avanzar la estrella en el eje Z de profundidad
+                star.z -= speed;
 
-      // ---------- CÓMICS: MODAL ----------
-      comicItems.forEach(item => {
-        item.addEventListener('click', function() {
-          comicModal.classList.add('open');
+                // Si la estrella rebasa la pantalla, relocalizarla al fondo
+                if (star.z <= 0) {
+                    star.x = Math.random() * width - width / 2;
+                    star.y = Math.random() * height - height / 2;
+                    star.z = width;
+                }
+
+                // Proyección 3D a coordenadas 2D de pantalla
+                let k = 400 / star.z;
+                let px = star.x * k + width / 2;
+                let py = star.y * k + height / 2;
+
+                if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                    // Cálculo de la longitud del vector según la velocidad (Efecto túnel del video)
+                    let size = (1 - star.z / width) * 3;
+                    let stretch = isJumping ? speed * 0.8 : 1; 
+
+                    ctx.beginPath();
+                    ctx.strokeStyle = star.color;
+                    ctx.lineWidth = size < 1 ? 1 : size;
+                    
+                    // Dibujar vector de línea estirada desde el origen radial central
+                    let prevK = 400 / (star.z + stretch);
+                    let pXOld = star.x * prevK + width / 2;
+                    let pYOld = star.y * prevK + height / 2;
+
+                    ctx.moveTo(px, py);
+                    ctx.lineTo(pXOld, pYOld);
+                    ctx.stroke();
+                }
+            }
+            requestAnimationFrame(updateAndRenderStars);
+        }
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initStars();
         });
-      });
 
-      // cerrar modal
-      closeModal.addEventListener('click', function() {
-        comicModal.classList.remove('open');
-      });
-      comicModal.addEventListener('click', function(e) {
-        if (e.target === comicModal) comicModal.classList.remove('open');
-      });
+        initStars();
+        updateAndRenderStars();
 
-      // ---------- FORMULARIO CONTACTO (prevent) ----------
-      document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        hyperspaceJump(() => {
-          alert('📡 Mensaje cifrado transmitido al Alto Mando. ¡El Lado Oscuro te agradece!');
+        /* ==========================================
+           LOGICA DE ENTRADA Y CONTROL DE LA SPA
+           ========================================== */
+        const navButtons = document.querySelectorAll('.nav-menu button, .nav-hook-btn');
+        const sections = document.querySelectorAll('.app-section');
+        const flashOverlay = document.getElementById('flash-overlay');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const targetId = button.getAttribute('data-target');
+                if (isJumping) return; // Bloquear múltiples clics simultáneos
+
+                isJumping = true;
+                targetSpeed = 65; // Aceleración de salto hiperespacial exponencial
+
+                // Sincronización precisa con el clímax tridimensional (1000ms)
+                setTimeout(() => {
+                    flashOverlay.style.opacity = '1'; // Destello blanco absoluto
+                }, 950);
+
+                // Relevo de visualización de vistas (1150ms)
+                setTimeout(() => {
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        }
+                    });
+                    window.scrollTo(0, 0);
+                }, 1150);
+
+                // Desaceleración y retorno fluido a la normalidad espacial (1350ms)
+                setTimeout(() => {
+                    flashOverlay.style.opacity = '0';
+                    targetSpeed = 0.8;
+                    isJumping = false;
+                }, 1350);
+            });
         });
-      });
 
-      // ---------- TARJETAS "RECLAMAR" (efecto) ----------
-      document.querySelectorAll('.btn-claim').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          hyperspaceJump(() => {
-            alert('🍫 Has reclamado una porción. ¡El lado oscuro te espera!');
-          });
-        });
-      });
+        /* ==========================================
+           FUNCIONES AUXILIARES INTERACTIVAS (HUD)
+           ========================================== */
+        // Control de Escáner QR de mentira
+        function triggerScannerSimulation() {
+            const laser = document.querySelector('.scanner-laser');
+            const resultBox = document.getElementById('scan-result');
+            const btn = document.getElementById('btn-scan');
 
-      // ---------- PEQUEÑO EFECTO PARALAJE EN SECCIONES (VR) ----------
-      // (opcional: sutil movimiento al scrollear)
-      // ya tenemos perspectiva en .app-wrapper
+            btn.style.display = 'none';
+            laser.style.display = 'block';
 
-    })();
-  </script>
+            setTimeout(() => {
+                laser.style.display = 'none';
+                resultBox.classList.add('show');
+            }, 3000); // 3 segundos simulando rastreo de matriz óptica
+        }
+
+        function closeScannerSimulation() {
+            document.getElementById('scan-result').classList.remove('show');
+            document.getElementById('btn-scan').style.display = 'inline-block';
+        }
+
+        // Control del visualizador de Cómics
+        function openComic(title, bodyText) {
+            document.getElementById('modal-comic-title').innerText = title.toUpperCase();
+            document.getElementById('modal-comic-body').innerText = bodyText;
+            document.getElementById('comic-modal').style.display = 'flex';
+        }
+
+        function closeComic() {
+            document.getElementById('comic-modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
