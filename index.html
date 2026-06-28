@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Dark Side Brownies</title>
+    <title>The Dark Side Brownies - Hub Imperial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,14 +18,10 @@
             --sw-border: rgba(255, 255, 255, 0.15);
             --text-bright: #ffffff;
             --text-muted: #999999;
+            --gold: #fade4b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
         body {
             background-color: var(--dark-bg);
@@ -37,358 +33,108 @@
         }
 
         body::before {
-            content: " ";
-            display: block;
-            position: fixed;
+            content: " "; display: block; position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.01) 50%);
-            z-index: 99;
-            background-size: 100% 4px;
-            pointer-events: none;
+            z-index: 99; background-size: 100% 4px; pointer-events: none;
         }
 
         .sw-font {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -1px;
+            font-family: 'Montserrat', sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;
             background-image: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(180deg, #ffffff 30%, #a6b8c7 100%);
-            background-color: #000;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-color: #000; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
         }
 
         /* --- CANVAS HIPERESPACIO --- */
-        #hyperspace {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            transition: z-index 0.1s step-end;
-        }
-
-        #flash-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #ffffff;
-            opacity: 0;
-            z-index: 9999;
-            pointer-events: none;
-            transition: opacity 0.1s ease;
-        }
+        #hyperspace { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; transition: z-index 0.1s step-end; }
+        #flash-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; opacity: 0; z-index: 9999; pointer-events: none; transition: opacity 0.1s ease; }
 
         /* --- BARRA DE NAVEGACIÓN --- */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            border-bottom: 1px solid var(--sw-border);
-            z-index: 900;
-            display: none; 
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .nav-top {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-logo-img {
-            height: 75px;
-            margin: 5px 0;
-            object-fit: contain;
-            filter: drop-shadow(0px 0px 8px rgba(0, 243, 255, 0.2));
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            width: 100%;
-            max-width: 800px;
-            justify-content: center;
-        }
-
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid var(--sw-border); z-index: 900; display: none; flex-direction: column; align-items: center; }
+        .nav-top { width: 100%; max-width: 1200px; display: flex; justify-content: center; align-items: center; padding: 10px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .nav-logo-img { height: 75px; margin: 5px 0; object-fit: contain; filter: drop-shadow(0px 0px 8px rgba(0, 243, 255, 0.2)); }
+        .nav-menu { display: flex; list-style: none; width: 100%; max-width: 900px; justify-content: center; }
         .nav-item { border-left: 1px solid var(--sw-border); }
         .nav-item:last-child { border-right: 1px solid var(--sw-border); }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 14px 18px; transition: all 0.2s ease; letter-spacing: 1px; }
+        .nav-btn:hover, .nav-btn.active-tab { color: var(--text-bright); background: rgba(255, 255, 255, 0.03); box-shadow: inset 0 -3px 0 var(--neon-cyan); }
 
-        .nav-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            padding: 14px 25px;
-            transition: all 0.2s ease;
-            letter-spacing: 1px;
-        }
+        /* --- SECCIONES --- */
+        .app-section { display: none; height: 100vh; width: 100vw; padding: 170px 40px 40px 40px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; overflow-y: auto; }
+        #hero-section { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; max-width: 100vw; height: 100vh; position: relative; z-index: 5; }
+        .hero-title { font-size: 4.8rem; line-height: 0.9; margin-bottom: 15px; }
+        .hero-slogan { font-size: 1.6rem; color: var(--text-bright); font-style: italic; margin-bottom: 40px; font-weight: 500; }
+        
+        .btn-sw { background: var(--gold); border: none; color: #000000; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; padding: 14px 35px; cursor: pointer; letter-spacing: 1px; border-radius: 25px; transition: all 0.3s ease; }
+        .btn-sw:hover { background: #ffffff; transform: scale(1.05); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .section-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 25px; border-left: 4px solid var(--neon-cyan); padding-left: 15px; }
 
-        .nav-btn:hover, .nav-btn.active-tab {
-            color: var(--text-bright);
-            background: rgba(255, 255, 255, 0.03);
-            box-shadow: inset 0 -3px 0 var(--neon-cyan);
-        }
-
-        /* --- CONTENEDORES INDEPENDIENTES --- */
-        .app-section {
-            display: none;
-            height: 100vh;
-            width: 100vw;
-            padding: 180px 40px 40px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-            overflow-y: auto; 
-        }
-
-        #hero-section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            max-width: 100vw;
-            height: 100vh;
-            position: relative;
-            z-index: 5;
-        }
-
-        .hero-title {
-            font-size: 4.8rem;
-            line-height: 0.9;
-            margin-bottom: 15px;
-        }
-
-        .hero-slogan {
-            font-size: 1.6rem;
-            color: var(--text-bright);
-            font-style: italic;
-            margin-bottom: 40px;
-            font-weight: 500;
-        }
-
-        .btn-sw {
-            background: #fade4b;
-            border: none;
-            color: #000000;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            padding: 14px 35px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        .btn-sw:hover {
-            background: #ffffff;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
-
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 2rem;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            margin-bottom: 25px;
-            border-left: 4px solid var(--neon-cyan);
-            padding-left: 15px;
-        }
-
-        /* --- CATÁLOGO --- */
-        .catalog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background: var(--sw-gray);
-            border: 1px solid var(--sw-border);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-img-placeholder {
-            width: 100%; height: 160px;
-            background: #252525;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 3rem; color: rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid var(--sw-border);
-        }
-
+        /* --- GRID DE PRODUCTOS --- */
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .product-card { background: var(--sw-gray); border: 1px solid var(--sw-border); display: flex; flex-direction: column; justify-content: space-between; }
+        .product-img-placeholder { width: 100%; height: 150px; background: #252525; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: rgba(255, 255, 255, 0.1); border-bottom: 1px solid var(--sw-border); }
         .product-info { padding: 20px; }
-        .product-name {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900; font-size: 1.2rem;
-            text-transform: uppercase; margin-bottom: 8px;
-        }
+        .product-name { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.2rem; text-transform: uppercase; margin-bottom: 8px; }
         .product-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; margin-bottom: 15px; }
         .product-meta { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
-        .product-price { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; }
 
         /* --- PORTAL QR --- */
-        .qr-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--sw-gray);
-            border: 1px solid var(--sw-border);
-            padding: 30px;
-            text-align: center;
-        }
-
-        .scanner-viewport {
-            width: 100%;
-            min-height: 280px;
-            background: #0b0b0b;
-            border: 1px solid var(--sw-border);
-            margin: 20px 0;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #camera-reader {
-            width: 100% !important;
-            border: none !important;
-        }
+        .qr-container { max-width: 600px; margin: 0 auto; background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; text-align: center; }
+        .scanner-viewport { width: 100%; min-height: 280px; background: #0b0b0b; border: 1px solid var(--sw-border); margin: 20px 0; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        #camera-reader { width: 100% !important; border: none !important; }
         #camera-reader video { object-fit: cover; }
-
-        .scanner-laser {
-            position: absolute;
-            width: 100%; height: 2px;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 10px var(--neon-cyan);
-            top: 0; left: 0;
-            z-index: 100;
-            animation: laserScan 2.5s linear infinite;
-            display: none;
-        }
-
-        @keyframes laserScan {
-            0% { top: 0%; }
-            50% { top: 100%; }
-            100% { top: 0%; }
-        }
-
-        .scan-idle-placeholder {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255,255,255,0.15);
-            font-size: 3.5rem;
-            gap: 15px;
-        }
-        .scan-idle-placeholder p {
-            font-size: 1rem;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .scan-message {
-            position: absolute;
-            background: rgba(0,0,0,0.95);
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            padding: 20px;
-            z-index: 110;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
-        }
+        .scanner-laser { position: absolute; width: 100%; height: 2px; background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); top: 0; left: 0; z-index: 100; animation: laserScan 2.5s linear infinite; display: none; }
+        @keyframes laserScan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
+        .scan-idle-placeholder { display: flex; flex-direction: column; justify-content: center; align-items: center; color: rgba(255,255,255,0.15); font-size: 3.5rem; gap: 15px; }
+        .scan-idle-placeholder p { font-size: 1rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .scan-message { position: absolute; background: rgba(0,0,0,0.95); top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; z-index: 110; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); }
         .scan-message.show { transform: translateY(0); }
 
-        /* --- SISTEMA DE CÓMICS --- */
-        .comics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
+        /* --- PANEL DE CÓMICS Y ÁLBUM --- */
+        .comics-grid, .album-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .comic-card, .datacard-card { background: var(--sw-gray); border: 1px solid var(--sw-border); position: relative; transition: all 0.3s ease; }
+        .comic-card.unlocked:hover, .datacard-card.collected:hover { border-color: var(--neon-cyan); transform: scale(1.02); cursor: pointer; }
+        .comic-card.locked, .datacard-card.missing { opacity: 0.35; }
+        .comic-placeholder, .card-placeholder { width: 100%; height: 230px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center; }
+        .comic-tag { font-size: 0.7rem; color: var(--neon-cyan); font-weight: 700; margin-bottom: 5px; }
+        .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
+        .lock-icon { font-size: 1.8rem; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
+        
+        /* Album specific styles */
+        .card-faction { font-size: 0.65rem; color: var(--gold); font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+        .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
 
-        .comic-card {
-            background: var(--sw-gray);
-            border: 1px solid var(--sw-border);
-            position: relative;
-            transition: all 0.3s ease;
-        }
+        /* --- CONTENEDOR DEL MINIJUEGO ARCADE --- */
+        .game-wrapper { max-width: 700px; margin: 0 auto; background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 20px; text-align: center; }
+        #gameCanvas { background: #020305; border: 2px solid rgba(0, 243, 255, 0.3); display: block; margin: 15px auto; max-width: 100%; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
+        .game-controls-desc { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
-        .comic-card.unlocked { cursor: pointer; }
-        .comic-card.unlocked:hover { border-color: var(--neon-cyan); transform: scale(1.02); }
-        .comic-card.locked { opacity: 0.4; }
+        /* --- TRANMISIONES COMUNIDAD --- */
+        .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .feed-card { background: #0a0e12; border-left: 3px solid var(--neon-cyan); padding: 20px; }
+        .feed-user { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.9rem; color: var(--neon-cyan); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .feed-text { font-size: 0.95rem; color: #d0d7de; font-style: italic; }
 
-        .comic-placeholder {
-            width: 100%; height: 260px;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            padding: 20px; text-align: center;
-        }
-
-        .comic-tag { font-size: 0.75rem; color: var(--neon-cyan); font-weight: 700; margin-bottom: 5px; }
-        .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; }
-        .lock-icon { font-size: 2rem; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
-
-        /* --- NEXO Y MAPA GALÁCTICO --- */
+        /* --- MAPA Y CONTACTO --- */
         .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
-        
-        .map-hud-box { 
-            background: #050708; 
-            border: 1px solid var(--sw-border); 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column;
-        }
-        
-        .map-frame {
-            width: 100%;
-            height: 280px;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            filter: grayscale(1) invert(0.9) sepia(0.2) hue-rotate(140deg); 
-        }
-
+        .map-hud-box { background: #050708; border: 1px solid var(--sw-border); padding: 20px; display: flex; flex-direction: column; }
+        .map-frame { width: 100%; height: 260px; border: 1px solid rgba(0, 243, 255, 0.3); filter: grayscale(1) invert(0.9) sepia(0.2) hue-rotate(140deg); }
         .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; }
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
         .form-input { width: 100%; background: #000; border: 1px solid var(--sw-border); padding: 10px 15px; color: #ffffff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; }
         .form-input:focus { outline: none; border-color: #ffffff; }
 
-        /* Modales */
-        .galaxy-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9);
-            z-index: 995; display: none;
-            justify-content: center; align-items: center; padding: 20px;
-            backdrop-filter: blur(8px);
-        }
+        .galaxy-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 995; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
         .modal-content { background: var(--sw-gray); border: 1px solid var(--sw-border); width: 100%; max-width: 550px; padding: 30px; position: relative; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.6rem; color: var(--text-muted); cursor: pointer; }
 
         @media(max-width: 768px) {
             .hero-title { font-size: 2.8rem; }
-            .nav-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
+            .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
             .nav-item { border: 1px solid var(--sw-border) !important; }
-            .app-section { padding-top: 240px; }
+            .app-section { padding-top: 260px; }
             .contact-layout { grid-template-columns: 1fr; }
         }
     </style>
@@ -405,7 +151,8 @@
         <ul class="nav-menu">
             <li class="nav-item"><button class="nav-btn" data-target="catalog-section">Menú</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="phygital-section">Holocrón</button></li>
-            <li class="nav-item"><button class="nav-btn" data-target="comics-section">Cómics</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="comics-section">Cómics/Álbum</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="game-section">Hangar Arcade</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="contact-section">Nexo</button></li>
         </ul>
     </nav>
@@ -445,22 +192,21 @@
     <section id="phygital-section" class="app-section">
         <h2 class="section-title">Escaner Holocrón</h2>
         <div class="qr-container">
-            <p style="color: var(--text-muted); margin-bottom: 15px;">Alinea el código del empaque físico frente al capturador óptico.</p>
+            <p style="color: var(--text-muted); margin-bottom: 15px;">Escanea el QR de tu caja para descifrar un archivo de la base de datos y ganar una Datacard.</p>
             <div class="scanner-viewport">
                 <div class="scanner-laser" id="laser-line"></div>
-                
                 <div class="scan-idle-placeholder" id="idle-placeholder">
                     <i class="fa-solid fa-expand"></i>
                     <p>Sensor fuera de línea</p>
                 </div>
-
                 <div id="camera-reader"></div>
                 
                 <div class="scan-message" id="scan-result">
-                    <i class="fa-solid fa-square-rss" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
-                    <h3 class="product-name" style="color: var(--neon-cyan);">¡TRANSMISIÓN DESBLOQUEADA!</h3>
-                    <p style="font-size: 0.95rem; color: #ffffff;" id="unlock-notification">Un nuevo archivo de cómic se ha añadido a tu base de datos.</p>
-                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="resetScannerContainer()">Confirmar Enlace</button>
+                    <i class="fa-solid fa-gift" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
+                    <h3 class="product-name" style="color: var(--neon-cyan);">¡RECOMPENSA DE LA ORDEN!</h3>
+                    <p style="font-size: 1rem; color: #ffffff; font-weight:700;" id="unlock-main-text"></p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;" id="unlock-sub-text"></p>
+                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="resetScannerContainer()">Cargar Datos</button>
                 </div>
             </div>
             <button class="btn-sw" id="btn-start-camera" onclick="initQrCamera()">Activar Escáner Óptico</button>
@@ -468,25 +214,52 @@
     </section>
 
     <section id="comics-section" class="app-section">
-        <h2 class="section-title">Base de Cómics Colectivos</h2>
+        <h2 class="section-title">Álbum de Datacards Oficiales</h2>
+        <div class="album-status-bar">
+            <div>
+                <p style="font-weight: 700; font-size: 1.1rem; text-transform:uppercase; letter-spacing:1px;">Progreso de la Colección</p>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Completa las 7 Datacards imperiales para liberar el Volumen Secreto.</span>
+            </div>
+            <div class="sw-font" id="album-counter" style="font-size: 1.6rem;">1 / 7</div>
+        </div>
+        <div class="album-grid" id="grid-datacards-container">
+            </div>
+
+        <h2 class="section-title" style="margin-top: 20px;">Archivos de Cómics Colectivos</h2>
         <div class="comics-grid" id="grid-comics-container">
             </div>
     </section>
 
+    <section id="game-section" class="app-section">
+        <h2 class="section-title">Hangar Arcade: Defensa de la Receta</h2>
+        <div class="game-wrapper">
+            <p style="color: var(--text-muted);">Derriba las naves rebeldes disparando núcleos de chocolate antes de que roben los planos de los brownies.</p>
+            <canvas id="gameCanvas" width="480" height="320"></canvas>
+            <button class="btn-sw" id="btn-start-game" onclick="startGame()">Iniciar Simulación de Vuelo</button>
+            <p class="game-controls-desc">Controles: Flechas de dirección [ ← ] [ → ] para moverte. [ Barra Espaciadora ] para disparar.</p>
+        </div>
+    </section>
+
     <section id="contact-section" class="app-section">
-        <h2 class="section-title">Nexo de Comunicación</h2>
+        <h2 class="section-title">Señales del Sector (Comunidad)</h2>
+        <div class="feed-grid">
+            <div class="feed-card"><div class="feed-user"><i class="fa-solid fa-satellite-dish"></i> @SithPotosino_44</div><p class="feed-text">"La costra crujiente de The Vader es de otro mundo. ¡Hangar de la Politécnica defendido!"</p></div>
+            <div class="feed-card"><div class="feed-user"><i class="fa-solid fa-satellite-dish"></i> @TrooperGourmet</div><p class="feed-text">"Acabo de escanear mi tercer cubo y me salió la Datacard del Halcón de Chocolate. ¡Gran juego!"</p></div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 40px;">Coordenadas del Nexo Central</h2>
         <div class="contact-layout">
             <div class="map-hud-box">
                 <h3 class="product-name" style="color: var(--neon-cyan); margin-bottom: 4px;"><i class="fa-solid fa-shuttle-space"></i> Puesto de Avanzada: Borde Exterior</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Coordenadas: C. Urbano Villalón 500, La Ladrillera, 78369 San Luis Potosí, S.L.P.</p>
-                <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.147573432328!2d-101.00845342417721!3d22.120355472493392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842aa236077ffdb3%3A0x7d6118d033e08f5d!2sUniversidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD!5e0!3m2!1ses!2smx!4v1710000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Universidad Politécnica: C. Urbano Villalón 500, La Ladrillera, San Luis Potosí.</p>
+                <iframe class="map-frame" src="https://maps.google.com/maps?q=Universidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="console-form">
                 <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
                     <div class="form-group"><label class="form-label">Identificación</label><input type="text" class="form-input" required></div>
                     <div class="form-group"><label class="form-label">Dirección Holored</label><input type="email" class="form-input" required></div>
                     <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-input" rows="3" required></textarea></div>
-                    <button type="submit" class="btn-sw" style="width: 100%;">Transmitir</button>
+                    <button type="submit" class="btn-sw" style="width: 100%; border-radius:0;">Transmitir Datos</button>
                 </form>
             </div>
         </div>
@@ -502,52 +275,29 @@
 
     <script>
         /* ==========================================
-           MOTOR GRÁFICO HIPERESPACIO 3D
+           MOTOR CANVAS FONDO: HIPERESPACIO 3D
            ========================================== */
-        const canvas = document.getElementById('hyperspace');
-        const ctx = canvas.getContext('2d');
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        const numStars = 200;
-        let stars = [];
-        let speed = 0.6; let targetSpeed = 0.6;
-        let isJumping = false;
+        const canvas = document.getElementById('hyperspace'); const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth; let height = canvas.height = window.innerHeight;
+        const numStars = 150; let stars = []; let speed = 0.5; let targetSpeed = 0.5; let isJumping = false;
 
         function initStars() {
             stars = [];
             for (let i = 0; i < numStars; i++) {
-                stars.push({
-                    x: Math.random() * width - width / 2,
-                    y: Math.random() * height - height / 2,
-                    z: Math.random() * width,
-                    color: Math.random() > 0.35 ? '#ffffff' : '#00f3ff'
-                });
+                stars.push({ x: Math.random() * width - width / 2, y: Math.random() * height - height / 2, z: Math.random() * width, color: Math.random() > 0.35 ? '#ffffff' : '#00f3ff' });
             }
         }
-
         function animateStars() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)'; ctx.fillRect(0, 0, width, height);
             speed += (targetSpeed - speed) * 0.08;
-
             for (let i = 0; i < numStars; i++) {
                 let star = stars[i]; star.z -= speed;
-                if (star.z <= 0) {
-                    star.x = Math.random() * width - width / 2;
-                    star.y = Math.random() * height - height / 2;
-                    star.z = width;
-                }
-                let k = 400 / star.z;
-                let px = star.x * k + width / 2; let py = star.y * k + height / 2;
+                if (star.z <= 0) { star.x = Math.random() * width - width / 2; star.y = Math.random() * height - height / 2; star.z = width; }
+                let k = 400 / star.z; let px = star.x * k + width / 2; let py = star.y * k + height / 2;
                 if (px >= 0 && px <= width && py >= 0 && py <= height) {
-                    let size = (1 - star.z / width) * 2.5;
-                    let stretch = isJumping ? speed * 0.75 : 1;
-                    ctx.beginPath(); ctx.strokeStyle = star.color;
-                    ctx.lineWidth = size < 1 ? 1 : size;
-                    let prevK = 400 / (star.z + stretch);
-                    ctx.moveTo(px, py); ctx.lineTo(star.x * prevK + width / 2, star.y * prevK + height / 2);
-                    ctx.stroke();
+                    let size = (1 - star.z / width) * 2; let stretch = isJumping ? speed * 0.75 : 1;
+                    ctx.beginPath(); ctx.strokeStyle = star.color; ctx.lineWidth = size;
+                    let prevK = 400 / (star.z + stretch); ctx.moveTo(px, py); ctx.lineTo(star.x * prevK + width / 2, star.y * prevK + height / 2); ctx.stroke();
                 }
             }
             requestAnimationFrame(animateStars);
@@ -556,61 +306,85 @@
         initStars(); animateStars();
 
         /* ==========================================
-           SISTEMA DE 7 CÓMICS EXCLUSIVOS
+           DATOS DEL ÁLBUM DE DATACARDS Y CÓMICS
            ========================================== */
-        const baseDeComics = [
-            { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen secreto de la receta de alta ingeniería gastronómica en el sector San Luis Potosí.", unlocked: true },
-            { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Las tropas imperiales rompen filas de forma masiva tras percibir el aroma del empaque.", unlocked: false },
-            { id: 3, title: "Vol 3: El Juicio del Lord", desc: "La imponente silueta oscura confronta al comandante por alterar el orden de la base.", unlocked: false },
-            { id: 4, title: "Vol 4: Hiperespacio Mental", desc: "La explosión sensorial y salto de luz que obligó a duplicar la producción del sector.", unlocked: false },
-            { id: 5, title: "Vol 5: Alianza Clandestina", desc: "Rutas de suministro secretas establecidas para distribuir los brownies a nivel masivo.", unlocked: false },
-            { id: 6, title: "Vol 6: La Costra Galáctica", desc: "Análisis pormenorizado de la densidad molecular de la costra crujiente perfecta.", unlocked: false },
-            { id: 7, title: "Vol 7: Imperio del Sabor", desc: "El dominio irreversible del sabor amargo y chewy en todos los confines conocidos.", unlocked: false }
+        const datacardsCollection = [
+            { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true },
+            { id: 2, title: "Cubo Holocrón", faction: "Artefacto de Carga", collected: false },
+            { id: 3, title: "Destructor Vader", faction: "Flota Sith", collected: false },
+            { id: 4, title: "Halcón de Cacao", faction: "Nave Contrabando", collected: false },
+            { id: 5, title: "Droide Repartidor", faction: "Logística Central", collected: false },
+            { id: 6, title: "Estrella de la Muerte", faction: "Horno Molecular", collected: false },
+            { id: 7, title: "Fuerza Cb2", faction: "Energía Organoléptica", collected: false }
         ];
 
-        function renderComics() {
-            const container = document.getElementById('grid-comics-container');
-            container.innerHTML = "";
+        const baseDeComics = [
+            { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen de la receta balanceada térmicamente en San Luis Potosí.", unlocked: true, secret: false },
+            { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Los soldados sabotean las patrullas imperiales atraídos por la textura chewy.", unlocked: false, secret: false },
+            { id: 3, title: "Vol 3: El Juicio del Lord", desc: "El imponente comandante oscuro confisca los cubos por alterar el orden.", unlocked: false, secret: false },
+            { id: 4, title: "CÓMIC SECRETO: IMPERIO DEL SABOR", desc: "¡Felicidades! Has completado el álbum. El Lord Sith declara los brownies patrimonio supremo y ordena su distribución masiva por todo el hiperespacio.", unlocked: false, secret: true }
+        ];
+
+        function renderAlbumAndComics() {
+            // Render Datacards
+            const cardContainer = document.getElementById('grid-datacards-container');
+            cardContainer.innerHTML = "";
+            let totalCollected = 0;
+
+            datacardsCollection.forEach(card => {
+                if(card.collected) totalCollected++;
+                const box = document.createElement('div');
+                box.className = `datacard-card ${card.collected ? 'unlocked' : 'missing'}`;
+                box.innerHTML = `
+                    <div class="card-placeholder">
+                        <i class="${card.collected ? 'fa-solid fa-id-card' : 'fa-solid fa-address-card'}" style="font-size:2rem; margin-bottom:8px; color:${card.collected ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.1)'}"></i>
+                        <h4 class="comic-title">${card.collected ? card.title : '???' }</h4>
+                        <span class="card-faction">${card.collected ? card.faction : 'Desconocido'}</span>
+                    </div>
+                `;
+                cardContainer.appendChild(box);
+            });
+
+            document.getElementById('album-counter').innerText = `${totalCollected} / 7`;
+
+            // Validación del Cómic Secreto por álbum lleno
+            if (totalCollected === 7) {
+                baseDeComics.find(c => c.secret).unlocked = true;
+            }
+
+            // Render Cómics
+            const comicContainer = document.getElementById('grid-comics-container');
+            comicContainer.innerHTML = "";
             baseDeComics.forEach(comic => {
-                const card = document.createElement('div');
-                card.className = `comic-card ${comic.unlocked ? 'unlocked' : 'locked'}`;
-                
+                if (comic.secret && !comic.unlocked) return; // Ocultar el secreto de la lista si no está completo
+
+                const block = document.createElement('div');
+                block.className = `comic-card ${comic.unlocked ? 'unlocked' : 'locked'}`;
                 if(comic.unlocked) {
-                    card.onclick = () => openComic(comic.title, comic.desc);
-                    card.innerHTML = `
-                        <div class="comic-placeholder">
-                            <span class="comic-tag">TRANSMISIÓN ACTIVA</span>
-                            <h3 class="comic-title">${comic.title}</h3>
+                    block.onclick = () => openComic(comic.title, comic.desc);
+                    block.innerHTML = `
+                        <div class="comic-placeholder" style="${comic.secret ? 'border: 1px dashed var(--gold); background:rgba(250,222,75,0.02)' : ''}">
+                            <span class="comic-tag">${comic.secret ? '★ SUPREMO EXCLUSIVO' : 'TRANSMISIÓN ACTIVA'}</span>
+                            <h3 class="comic-title" style="${comic.secret ? 'color:var(--gold)' : ''}">${comic.title}</h3>
                         </div>
                     `;
                 } else {
-                    card.innerHTML = `
-                        <div class="comic-placeholder">
-                            <i class="fa-solid fa-lock lock-icon"></i>
-                            <h3 class="comic-title" style="color: var(--text-muted);">Bloqueado</h3>
-                            <span style="font-size:0.75rem; color: rgba(255,255,255,0.2); margin-top:5px;">Requiere Escaneo QR</span>
-                        </div>
+                    block.innerHTML = `
+                        <div class="comic-placeholder"><i class="fa-solid fa-lock lock-icon"></i><h3 class="comic-title" style="color: var(--text-muted);">Bloqueado</h3></div>
                     `;
                 }
-                container.appendChild(card);
+                comicContainer.appendChild(block);
             });
         }
 
         /* ==========================================
-           GESTOR DE NAVEGACIÓN Y SECUENCIAS
+           GESTOR DE NAV SPA
            ========================================== */
-        const globalNav = document.getElementById('global-nav');
-        const heroSection = document.getElementById('hero-section');
-        const sections = document.querySelectorAll('.app-section');
-        const flashOverlay = document.getElementById('flash-overlay');
+        const globalNav = document.getElementById('global-nav'); const heroSection = document.getElementById('hero-section');
+        const sections = document.querySelectorAll('.app-section'); const flashOverlay = document.getElementById('flash-overlay');
 
         document.getElementById('btn-enter').addEventListener('click', () => {
-            executeJumpSequence(() => {
-                heroSection.style.display = 'none';
-                globalNav.style.display = 'flex';
-                document.getElementById('catalog-section').style.display = 'block';
-                document.querySelector('[data-target="catalog-section"]').classList.add('active-tab');
-            });
+            executeJumpSequence(() => { heroSection.style.display = 'none'; globalNav.style.display = 'flex'; document.getElementById('catalog-section').style.display = 'block'; document.querySelector('[data-target="catalog-section"]').classList.add('active-tab'); });
         });
 
         const tabButtons = document.querySelectorAll('.nav-menu button');
@@ -618,80 +392,57 @@
             btn.addEventListener('click', () => {
                 const targetId = btn.getAttribute('data-target');
                 if (isJumping || document.getElementById(targetId).style.display === 'block') return;
-
-                tabButtons.forEach(b => b.classList.remove('active-tab'));
-                btn.classList.add('active-tab');
-
-                executeJumpSequence(() => {
-                    sections.forEach(s => s.style.display = 'none');
-                    document.getElementById(targetId).style.display = 'block';
-                });
+                tabButtons.forEach(b => b.classList.remove('active-tab')); btn.classList.add('active-tab');
+                executeJumpSequence(() => { sections.forEach(s => s.style.display = 'none'); document.getElementById(targetId).style.display = 'block'; });
             });
         });
 
         function executeJumpSequence(uiCallback) {
-            isJumping = true;
-            canvas.style.zIndex = "9995"; 
-            targetSpeed = 75;
-
+            isJumping = true; canvas.style.zIndex = "9995"; targetSpeed = 75;
             setTimeout(() => { flashOverlay.style.opacity = '1'; }, 900);
-
-            setTimeout(() => {
-                uiCallback();
-                window.scrollTo(0, 0);
-            }, 1100);
-
-            setTimeout(() => {
-                flashOverlay.style.opacity = '0';
-                targetSpeed = 0.6;
-                canvas.style.zIndex = "-1"; 
-                isJumping = false;
-            }, 1300);
+            setTimeout(() => { uiCallback(); window.scrollTo(0, 0); }, 1100);
+            setTimeout(() => { flashOverlay.style.opacity = '0'; targetSpeed = 0.5; canvas.style.zIndex = "-1"; isJumping = false; }, 1300);
         }
 
         /* ==========================================
-           FLUJO DE ESCANEO QR REESTRUCTURADO
+           HARDWARE QR Y ASIGNACIÓN AL AZAR DE PREMIOS
            ========================================== */
         let html5QrScanner = null;
 
         function initQrCamera() {
-            // Ocultar placeholder de inactividad y botón
             document.getElementById('idle-placeholder').style.display = 'none';
             document.getElementById('btn-start-camera').style.display = 'none';
             document.getElementById('laser-line').style.display = 'block';
-
             html5QrScanner = new Html5Qrcode("camera-reader");
             
-            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-                html5QrScanner.stop().then(() => {
-                    triggerUnlockAnimation();
-                }).catch(err => console.error("Error al pausar lector óptico.", err));
+            const qrSuccess = (txt, res) => {
+                html5QrScanner.stop().then(() => { processRewardRandomly(); }).catch(err => console.error(err));
             };
-
-            const config = { fps: 15, qrbox: { width: 180, height: 180 } };
-            
-            html5QrScanner.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
-            .catch(err => {
-                alert("Error de acceso al hardware de cámara.");
-                resetScannerContainer();
-            });
+            html5QrScanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 180 }, qrSuccess)
+            .catch(() => { alert("Acceso denegado a hardware de video."); resetScannerContainer(); });
         }
 
-        function triggerUnlockAnimation() {
+        function processRewardRandomly() {
             document.getElementById('laser-line').style.display = 'none';
             
-            const nextLockedComic = baseDeComics.find(c => !c.unlocked);
-            if(nextLockedComic) {
-                nextLockedComic.unlocked = true;
-                document.getElementById('unlock-notification').innerText = `¡Se ha sincronizado con éxito el "${nextLockedComic.title}"! Accede desde tu visor de Base de Datos.`;
-            } else {
-                document.getElementById('unlock-notification').innerText = "Todos los registros de holocrones en tu poder ya se encuentran completamente descifrados.";
+            // 1. Desbloquear el siguiente cómic base normal si hay disponibles
+            const nextComic = baseDeComics.find(c => !c.unlocked && !c.secret);
+            if(nextComic) nextComic.unlocked = true;
+
+            // 2. Dar una Datacard aleatoria no recolectada para el álbum
+            const missingCards = datacardsCollection.filter(c => !c.collected);
+            let cardAwardedName = "Información Duplicada";
+            if(missingCards.length > 0) {
+                const luckyCard = missingCards[Math.floor(Math.random() * missingCards.length)];
+                luckyCard.collected = true;
+                cardAwardedName = luckyCard.title;
             }
 
-            setTimeout(() => {
-                document.getElementById('scan-result').classList.add('show');
-                renderComics();
-            }, 500);
+            document.getElementById('unlock-main-text').innerText = `¡DATACARD RECUPERADA: ${cardAwardedName.toUpperCase()}!`;
+            document.getElementById('unlock-sub-text').innerText = nextComic ? `Frecuencia sincronizada con éxito. Se abrió un nuevo tomo en los Cómics.` : `Tu rango de encriptación aumentó. Revisa tu progreso en el álbum central.`;
+            
+            document.getElementById('scan-result').classList.add('show');
+            renderAlbumAndComics();
         }
 
         function resetScannerContainer() {
@@ -701,16 +452,80 @@
             document.getElementById('camera-reader').innerHTML = "";
         }
 
-        // Modales
-        function openComic(title, bodyText) {
-            document.getElementById('modal-title').innerText = title.toUpperCase();
-            document.getElementById('modal-body').innerText = bodyText;
-            document.getElementById('comic-modal').style.display = 'flex';
-        }
-        function closeComic() { document.getElementById('comic-modal').style.display = 'none'; }
+        /* ==========================================
+           MINIJUEGO ARCADE: DEFENSA DEL HANGAR
+           ========================================== */
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gCtx = gameCanvas.getContext('2d');
+        let gameInterval = null; let score = 0; let playerX = 220;
+        let bullets = []; let enemies = []; let keys = {};
 
-        // Inicialización
-        renderComics();
+        window.addEventListener('keydown', e => { keys[e.code] = true; if(e.code === "Space" && gameInterval) e.preventDefault(); });
+        window.addEventListener('keyup', e => keys[e.code] = false);
+
+        function startGame() {
+            document.getElementById('btn-start-game').style.display = 'none';
+            score = 0; playerX = 220; bullets = []; enemies = [];
+            if(gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(updateGameEngine, 1000 / 30);
+        }
+
+        function updateGameEngine() {
+            // Controles de movimiento
+            if (keys["ArrowLeft"] && playerX > 0) playerX -= 6;
+            if (keys["ArrowRight"] && playerX < gameCanvas.width - 40) playerX += 6;
+            if (keys["Space"] && bullets.length < 4 && Math.random() > 0.7) {
+                bullets.push({ x: playerX + 16, y: gameCanvas.height - 30 });
+            }
+
+            // Generador de Naves Rebeldes
+            if(Math.random() > 0.93) {
+                enemies.push({ x: Math.random() * (gameCanvas.width - 25), y: 0, speed: Math.random() * 2 + 1 });
+            }
+
+            // Limpieza y cálculo de vectores
+            gCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // Dibujar Nave Repartidora Imperial
+            gCtx.fillStyle = '#ffffff'; gCtx.fillRect(playerX, gameCanvas.height - 20, 40, 15);
+            gCtx.fillStyle = '#00f3ff'; gCtx.fillRect(playerX + 15, gameCanvas.height - 27, 10, 7);
+
+            // Mover Balas (Núcleos de Brownie)
+            bullets.forEach((b, i) => {
+                b.y -= 8; gCtx.fillStyle = '#fade4b'; gCtx.fillRect(b.x, b.y, 6, 6);
+                if(b.y < 0) bullets.splice(i, 1);
+            });
+
+            // Mover Enemigos
+            enemies.forEach((enemy, ei) => {
+                enemy.y += enemy.speed;
+                gCtx.fillStyle = '#ff3333'; gCtx.beginPath();
+                gCtx.moveTo(enemy.x + 10, enemy.y + 15); gCtx.lineTo(enemy.x, enemy.y); gCtx.lineTo(enemy.x + 20, enemy.y);
+                gCtx.fill();
+
+                // Colisiones
+                bullets.forEach((b, bi) => {
+                    if (b.x > enemy.x && b.x < enemy.x + 20 && b.y > enemy.y && b.y < enemy.y + 15) {
+                        enemies.splice(ei, 1); bullets.splice(bi, 1); score += 10;
+                    }
+                });
+
+                // Fin del juego si tocan la base
+                if(enemy.y > gameCanvas.height) {
+                    clearInterval(gameInterval); gameInterval = null;
+                    alert(`SIMULACIÓN TERMINADA. Puntuación de Defensa: ${score} Puntos.`);
+                    document.getElementById('btn-start-game').style.display = 'inline-block';
+                }
+            });
+
+            // Marcador de HUD
+            gCtx.fillStyle = '#00f3ff'; gCtx.font = '14px Rajdhani'; gCtx.fillText(`DEFENSE SCORE: ${score}`, 15, 20);
+        }
+
+        // Modales e Inicialización General
+        function openComic(title, bodyText) { document.getElementById('modal-title').innerText = title.toUpperCase(); document.getElementById('modal-body').innerText = bodyText; document.getElementById('comic-modal').style.display = 'flex'; }
+        function closeComic() { document.getElementById('comic-modal').style.display = 'none'; }
+        renderAlbumAndComics();
     </script>
 </body>
 </html>
