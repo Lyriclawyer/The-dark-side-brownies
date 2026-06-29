@@ -73,7 +73,7 @@
         .btn-sw:hover { background: #ffffff; transform: scale(1.05); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .section-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 25px; border-left: 4px solid var(--neon-cyan); padding-left: 15px; }
 
-        /* --- GRID DE PRODUCTOS --- */
+        /* --- CATÁLOGO --- */
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .product-card { background: var(--sw-gray); border: 1px solid var(--sw-border); display: flex; flex-direction: column; justify-content: space-between; }
         .product-img-placeholder { width: 100%; height: 150px; background: #252525; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; color: rgba(255, 255, 255, 0.1); border-bottom: 1px solid var(--sw-border); }
@@ -105,11 +105,84 @@
         .card-faction { font-size: 0.65rem; color: var(--gold); font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
         .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- CONTENEDOR DEL MINIJUEGO ARCADE AVANZADO --- */
-        .game-wrapper { max-width: 800px; margin: 0 auto; background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 25px; text-align: center; border-radius: 4px; }
+        /* --- CONTENEDOR DEL VISOR INTERACTIVO DE CARTAS 3D (SOLIDWORKS EFFECT) --- */
+        .stage-3d {
+            width: 100%;
+            height: 380px;
+            perspective: 1200px; /* Profundidad de la cabina 3D */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #090c0f;
+            border: 1px dashed rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+        }
+        .stage-3d:active { cursor: grabbing; }
+        
+        /* Contenedor Maestro de la Tarjeta */
+        .card-3d-wrapper {
+            width: 220px;
+            height: 310px;
+            position: relative;
+            transform-style: preserve-3d; /* Obliga al navegador a renderizar en coordenadas X, Y, Z reales */
+            transition: transform 0.1s ease-out; /* Inercia fluida */
+        }
+
+        /* Capas Base de la Carta */
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Oculta la parte trasera cuando se gira */
+            border-radius: 12px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            background-size: cover;
+            background-position: center;
+            background-color: #111;
+        }
+
+        .card-face-front {
+            transform: rotateY(0deg);
+            z-index: 2;
+        }
+
+        .card-face-back {
+            transform: rotateY(180deg); /* Espejo de la cara trasera */
+        }
+
+        /* Capa de Brillo Holográfico Estilo Star Wars */
+        .hologram-shimmer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0,243,255,0) 30%, rgba(0,243,255,0.15) 50%, rgba(255,255,255,0.1) 55%, rgba(0,243,255,0) 70%);
+            background-size: 200% 200%;
+            background-position: 0% 0%;
+            pointer-events: none;
+            mix-blend-mode: color-dodge; /* Mezcla el brillo sin alterar la imagen real */
+            z-index: 5;
+        }
+
+        .instructions-overlay {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        /* --- MINIJUEGO ARCADE AVANZADO --- */
+        .game-wrapper { max-width: 800px; margin: 0 auto; background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 25px; text-align: center; }
         #gameCanvasContainer { position: relative; display: inline-block; max-width: 100%; overflow: hidden; }
         #gameCanvas { background: #020305; border: 2px solid rgba(0, 243, 255, 0.4); display: block; margin: 0 auto; box-shadow: 0 0 30px rgba(0, 243, 255, 0.1); cursor: crosshair; }
-        .game-controls-desc { color: var(--text-muted); font-size: 0.95rem; margin-top: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .game-controls-desc { color: var(--text-muted); font-size: 0.95rem; margin-top: 10px; font-weight: 600; text-transform: uppercase; }
 
         /* --- TRANSMISIONES COMUNIDAD --- */
         .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
@@ -234,7 +307,7 @@
         <div class="comics-grid" id="grid-comics-container"></div>
     </section>
 
-    <!-- --- SECCIÓN 5: MINIJUEGO ARCADE STAR WARS COMPLETO (+300 LÍNEAS DE MOTOR) --- -->
+    <!-- --- SECCIÓN 5: MINIJUEGO ARCADE --- -->
     <section id="game-section" class="app-section">
         <h2 class="section-title">Hangar TIE Arcade: Avanzada del Lado Oscuro</h2>
         <div class="game-wrapper">
@@ -275,7 +348,7 @@
         </div>
     </section>
 
-    <!-- Modal de Cómics -->
+    <!-- Modal del Visor de Cómics / Lector -->
     <div class="galaxy-modal" id="comic-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeComic()">×</span>
@@ -284,9 +357,29 @@
         </div>
     </div>
 
-    <!-- =========================================================================================
-         MOTOR DE JUEGO Y LOGICA DE NAVEGACIÓN COMPLETA INDEPENDIENTE
-         ========================================================================================= -->
+    <!-- --- VISOR MODAL 3D COMPACTO (SOLIDWORKS MOUSE ROTATION ENGINE) --- -->
+    <div class="galaxy-modal" id="card-3d-modal">
+        <div class="modal-content" style="max-width: 480px; padding: 20px;">
+            <span class="close-modal" onclick="closeCardModal()">×</span>
+            <h3 class="product-name" id="card-modal-title" style="margin-bottom: 15px; color: var(--neon-cyan); text-align:center;">DATACARD INTERACTIVA</h3>
+            
+            <!-- Ventana de Renderizado de Ejes -->
+            <div class="stage-3d" id="stage-3d-trigger">
+                <div class="card-3d-wrapper" id="card-mesh">
+                    <!-- Cara Frontal (CD1F) -->
+                    <div class="card-face card-face-front" id="card-mesh-front">
+                        <div class="hologram-shimmer" id="shimmer-f"></div>
+                    </div>
+                    <!-- Cara Trasera (CD1T) -->
+                    <div class="card-face card-face-back" id="card-mesh-back">
+                        <div class="hologram-shimmer" id="shimmer-b"></div>
+                    </div>
+                </div>
+                <div class="instructions-overlay"><i class="fa-solid fa-hand-pointer"></i> Arrastra para orbitar ejes (SolidWorks Mode)</div>
+            </div>
+        </div>
+    </div>
+
     <script>
         /* ==========================================
            MOTOR CANVAS FONDO: HIPERESPACIO 3D
@@ -323,13 +416,13 @@
            ESTRUCTURAS DE DATOS: HISTORIETAS Y ÁLBUM
            ========================================== */
         const datacardsCollection = [
-            { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true },
-            { id: 2, title: "Cubo Holocrón", faction: "Artefacto de Carga", collected: false },
-            { id: 3, title: "Destructor Vader", faction: "Flota Sith", collected: false },
-            { id: 4, title: "Halcón de Cacao", faction: "Nave Contrabando", collected: false },
-            { id: 5, title: "Droide Repartidor", faction: "Logística Central", collected: false },
-            { id: 6, title: "Estrella de la Muerte", faction: "Horno Molecular", collected: false },
-            { id: 7, title: "Fuerza Cb2", faction: "Energía Organoléptica", collected: false }
+            { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.png", imgT: "CD1T.png" },
+            { id: 2, title: "Cubo Holocrón", faction: "Artefacto de Carga", collected: false, imgF: "CD2F.png", imgT: "CD2T.png" },
+            { id: 3, title: "Destructor Vader", faction: "Flota Sith", collected: false, imgF: "CD3F.png", imgT: "CD3T.png" },
+            { id: 4, title: "Halcón de Cacao", faction: "Nave Contrabando", collected: false, imgF: "CD4F.png", imgT: "CD4T.png" },
+            { id: 5, title: "Droide Repartidor", faction: "Logística Central", collected: false, imgF: "CD5F.png", imgT: "CD5T.png" },
+            { id: 6, title: "Estrella de la Muerte", faction: "Horno Molecular", collected: false, imgF: "CD6F.png", imgT: "CD6T.png" },
+            { id: 7, title: "Fuerza Cb2", faction: "Energía Organoléptica", collected: false, imgF: "CD7F.png", imgT: "CD7T.png" }
         ];
 
         const baseDeComics = [
@@ -345,6 +438,11 @@
             datacardsCollection.forEach(card => {
                 if(card.collected) totalCollected++;
                 const box = document.createElement('div'); box.className = `datacard-card ${card.collected ? 'collected' : 'missing'}`;
+                
+                if(card.collected) {
+                    box.onclick = () => openCard3DViewer(card);
+                }
+
                 box.innerHTML = `
                     <div class="card-placeholder">
                         <i class="${card.collected ? 'fa-solid fa-id-card' : 'fa-solid fa-address-card'}" style="font-size:2rem; margin-bottom:8px; color:${card.collected ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.1)'}"></i>
@@ -376,7 +474,99 @@
         }
 
         /* ==========================================
-           GESTOR DE NAV SPA INTERESTELAR
+           MOTOR INTERACTIVO 3D: SISTEMA SOLIDWORKS
+           ========================================== */
+        const cardMesh = document.getElementById('card-mesh');
+        const stage3D = document.getElementById('stage-3d-trigger');
+        const shimmerF = document.getElementById('shimmer-f');
+        const shimmerB = document.getElementById('shimmer-b');
+
+        let isDraggingCard = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let cardRotation = { x: 0, y: 0 }; // Grados acumulados de rotación
+
+        function openCard3DViewer(card) {
+            document.getElementById('card-modal-title').innerText = card.title.toUpperCase();
+            
+            // Asignar imágenes relativas locales sin alterar colores
+            document.getElementById('card-mesh-front').style.backgroundImage = `url('${card.imgF}')`;
+            document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
+            
+            // Reset de coordenadas espaciales
+            cardRotation = { x: 10, y: 15 }; 
+            applyMeshTransforms();
+            
+            document.getElementById('card-3d-modal').style.display = 'flex';
+            init3DControlListeners();
+        }
+
+        function init3DControlListeners() {
+            // Mouse Events
+            stage3D.onmousedown = (e) => {
+                isDraggingCard = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            };
+
+            window.onmousemove = (e) => {
+                if (!isDraggingCard) return;
+                
+                // Delta del movimiento del puntero
+                let deltaX = e.clientX - previousMousePosition.x;
+                let deltaY = e.clientY - previousMousePosition.y;
+
+                // Mapear rotación de ejes inversos (Mover ratón a la derecha gira eje Y)
+                cardRotation.y += deltaX * 0.6;
+                cardRotation.x -= deltaY * 0.6;
+
+                applyMeshTransforms();
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            };
+
+            window.onmouseup = () => { isDraggingCard = false; };
+
+            // Touch Events para Dispositivos Móviles
+            stage3D.ontouchstart = (e) => {
+                isDraggingCard = true;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            };
+
+            window.ontouchmove = (e) => {
+                if (!isDraggingCard) return;
+                let deltaX = e.touches[0].clientX - previousMousePosition.x;
+                let deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+                cardRotation.y += deltaX * 0.6;
+                cardRotation.x -= deltaY * 0.6;
+
+                applyMeshTransforms();
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            };
+
+            window.ontouchend = () => { isDraggingCard = false; };
+        }
+
+        function applyMeshTransforms() {
+            // Aplicar la rotación real por CSS 3D
+            cardMesh.style.transform = `rotateX(${cardRotation.x}deg) rotateY(${cardRotation.y}deg)`;
+            
+            // Dinámica del destello holográfico dependiendo del ángulo de órbita
+            let posX = (cardRotation.y % 360) / 3.6;
+            let posY = (cardRotation.x % 360) / 3.6;
+            shimmerF.style.backgroundPosition = `${posX}% ${posY}%`;
+            shimmerB.style.backgroundPosition = `${-posX}% ${-posY}%`;
+        }
+
+        function closeCardModal() {
+            document.getElementById('card-3d-modal').style.display = 'none';
+            // Apagar listeners globales
+            window.onmousemove = null;
+            window.onmouseup = null;
+            window.ontouchmove = null;
+            window.ontouchend = null;
+        }
+
+        /* ==========================================
+           GESTOR DE NAV SPA
            ========================================== */
         const globalNav = document.getElementById('global-nav'); const heroSection = document.getElementById('hero-section');
         const sections = document.querySelectorAll('.app-section'); const flashOverlay = document.getElementById('flash-overlay');
@@ -391,10 +581,7 @@
                 const targetId = btn.getAttribute('data-target');
                 if (isJumping || document.getElementById(targetId).style.display === 'block') return;
                 tabButtons.forEach(b => b.classList.remove('active-tab')); btn.classList.add('active-tab');
-                
-                // Detener motor del juego si cambias de pestaña
                 if(targetId !== 'game-section' && gameEngine.isRunning) { gameEngine.stop(); }
-
                 executeJumpSequence(() => { sections.forEach(s => s.style.display = 'none'); document.getElementById(targetId).style.display = 'block'; });
             });
         });
@@ -407,7 +594,7 @@
         }
 
         /* ==========================================
-           HARDWARE DE ESCANEO QR Y CONTROL ENLACE
+           HARDWARE DE ESCANEO QR
            ========================================== */
         let html5QrScanner = null;
         function initQrCamera() {
@@ -432,398 +619,120 @@
         /* =========================================================================================
            VIDE_OJUEGO AVANZADO: "HANGAR TIE ARCADE" (MOTOR INTEGRADO COMPLETO +300 LÍNEAS)
            ========================================================================================= */
-        const gameCanvas = document.getElementById('gameCanvas');
-        const gCtx = gameCanvas.getContext('2d');
-
-        // Estado Maestro del Videojuego
+        const gameCanvas = document.getElementById('gameCanvas'); const gCtx = gameCanvas.getContext('2d');
         const gameEngine = {
-            isRunning: false,
-            score: 0,
-            combo: 0,
-            screenShake: 0,
-            keys: {},
-            lastShotTime: 0,
-            spawnTimer: 0,
-            bossMode: false,
-            
-            // Entidades en pantalla
-            player: null,
-            bullets: [],
-            enemyBullets: [],
-            enemies: [],
-            particles: [],
-            powerups: [],
-            boss: null,
-
+            isRunning: false, score: 0, combo: 0, screenShake: 0, keys: {}, lastShotTime: 0, spawnTimer: 0, bossMode: false,
+            player: null, bullets: [], enemyBullets: [], enemies: [], particles: [], powerups: [], boss: null,
             init: function() {
-                this.player = {
-                    x: gameCanvas.width / 2 - 20,
-                    y: gameCanvas.height - 45,
-                    w: 40,
-                    h: 30,
-                    speed: 7,
-                    shields: 100,
-                    maxShields: 100,
-                    weaponType: 'NORMAL', // NORMAL, DOUBLE, RAPID
-                    weaponTimer: 0,
-                    hasShieldBuff: false,
-                    shieldBuffTimer: 0
-                };
-                this.bullets = [];
-                this.enemyBullets = [];
-                this.enemies = [];
-                this.particles = [];
-                this.powerups = [];
-                this.boss = null;
-                this.score = 0;
-                this.combo = 0;
-                this.screenShake = 0;
-                this.spawnTimer = 0;
-                this.bossMode = false;
+                this.player = { x: gameCanvas.width / 2 - 20, y: gameCanvas.height - 45, w: 40, h: 30, speed: 7, shields: 100, maxShields: 100, weaponType: 'NORMAL', weaponTimer: 0, hasShieldBuff: false, shieldBuffTimer: 0 };
+                this.bullets = []; this.enemyBullets = []; this.enemies = []; this.particles = []; this.powerups = []; this.boss = null; this.score = 0; this.combo = 0; this.screenShake = 0; this.spawnTimer = 0; this.bossMode = false;
             },
-
-            stop: function() {
-                this.isRunning = false;
-                document.getElementById('btn-start-game').style.display = 'inline-block';
-                document.getElementById('btn-start-game').innerText = "Reiniciar Sistemas de Caza";
-            }
+            stop: function() { this.isRunning = false; document.getElementById('btn-start-game').style.display = 'inline-block'; document.getElementById('btn-start-game').innerText = "Reiniciar Sistemas de Caza"; }
         };
 
-        // Captura de Teclado Avanzada
-        window.addEventListener('keydown', e => { 
-            gameEngine.keys[e.code] = true; 
-            if(["Space", "ArrowUp", "ArrowDown", "KeyW", "KeyS"].includes(e.code) && gameEngine.isRunning) e.preventDefault(); 
-        });
+        window.addEventListener('keydown', e => { gameEngine.keys[e.code] = true; if(["Space", "ArrowUp", "ArrowDown", "KeyW", "KeyS"].includes(e.code) && gameEngine.isRunning) e.preventDefault(); });
         window.addEventListener('keyup', e => gameEngine.keys[e.code] = false);
 
-        function startGame() {
-            document.getElementById('btn-start-game').style.display = 'none';
-            gameEngine.init();
-            gameEngine.isRunning = true;
-            loopGame();
-        }
-
-        // Sistema de Partículas para Explosiones Realistas
-        function spawnExplosion(x, y, color, count = 12) {
-            for(let i=0; i<count; i++) {
-                gameEngine.particles.push({
-                    x: x, y: y,
-                    vx: (Math.random() - 0.5) * 8,
-                    vy: (Math.random() - 0.5) * 8,
-                    radius: Math.random() * 3 + 1,
-                    alpha: 1,
-                    decay: Math.random() * 0.04 + 0.02,
-                    color: color
-                });
-            }
-        }
-
-        // Bucle Principal del Motor del Videojuego
-        function loopGame() {
-            if(!gameEngine.isRunning) return;
-
-            updateGameLogic();
-            renderGameGraphics();
-
-            requestAnimationFrame(loopGame);
-        }
+        function startGame() { document.getElementById('btn-start-game').style.display = 'none'; gameEngine.init(); gameEngine.isRunning = true; loopGame(); }
+        function spawnExplosion(x, y, color, count = 12) { for(let i=0; i<count; i++) { gameEngine.particles.push({ x: x, y: y, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8, radius: Math.random() * 3 + 1, alpha: 1, decay: Math.random() * 0.04 + 0.02, color: color }); } }
+        
+        function loopGame() { if(!gameEngine.isRunning) return; updateGameLogic(); renderGameGraphics(); requestAnimationFrame(loopGame); }
 
         function updateGameLogic() {
-            // Aplicar fricción al screen shake
             if(gameEngine.screenShake > 0) gameEngine.screenShake -= 0.5;
-
-            // Movimiento del Caza Imperial del Jugador
             if((gameEngine.keys["ArrowLeft"] || gameEngine.keys["KeyA"]) && gameEngine.player.x > 5) gameEngine.player.x -= gameEngine.player.speed;
             if((gameEngine.keys["ArrowRight"] || gameEngine.keys["KeyD"]) && gameEngine.player.x < gameCanvas.width - gameEngine.player.w - 5) gameEngine.player.x += gameEngine.player.speed;
-
-            // Control de Tiempos de las Armas Especiales
-            if(gameEngine.player.weaponType !== 'NORMAL') {
-                gameEngine.player.weaponTimer--;
-                if(gameEngine.player.weaponTimer <= 0) gameEngine.player.weaponType = 'NORMAL';
-            }
-            if(gameEngine.player.hasShieldBuff) {
-                gameEngine.player.shieldBuffTimer--;
-                if(gameEngine.player.shieldBuffTimer <= 0) gameEngine.player.hasShieldBuff = false;
-            }
-
-            // Sistema de Disparo Láser Integrado
-            const now = Date.now();
-            let fireDelay = gameEngine.player.weaponType === 'RAPID' ? 120 : 250;
+            if(gameEngine.player.weaponType !== 'NORMAL') { gameEngine.player.weaponTimer--; if(gameEngine.player.weaponTimer <= 0) gameEngine.player.weaponType = 'NORMAL'; }
+            const now = Date.now(); let fireDelay = gameEngine.player.weaponType === 'RAPID' ? 120 : 250;
             if(gameEngine.keys["Space"] && (now - gameEngine.lastShotTime > fireDelay)) {
-                if(gameEngine.player.weaponType === 'DOUBLE') {
-                    gameEngine.bullets.push({ x: gameEngine.player.x + 2, y: gameEngine.player.y, vy: -10 });
-                    gameEngine.bullets.push({ x: gameEngine.player.x + gameEngine.player.w - 8, y: gameEngine.player.y, vy: -10 });
-                } else {
-                    gameEngine.bullets.push({ x: gameEngine.player.x + gameEngine.player.w/2 - 3, y: gameEngine.player.y, vy: -10 });
-                }
+                if(gameEngine.player.weaponType === 'DOUBLE') { gameEngine.bullets.push({ x: gameEngine.player.x + 2, y: gameEngine.player.y, vy: -10 }); gameEngine.bullets.push({ x: gameEngine.player.x + gameEngine.player.w - 8, y: gameEngine.player.y, vy: -10 }); }
+                else { gameEngine.bullets.push({ x: gameEngine.player.x + gameEngine.player.w/2 - 3, y: gameEngine.player.y, vy: -10 }); }
                 gameEngine.lastShotTime = now;
             }
-
-            // Gestión de Balas del Jugador
-            for(let i = gameEngine.bullets.length - 1; i >= 0; i--) {
-                let b = gameEngine.bullets[i]; b.y += b.vy;
-                if(b.y < 0) gameEngine.bullets.splice(i, 1);
-            }
-
-            // Gestión de Balas Enemigas (Láser Rebelde Rojo)
+            for(let i = gameEngine.bullets.length - 1; i >= 0; i--) { let b = gameEngine.bullets[i]; b.y += b.vy; if(b.y < 0) gameEngine.bullets.splice(i, 1); }
             for(let i = gameEngine.enemyBullets.length - 1; i >= 0; i--) {
                 let eb = gameEngine.enemyBullets[i]; eb.y += eb.vy;
-                
-                // Colisión contra la Nave del Jugador
-                if(eb.x > gameEngine.player.x && eb.x < gameEngine.player.x + gameEngine.player.w &&
-                   eb.y > gameEngine.player.y && eb.y < gameEngine.player.y + gameEngine.player.h) {
-                    
-                    gameEngine.enemyBullets.splice(i, 1);
-                    if(!gameEngine.player.hasShieldBuff) {
-                        gameEngine.player.shields -= 15;
-                        gameEngine.screenShake = 6;
-                        spawnExplosion(gameEngine.player.x + gameEngine.player.w/2, gameEngine.player.y, '#ff3333', 6);
-                    }
-                    if(gameEngine.player.shields <= 0) {
-                        spawnExplosion(gameEngine.player.x + gameEngine.player.w/2, gameEngine.player.y, '#ffffff', 30);
-                        gameEngine.stop();
-                        alert(`TU ENLACE CON EL CAZA SE HA PERDIDO.\nDefendiste la Receta e ingresaste ${gameEngine.score} puntos de energía.`);
-                        return;
-                    }
+                if(eb.x > gameEngine.player.x && eb.x < gameEngine.player.x + gameEngine.player.w && eb.y > gameEngine.player.y && eb.y < gameEngine.player.y + gameEngine.player.h) {
+                    gameEngine.enemyBullets.splice(i, 1); gameEngine.player.shields -= 15; gameEngine.screenShake = 6; spawnExplosion(gameEngine.player.x + gameEngine.player.w/2, gameEngine.player.y, '#ff3333', 6);
+                    if(gameEngine.player.shields <= 0) { spawnExplosion(gameEngine.player.x + gameEngine.player.w/2, gameEngine.player.y, '#ffffff', 30); gameEngine.stop(); alert(`SISTEMA DE CAMARAS FUERA DE LINEA.`); return; }
                     continue;
                 }
                 if(eb.y > gameCanvas.height) gameEngine.enemyBullets.splice(i, 1);
             }
-
-            // Generador de Inteligencias Enemigas (Cazas Rebeldes)
             if(!gameEngine.bossMode) {
-                gameEngine.spawnTimer++;
-                let spawnRate = gameEngine.score > 150 ? 25 : 40;
+                gameEngine.spawnTimer++; let spawnRate = gameEngine.score > 150 ? 25 : 40;
                 if(gameEngine.spawnTimer > spawnRate) {
-                    let rand = Math.random();
-                    let type = 'XWING'; let hp = 1; let speedY = 2.5;
-                    if(rand > 0.8) { type = 'YWING'; hp = 3; speedY = 1.2; } // Tanque pesado
-                    else if(rand > 0.6) { type = 'AWING'; hp = 1; speedY = 4; } // Interceptor rápido
-                    
-                    gameEngine.enemies.push({
-                        x: Math.random() * (gameCanvas.width - 30) + 5,
-                        y: -30, type: type, hp: hp, maxHp: hp, speedY: speedY,
-                        step: 0, amp: Math.random() * 3
-                    });
+                    let rand = Math.random(); let type = 'XWING'; let hp = 1; let speedY = 2.5;
+                    if(rand > 0.8) { type = 'YWING'; hp = 3; speedY = 1.2; } else if(rand > 0.6) { type = 'AWING'; hp = 1; speedY = 4; }
+                    gameEngine.enemies.push({ x: Math.random() * (gameCanvas.width - 30) + 5, y: -30, type: type, hp: hp, maxHp: hp, speedY: speedY, step: 0, amp: Math.random() * 3 });
                     gameEngine.spawnTimer = 0;
                 }
-
-                // Activar BOSS MODE al superar los 300 puntos
-                if(gameEngine.score >= 300) {
-                    gameEngine.bossMode = true;
-                    gameEngine.boss = { x: gameCanvas.width / 2 - 60, y: -80, w: 120, h: 50, hp: 150, maxHp: 150, dir: 1, speedX: 2.5, shootTimer: 0 };
-                }
+                if(gameEngine.score >= 300) { gameEngine.bossMode = true; gameEngine.boss = { x: gameCanvas.width / 2 - 60, y: -80, w: 120, h: 50, hp: 150, maxHp: 150, dir: 1, speedX: 2.5, shootTimer: 0 }; }
             }
-
-            // Procesar Movimiento de Enemigos y Colisiones Láser
             for(let eIdx = gameEngine.enemies.length - 1; eIdx >= 0; eIdx--) {
-                let enemy = gameEngine.enemies[eIdx];
-                enemy.y += enemy.speedY;
-                
-                // Comportamiento de vuelo evasivo para los veloces Ala-A
-                if(enemy.type === 'AWING') {
-                    enemy.step += 0.1;
-                    enemy.x += Math.sin(enemy.step) * enemy.amp;
-                }
-
-                // Disparo de Cazas Enemigos de forma aleatoria
-                if(Math.random() > 0.985) {
-                    gameEngine.enemyBullets.push({ x: enemy.x + 10, y: enemy.y + 15, vy: 5 });
-                }
-
-                // Limpiar si salen del radar inferior
-                if(enemy.y > gameCanvas.height) {
-                    gameEngine.enemies.splice(eIdx, 1);
-                    gameEngine.player.shields -= 5; // Penalización por dejar pasar rebeldes
-                    continue;
-                }
-
-                // Evaluar impactos de bala del jugador sobre este enemigo
+                let enemy = gameEngine.enemies[eIdx]; enemy.y += enemy.speedY;
+                if(enemy.type === 'AWING') { enemy.step += 0.1; enemy.x += Math.sin(enemy.step) * enemy.amp; }
+                if(Math.random() > 0.985) { gameEngine.enemyBullets.push({ x: enemy.x + 10, y: enemy.y + 15, vy: 5 }); }
+                if(enemy.y > gameCanvas.height) { gameEngine.enemies.splice(eIdx, 1); gameEngine.player.shields -= 5; continue; }
                 for(let bIdx = gameEngine.bullets.length - 1; bIdx >= 0; bIdx--) {
                     let b = gameEngine.bullets[bIdx];
                     if(b.x > enemy.x && b.x < enemy.x + 25 && b.y > enemy.y && b.y < enemy.y + 20) {
-                        gameEngine.bullets.splice(bIdx, 1);
-                        enemy.hp--;
-                        
-                        // Chispas de impacto parcial
-                        spawnExplosion(b.x, b.y, '#00f3ff', 3);
-
+                        gameEngine.bullets.splice(bIdx, 1); enemy.hp--; spawnExplosion(b.x, b.y, '#00f3ff', 3);
                         if(enemy.hp <= 0) {
-                            // Destrucción total
-                            let points = enemy.type === 'YWING' ? 30 : (enemy.type === 'AWING' ? 20 : 10);
-                            gameEngine.score += points;
-                            spawnExplosion(enemy.x + 12, enemy.y + 10, enemy.type === 'YWING' ? '#ffaa00' : '#ff3333', 15);
-                            
-                            // Probabilidad de soltar Power-Up en el Hangar
-                            if(Math.random() > 0.75) {
-                                let pTypes = ['DOUBLE', 'RAPID', 'SHIELD'];
-                                gameEngine.powerups.push({
-                                    x: enemy.x, y: enemy.y,
-                                    type: pTypes[Math.floor(Math.random() * pTypes.length)],
-                                    vy: 2
-                                });
-                            }
-                            gameEngine.enemies.splice(eIdx, 1);
-                            break;
+                            let points = enemy.type === 'YWING' ? 30 : (enemy.type === 'AWING' ? 20 : 10); gameEngine.score += points; spawnExplosion(enemy.x + 12, enemy.y + 10, '#ff3333', 15);
+                            if(Math.random() > 0.75) { let pTypes = ['DOUBLE', 'RAPID', 'SHIELD']; gameEngine.powerups.push({ x: enemy.x, y: enemy.y, type: pTypes[Math.floor(Math.random() * pTypes.length)], vy: 2 }); }
+                            gameEngine.enemies.splice(eIdx, 1); break;
                         }
                     }
                 }
             }
-
-            // Lógica Completa de la Nave Nodriza (BOSS FIGHT)
             if(gameEngine.bossMode && gameEngine.boss) {
-                let boss = gameEngine.boss;
-                if(boss.y < 40) boss.y += 1; // Descenso cinemático
-                
-                // Patrón de movimiento lateral de evasión
-                boss.x += boss.speedX * boss.dir;
-                if(boss.x <= 10 || boss.x >= gameCanvas.width - boss.w - 10) boss.dir *= -1;
-
-                // Sistema de Ataque del Boss
-                boss.shootTimer++;
-                if(boss.shootTimer > 20) {
-                    gameEngine.enemyBullets.push({ x: boss.x + 15, y: boss.y + boss.h, vy: 6 });
-                    gameEngine.enemyBullets.push({ x: boss.x + boss.w - 20, y: boss.y + boss.h, vy: 6 });
-                    if(Math.random() > 0.5) { // Ráfaga central pesada
-                        gameEngine.enemyBullets.push({ x: boss.x + boss.w/2, y: boss.y + boss.h, vy: 8 });
-                    }
-                    boss.shootTimer = 0;
-                }
-
-                // Evaluar colisiones del jugador contra el Boss
+                let b = gameEngine.boss; if(b.y < 40) b.y += 1; b.x += b.speedX * b.dir; if(b.x <= 10 || b.x >= gameCanvas.width - b.w - 10) b.dir *= -1;
+                b.shootTimer++; if(b.shootTimer > 20) { gameEngine.enemyBullets.push({ x: b.x + 15, y: b.y + b.h, vy: 6 }); gameEngine.enemyBullets.push({ x: b.x + b.w - 20, y: b.y + b.h, vy: 6 }); b.shootTimer = 0; }
                 for(let bIdx = gameEngine.bullets.length - 1; bIdx >= 0; bIdx--) {
-                    let b = gameEngine.bullets[bIdx];
-                    if(b.x > boss.x && b.x < boss.x + boss.w && b.y > boss.y && b.y < boss.y + boss.h) {
-                        gameEngine.bullets.splice(bIdx, 1);
-                        boss.hp--;
-                        spawnExplosion(b.x, b.y, '#fade4b', 4);
-
-                        if(boss.hp <= 0) {
-                            spawnExplosion(boss.x + boss.w/2, boss.y + boss.h/2, '#ffffff', 60);
-                            gameEngine.score += 500;
-                            gameEngine.bossMode = false;
-                            gameEngine.boss = null;
-                            gameEngine.screenShake = 15;
-                            alert("¡SISTEMA REBELDE ANIQUILADO!\nHas defendido con éxito absoluto la pureza del Lado Oscuro.");
-                        }
+                    let bl = gameEngine.bullets[bIdx];
+                    if(bl.x > b.x && bl.x < b.x + b.w && bl.y > b.y && bl.y < b.y + b.h) {
+                        gameEngine.bullets.splice(bIdx, 1); b.hp--; spawnExplosion(bl.x, bl.y, '#fade4b', 4);
+                        if(b.hp <= 0) { spawnExplosion(b.x + b.w/2, b.y + b.h/2, '#ffffff', 60); gameEngine.score += 500; gameEngine.bossMode = false; gameEngine.boss = null; gameEngine.screenShake = 15; alert("VICTORIA ABSOLUTA."); }
                     }
                 }
             }
-
-            // Actualización de Items de Recompensa Flotantes
             for(let i = gameEngine.powerups.length - 1; i >= 0; i--) {
                 let p = gameEngine.powerups[i]; p.y += p.vy;
-                
-                // Recolección por parte del Jugador
-                if(p.x > gameEngine.player.x && p.x < gameEngine.player.x + gameEngine.player.w &&
-                   p.y > gameEngine.player.y && p.y < gameEngine.player.y + gameEngine.player.h) {
-                    
-                    if(p.type === 'SHIELD') {
-                        gameEngine.player.shields = Math.min(gameEngine.player.maxShields, gameEngine.player.shields + 40);
-                    } else {
-                        gameEngine.player.weaponType = p.type;
-                        gameEngine.player.weaponTimer = 250; // Duración de ráfaga
-                    }
-                    // Destello óptico de recolección
-                    spawnExplosion(p.x, p.y, '#fade4b', 8);
-                    gameEngine.powerups.splice(i, 1);
-                    continue;
+                if(p.x > gameEngine.player.x && p.x < gameEngine.player.x + gameEngine.player.w && p.y > gameEngine.player.y && p.y < gameEngine.player.y + gameEngine.player.h) {
+                    if(p.type === 'SHIELD') { gameEngine.player.shields = Math.min(gameEngine.player.maxShields, gameEngine.player.shields + 40); } else { gameEngine.player.weaponType = p.type; gameEngine.player.weaponTimer = 250; }
+                    spawnExplosion(p.x, p.y, '#fade4b', 8); gameEngine.powerups.splice(i, 1); continue;
                 }
                 if(p.y > gameCanvas.height) gameEngine.powerups.splice(i, 1);
             }
-
-            // Mecánica de Disipación de Partículas
-            for(let i = gameEngine.particles.length - 1; i >= 0; i--) {
-                let pt = gameEngine.particles[i];
-                pt.x += pt.vx; pt.y += pt.vy; pt.alpha -= pt.decay;
-                if(pt.alpha <= 0) gameEngine.particles.splice(i, 1);
-            }
+            for(let i = gameEngine.particles.length - 1; i >= 0; i--) { let pt = gameEngine.particles[i]; pt.x += pt.vx; pt.y += pt.vy; pt.alpha -= pt.decay; if(pt.alpha <= 0) gameEngine.particles.splice(i, 1); }
         }
 
         function renderGameGraphics() {
-            gCtx.save();
-            // Inyección de vibración por Screen Shake
-            if(gameEngine.screenShake > 0) {
-                let dx = (Math.random() - 0.5) * gameEngine.screenShake;
-                let dy = (Math.random() - 0.5) * gameEngine.screenShake;
-                gCtx.translate(dx, dy);
-            }
-
-            // Fondo del espacio profundo del juego
+            gCtx.save(); if(gameEngine.screenShake > 0) { gCtx.translate((Math.random() - 0.5) * gameEngine.screenShake, (Math.random() - 0.5) * gameEngine.screenShake); }
             gCtx.fillStyle = '#020406'; gCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-            // Renderizar partículas vectoriales
-            gameEngine.particles.forEach(p => {
-                gCtx.save(); gCtx.globalAlpha = p.alpha; gCtx.fillStyle = p.color;
-                gCtx.beginPath(); gCtx.arc(p.x, p.y, p.radius, 0, Math.PI*2); gCtx.fill(); gCtx.restore();
-            });
-
-            // Dibujar Balas Láser del Jugador (Cian Neón)
-            gCtx.fillStyle = 'var(--neon-cyan)';
-            gameEngine.bullets.forEach(b => { gCtx.fillRect(b.x, b.y, 4, 12); });
-
-            // Dibujar Balas Enemigas (Rojo Rebelde Fuerte)
-            gCtx.fillStyle = '#ff3333';
-            gameEngine.enemyBullets.forEach(eb => { gCtx.fillRect(eb.x, eb.y, 3, 10); });
-
-            // Dibujar Power-Ups en Pantalla
-            gameEngine.powerups.forEach(p => {
-                gCtx.fillStyle = p.type === 'SHIELD' ? '#00f3ff' : '#fade4b';
-                gCtx.font = '10px Montserrat'; gCtx.fillRect(p.x, p.y, 14, 14);
-                gCtx.fillStyle = '#000000'; gCtx.fillText(p.type[0], p.x + 4, p.y + 11);
-            });
-
-            // Dibujar Cazas de la Alianza Rebelde
+            gameEngine.particles.forEach(p => { gCtx.save(); gCtx.globalAlpha = p.alpha; gCtx.fillStyle = p.color; gCtx.beginPath(); gCtx.arc(p.x, p.y, p.radius, 0, Math.PI*2); gCtx.fill(); gCtx.restore(); });
+            gCtx.fillStyle = 'var(--neon-cyan)'; gameEngine.bullets.forEach(b => { gCtx.fillRect(b.x, b.y, 4, 12); });
+            gCtx.fillStyle = '#ff3333'; gameEngine.enemyBullets.forEach(eb => { gCtx.fillRect(eb.x, eb.y, 3, 10); });
+            gameEngine.powerups.forEach(p => { gCtx.fillStyle = p.type === 'SHIELD' ? '#00f3ff' : '#fade4b'; gCtx.fillRect(p.x, p.y, 14, 14); });
             gameEngine.enemies.forEach(e => {
-                if(e.type === 'XWING') { gCtx.fillStyle = '#b0bec5'; gCtx.fillRect(e.x + 8, e.y, 6, 20); gCtx.fillRect(e.x, e.y + 6, 22, 4); gCtx.fillStyle = '#ff5722'; gCtx.fillRect(e.x + 9, e.y + 2, 4, 4); }
-                else if(e.type === 'YWING') { gCtx.fillStyle = '#eceff1'; gCtx.fillRect(e.x + 4, e.y, 14, 18); gCtx.fillStyle = '#ffd54f'; gCtx.fillRect(e.x, e.y + 12, 22, 5); }
+                if(e.type === 'XWING') { gCtx.fillStyle = '#b0bec5'; gCtx.fillRect(e.x + 8, e.y, 6, 20); gCtx.fillRect(e.x, e.y + 6, 22, 4); }
+                else if(e.type === 'YWING') { gCtx.fillStyle = '#eceff1'; gCtx.fillRect(e.x + 4, e.y, 14, 18); }
                 else if(e.type === 'AWING') { gCtx.fillStyle = '#d32f2f'; gCtx.beginPath(); gCtx.moveTo(e.x + 10, e.y + 18); gCtx.lineTo(e.x, e.y); gCtx.lineTo(e.x + 20, e.y); gCtx.fill(); }
-                
-                // Barra de salud superior para naves blindadas como el Ala-Y
-                if(e.maxHp > 1) {
-                    gCtx.fillStyle = 'rgba(255,0,0,0.4)'; gCtx.fillRect(e.x, e.y - 6, 22, 3);
-                    gCtx.fillStyle = '#00f3ff'; gCtx.fillRect(e.x, e.y - 6, (e.hp / e.maxHp) * 22, 3);
-                }
             });
-
-            // Dibujar la Gran Nave Nodriza Rebelde (Boss Fight)
-            if(gameEngine.bossMode && gameEngine.boss) {
-                let b = gameEngine.boss;
-                gCtx.fillStyle = '#78909c'; gCtx.fillRect(b.x, b.y, b.w, b.h);
-                gCtx.fillStyle = '#d32f2f'; gCtx.fillRect(b.x + 20, b.y + b.h - 8, 15, 8); gCtx.fillRect(b.x + b.w - 35, b.y + b.h - 8, 15, 8);
-                // HUD Integrado de Salud del Jefe
-                gCtx.fillStyle = 'rgba(255,255,255,0.1)'; gCtx.fillRect(150, 15, 300, 6);
-                gCtx.fillStyle = '#ff3333'; gCtx.fillRect(150, 15, (b.hp / b.maxHp) * 300, 6);
-                gCtx.fillStyle = '#ffffff'; gCtx.font = '9px Montserrat'; gCtx.fillText("CRUCERO ENE_MIGO PRINCIPAL", 240, 11);
-            }
-
-            // Dibujar Caza Interceptor Imperial del Jugador (Inspiración Cabina de TIE Fighter)
+            if(gameEngine.bossMode && gameEngine.boss) { let b = gameEngine.boss; gCtx.fillStyle = '#78909c'; gCtx.fillRect(b.x, b.y, b.w, b.h); gCtx.fillStyle = 'rgba(255,255,255,0.1)'; gCtx.fillRect(150, 15, 300, 6); gCtx.fillStyle = '#ff3333'; gCtx.fillRect(150, 15, (b.hp / b.maxHp) * 300, 6); }
             gCtx.fillStyle = '#455a64'; gCtx.fillRect(gameEngine.player.x + 12, gameEngine.player.y, 16, 25);
             gCtx.fillStyle = '#1c232a'; gCtx.beginPath(); gCtx.arc(gameEngine.player.x + 20, gameEngine.player.y + 12, 8, 0, Math.PI*2); gCtx.fill();
             gCtx.fillStyle = 'var(--neon-cyan)'; gCtx.fillRect(gameEngine.player.x, gameEngine.player.y + 4, 3, 22); gCtx.fillRect(gameEngine.player.x + gameEngine.player.w - 3, gameEngine.player.y + 4, 3, 22);
-            gCtx.strokeStyle = '#455a64'; gCtx.lineWidth = 2; gCtx.strokeRect(gameEngine.player.x, gameEngine.player.y + 12, gameEngine.player.w, 2);
-
-            // Panel de Control HUD de Cabina
             gCtx.fillStyle = 'rgba(0, 0, 0, 0.85)'; gCtx.fillRect(0, gameCanvas.height - 25, gameCanvas.width, 25);
-            gCtx.strokeStyle = 'rgba(0, 243, 255, 0.2)'; gCtx.strokeRect(0, gameCanvas.height - 25, gameCanvas.width, 25);
-
-            // Texto HUD de Energía y Armas
-            gCtx.fillStyle = '#00f3ff'; gCtx.font = '12px Rajdhani';
-            gCtx.fillText(`MARCADOR SITH: ${gameEngine.score}`, 20, gameCanvas.height - 7);
-            gCtx.fillText(`SISTEMA DE ARMAS: ${gameEngine.player.weaponType}`, gameCanvas.width - 180, gameCanvas.height - 7);
-
-            // Barra de Escudo Deflector en la Base
-            gCtx.fillStyle = 'rgba(255, 255, 255, 0.1)'; gCtx.fillRect(160, gameCanvas.height - 16, 120, 8);
-            gCtx.fillStyle = gameEngine.player.shields > 30 ? '#00f3ff' : '#ff3333';
-            gCtx.fillRect(160, gameCanvas.height - 16, (gameEngine.player.shields / gameEngine.player.maxShields) * 120, 8);
-            gCtx.fillText(`ESCUDOS`, 110, gameCanvas.height - 7);
-
+            gCtx.fillStyle = '#00f3ff'; gCtx.font = '12px Rajdhani'; gCtx.fillText(`MARCADOR SITH: ${gameEngine.score}`, 20, gameCanvas.height - 7);
+            gCtx.fillStyle = 'rgba(255, 255, 255, 0.1)'; gCtx.fillRect(160, gameCanvas.height - 16, 120, 8); gCtx.fillStyle = '#00f3ff'; gCtx.fillRect(160, gameCanvas.height - 16, (gameEngine.player.shields / gameEngine.player.maxShields) * 120, 8);
             gCtx.restore();
         }
 
-        /* ==========================================
-           INICIALIZACIÓN DE COMPONENTES AL CARGAR
-           ========================================== */
+        function openComic(title, bodyText) { document.getElementById('modal-title').innerText = title.toUpperCase(); document.getElementById('modal-body').innerText = bodyText; document.getElementById('comic-modal').style.display = 'flex'; }
+        function closeComic() { document.getElementById('comic-modal').style.display = 'none'; }
+        
         renderAlbumAndComics();
     </script>
 </body>
