@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Dark Side Brownies - Hub Imperial</title>
-    <!-- FontAwesome para Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fuentes Oficiales -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <!-- Biblioteca Externa para Escanear QR -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
@@ -98,18 +95,22 @@
         .comic-card, .datacard-card { background: var(--sw-gray); border: 1px solid var(--sw-border); position: relative; transition: all 0.3s ease; }
         .comic-card.unlocked:hover, .datacard-card.collected:hover { border-color: var(--neon-cyan); transform: scale(1.02); cursor: pointer; }
         .comic-card.locked, .datacard-card.missing { opacity: 0.35; }
-        .comic-placeholder, .card-placeholder { width: 100%; height: 230px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center; }
+        
+        .card-placeholder { width: 100%; height: 230px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 15px; text-align: center; }
+        .card-thumbnail { width: 100%; height: 130px; background-size: cover; background-position: center; border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.2); }
+        
+        .comic-placeholder { width: 100%; height: 230px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center; }
         .comic-tag { font-size: 0.7rem; color: var(--neon-cyan); font-weight: 700; margin-bottom: 5px; }
         .comic-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1rem; text-transform: uppercase; }
         .lock-icon { font-size: 1.8rem; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
-        .card-faction { font-size: 0.65rem; color: var(--gold); font-weight: 700; margin-top: 5px; letter-spacing: 1px; }
+        .card-faction { font-size: 0.65rem; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
         .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- CONTENEDOR DEL VISOR INTERACTIVO DE CARTAS 3D (SOLIDWORKS EFFECT) --- */
+        /* --- CONTENEDOR INTERACTIVO 3D --- */
         .stage-3d {
             width: 100%;
-            height: 380px;
-            perspective: 1200px; /* Profundidad de la cabina 3D */
+            height: 420px;
+            perspective: 1200px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -121,26 +122,25 @@
         }
         .stage-3d:active { cursor: grabbing; }
         
-        /* Contenedor Maestro de la Tarjeta */
         .card-3d-wrapper {
-            width: 220px;
-            height: 310px;
+            width: 240px;
+            height: 340px;
             position: relative;
-            transform-style: preserve-3d; /* Obliga al navegador a renderizar en coordenadas X, Y, Z reales */
-            transition: transform 0.1s ease-out; /* Inercia fluida */
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
 
-        /* Capas Base de la Carta */
         .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Oculta la parte trasera cuando se gira */
+            backface-visibility: hidden;
             border-radius: 12px;
             border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            background-size: cover;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.25);
+            background-size: 100% 100%;
             background-position: center;
+            background-repeat: no-repeat;
             background-color: #111;
         }
 
@@ -150,10 +150,9 @@
         }
 
         .card-face-back {
-            transform: rotateY(180deg); /* Espejo de la cara trasera */
+            transform: rotateY(180deg);
         }
 
-        /* Capa de Brillo Holográfico Estilo Star Wars */
         .hologram-shimmer {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -162,7 +161,7 @@
             background-size: 200% 200%;
             background-position: 0% 0%;
             pointer-events: none;
-            mix-blend-mode: color-dodge; /* Mezcla el brillo sin alterar la imagen real */
+            mix-blend-mode: color-dodge;
             z-index: 5;
         }
 
@@ -178,7 +177,7 @@
             pointer-events: none;
         }
 
-        /* --- MINIJUEGO ARCADE AVANZADO --- */
+        /* --- MINIJUEGO ARCADE --- */
         .game-wrapper { max-width: 800px; margin: 0 auto; background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 25px; text-align: center; }
         #gameCanvasContainer { position: relative; display: inline-block; max-width: 100%; overflow: hidden; }
         #gameCanvas { background: #020305; border: 2px solid rgba(0, 243, 255, 0.4); display: block; margin: 0 auto; box-shadow: 0 0 30px rgba(0, 243, 255, 0.1); cursor: crosshair; }
@@ -218,7 +217,6 @@
     <div id="flash-overlay"></div>
     <canvas id="hyperspace"></canvas>
 
-    <!-- Barra de Navegación Oficial -->
     <nav class="navbar" id="global-nav">
         <div class="nav-top">
             <img src="LOGO TDB.png" alt="LOGO TDB" class="nav-logo-img">
@@ -232,14 +230,12 @@
         </ul>
     </nav>
 
-    <!-- --- SECCIÓN 1: HERO / INICIO --- -->
     <section id="hero-section">
         <h1 class="hero-title sw-font">The Dark Side<br>Brownies</h1>
         <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
         <button class="btn-sw" id="btn-enter">Entrar al Lado Oscuro</button>
     </section>
 
-    <!-- --- SECCIÓN 2: CATÁLOGO --- -->
     <section id="catalog-section" class="app-section">
         <h2 class="section-title">Catálogo Galáctico</h2>
         <div class="catalog-grid">
@@ -266,7 +262,6 @@
         </div>
     </section>
 
-    <!-- --- SECCIÓN 3: PORTAL QR --- -->
     <section id="phygital-section" class="app-section">
         <h2 class="section-title">Escaner Holocrón</h2>
         <div class="qr-container">
@@ -291,7 +286,6 @@
         </div>
     </section>
 
-    <!-- --- SECCIÓN 4: BASE DE DATOS (CÓMICS + ÁLBUM) --- -->
     <section id="comics-section" class="app-section">
         <h2 class="section-title">Álbum de Datacards Oficiales</h2>
         <div class="album-status-bar">
@@ -307,7 +301,6 @@
         <div class="comics-grid" id="grid-comics-container"></div>
     </section>
 
-    <!-- --- SECCIÓN 5: MINIJUEGO ARCADE --- -->
     <section id="game-section" class="app-section">
         <h2 class="section-title">Hangar TIE Arcade: Avanzada del Lado Oscuro</h2>
         <div class="game-wrapper">
@@ -322,7 +315,6 @@
         </div>
     </section>
 
-    <!-- --- SECCIÓN 6: UBICACIÓN --- -->
     <section id="contact-section" class="app-section">
         <h2 class="section-title">Señales del Sector (Comunidad)</h2>
         <div class="feed-grid">
@@ -348,7 +340,6 @@
         </div>
     </section>
 
-    <!-- Modal del Visor de Cómics / Lector -->
     <div class="galaxy-modal" id="comic-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeComic()">×</span>
@@ -357,20 +348,16 @@
         </div>
     </div>
 
-    <!-- --- VISOR MODAL 3D COMPACTO (SOLIDWORKS MOUSE ROTATION ENGINE) --- -->
     <div class="galaxy-modal" id="card-3d-modal">
         <div class="modal-content" style="max-width: 480px; padding: 20px;">
             <span class="close-modal" onclick="closeCardModal()">×</span>
             <h3 class="product-name" id="card-modal-title" style="margin-bottom: 15px; color: var(--neon-cyan); text-align:center;">DATACARD INTERACTIVA</h3>
             
-            <!-- Ventana de Renderizado de Ejes -->
             <div class="stage-3d" id="stage-3d-trigger">
                 <div class="card-3d-wrapper" id="card-mesh">
-                    <!-- Cara Frontal (CD1F) -->
                     <div class="card-face card-face-front" id="card-mesh-front">
                         <div class="hologram-shimmer" id="shimmer-f"></div>
                     </div>
-                    <!-- Cara Trasera (CD1T) -->
                     <div class="card-face card-face-back" id="card-mesh-back">
                         <div class="hologram-shimmer" id="shimmer-b"></div>
                     </div>
@@ -441,15 +428,22 @@
                 
                 if(card.collected) {
                     box.onclick = () => openCard3DViewer(card);
+                    box.innerHTML = `
+                        <div class="card-placeholder">
+                            <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
+                            <h4 class="comic-title">${card.title}</h4>
+                            <span class="card-faction">${card.faction}</span>
+                        </div>
+                    `;
+                } else {
+                    box.innerHTML = `
+                        <div class="card-placeholder">
+                            <i class="fa-solid fa-address-card" style="font-size:2rem; margin-top:30px; color:rgba(255,255,255,0.1)"></i>
+                            <h4 class="comic-title">???</h4>
+                            <span class="card-faction">Desconocido</span>
+                        </div>
+                    `;
                 }
-
-                box.innerHTML = `
-                    <div class="card-placeholder">
-                        <i class="${card.collected ? 'fa-solid fa-id-card' : 'fa-solid fa-address-card'}" style="font-size:2rem; margin-bottom:8px; color:${card.collected ? 'var(--neon-cyan)' : 'rgba(255,255,255,0.1)'}"></i>
-                        <h4 class="comic-title">${card.collected ? card.title : '???' }</h4>
-                        <span class="card-faction">${card.collected ? card.faction : 'Desconocido'}</span>
-                    </div>
-                `;
                 cardContainer.appendChild(box);
             });
             document.getElementById('album-counter').innerText = `${totalCollected} / 7`;
@@ -483,16 +477,14 @@
 
         let isDraggingCard = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let cardRotation = { x: 0, y: 0 }; // Grados acumulados de rotación
+        let cardRotation = { x: 0, y: 0 };
 
         function openCard3DViewer(card) {
             document.getElementById('card-modal-title').innerText = card.title.toUpperCase();
             
-            // Asignar imágenes relativas locales sin alterar colores
             document.getElementById('card-mesh-front').style.backgroundImage = `url('${card.imgF}')`;
             document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
             
-            // Reset de coordenadas espaciales
             cardRotation = { x: 10, y: 15 }; 
             applyMeshTransforms();
             
@@ -501,7 +493,6 @@
         }
 
         function init3DControlListeners() {
-            // Mouse Events
             stage3D.onmousedown = (e) => {
                 isDraggingCard = true;
                 previousMousePosition = { x: e.clientX, y: e.clientY };
@@ -509,12 +500,9 @@
 
             window.onmousemove = (e) => {
                 if (!isDraggingCard) return;
-                
-                // Delta del movimiento del puntero
                 let deltaX = e.clientX - previousMousePosition.x;
                 let deltaY = e.clientY - previousMousePosition.y;
 
-                // Mapear rotación de ejes inversos (Mover ratón a la derecha gira eje Y)
                 cardRotation.y += deltaX * 0.6;
                 cardRotation.x -= deltaY * 0.6;
 
@@ -524,7 +512,6 @@
 
             window.onmouseup = () => { isDraggingCard = false; };
 
-            // Touch Events para Dispositivos Móviles
             stage3D.ontouchstart = (e) => {
                 isDraggingCard = true;
                 previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -546,10 +533,7 @@
         }
 
         function applyMeshTransforms() {
-            // Aplicar la rotación real por CSS 3D
             cardMesh.style.transform = `rotateX(${cardRotation.x}deg) rotateY(${cardRotation.y}deg)`;
-            
-            // Dinámica del destello holográfico dependiendo del ángulo de órbita
             let posX = (cardRotation.y % 360) / 3.6;
             let posY = (cardRotation.x % 360) / 3.6;
             shimmerF.style.backgroundPosition = `${posX}% ${posY}%`;
@@ -558,11 +542,8 @@
 
         function closeCardModal() {
             document.getElementById('card-3d-modal').style.display = 'none';
-            // Apagar listeners globales
-            window.onmousemove = null;
-            window.onmouseup = null;
-            window.ontouchmove = null;
-            window.ontouchend = null;
+            window.onmousemove = null; window.onmouseup = null;
+            window.ontouchmove = null; window.ontouchend = null;
         }
 
         /* ==========================================
