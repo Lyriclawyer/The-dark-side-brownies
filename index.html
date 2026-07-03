@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +12,8 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Star+Wars&display=swap');
+
         :root {
             --neon-cyan: #00f3ff;
             --dark-bg: #000000;
@@ -52,6 +55,12 @@
             filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
         }
 
+        .starwars-text {
+            font-family: 'Star Wars', 'Montserrat', sans-serif;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(250, 222, 75, 0.3);
+        }
+
         /* --- CANVAS HIPERESPACIO --- */
         #hyperspace { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; transition: z-index 0.1s step-end; }
         #flash-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; opacity: 0; z-index: 9999; pointer-events: none; transition: opacity 0.1s ease; }
@@ -72,6 +81,22 @@
         .hero-title { font-size: 3.2rem; line-height: 0.9; margin-bottom: 15px; }
         .hero-slogan { font-size: 1.2rem; color: var(--text-bright); font-style: italic; margin-bottom: 40px; font-weight: 500; }
         
+        /* Texto estilo Star Wars en la imagen */
+        .hero-message {
+            font-family: 'Star Wars', 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(250, 222, 75, 0.4), 0 0 60px rgba(250, 222, 75, 0.2);
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.8; text-shadow: 0 0 20px rgba(250, 222, 75, 0.3); }
+            50% { opacity: 1; text-shadow: 0 0 40px rgba(250, 222, 75, 0.6), 0 0 80px rgba(250, 222, 75, 0.3); }
+        }
+
         .btn-sw { background: var(--gold); border: none; color: #000000; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; padding: 14px 35px; cursor: pointer; letter-spacing: 1px; border-radius: 25px; transition: all 0.3s ease; }
         .btn-sw:hover { background: #ffffff; transform: scale(1.05); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .section-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 25px; border-left: 4px solid var(--neon-cyan); padding-left: 15px; }
@@ -259,7 +284,6 @@
             100% { filter: drop-shadow(0 0 40px #ffaa00) drop-shadow(0 0 80px #ff8800); }
         }
 
-        /* ANIMACIÓN SECRETA - NO AFECTA AL ARRASTRE */
         .card-secret-ultra {
             animation: secretPulse 1.5s ease-in-out infinite alternate;
         }
@@ -296,6 +320,7 @@
         @media (max-width: 480px) {
             .hero-title { font-size: 2.2rem; }
             .hero-slogan { font-size: 0.95rem; }
+            .hero-message { font-size: 1rem; letter-spacing: 2px; }
             .app-section { padding: 120px 12px 30px 12px; }
             .section-title { font-size: 1.2rem; padding-left: 10px; }
             .nav-btn { font-size: 0.7rem; padding: 8px 10px; }
@@ -315,6 +340,7 @@
 
         @media (min-width: 481px) and (max-width: 768px) {
             .hero-title { font-size: 3rem; }
+            .hero-message { font-size: 1.2rem; }
             .app-section { padding: 140px 20px 30px 20px; }
             .card-3d-wrapper { width: 180px; height: 252px; }
             .album-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
@@ -322,6 +348,7 @@
 
         @media (min-width: 769px) {
             .hero-title { font-size: 4.8rem; }
+            .hero-message { font-size: 1.6rem; }
             .app-section { padding: 170px 40px 40px 40px; }
             .card-3d-wrapper { width: 240px; height: 336px; }
         }
@@ -352,6 +379,8 @@
     <section id="hero-section">
         <h1 class="hero-title sw-font">The Dark Side<br>Brownies</h1>
         <p class="hero-slogan">“Tan oscuro que te hará caer en la tentación”</p>
+        <!-- TEXTO ESTILO STAR WARS -->
+        <p class="hero-message">✦ Que los brownies te acompañen ✦</p>
         <button class="btn-sw" id="btn-enter">Entrar al Lado Oscuro</button>
     </section>
 
@@ -436,10 +465,10 @@
             </div>
             <div class="console-form">
                 <form onsubmit="event.preventDefault(); alert('Transmisión Cifrada Enviada.');">
-                    <div class="form-group"><label class="form-label">Identificación</label><input type="text" class="form-input" required></div>
-                    <div class="form-group"><label class="form-label">Dirección Holored</label><input type="email" class="form-input" required></div>
-                    <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-input" rows="3" required></textarea></div>
-                    <button type="submit" class="btn-sw" style="width: 100%; border-radius:0;">Transmitir Datos</button>
+                    <div class="form-group"><label class="form-label">IDENTIFICACIÓN</label><input type="text" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">DIRECCIÓN HOLORED</label><input type="email" class="form-input" required></div>
+                    <div class="form-group"><label class="form-label">MENSAJE</label><textarea class="form-input" rows="3" required></textarea></div>
+                    <button type="submit" class="btn-sw" style="width: 100%; border-radius:0;">TRANSMITIR DATOS</button>
                 </form>
             </div>
         </div>
@@ -664,7 +693,7 @@
         }
 
         // ============================================
-        // VISOR 3D CON ROTACIÓN LIBRE (CORREGIDO)
+        // VISOR 3D CON ROTACIÓN LIBRE
         // ============================================
         const cardMesh = document.getElementById('card-mesh');
         const stage3D = document.getElementById('stage-3d-trigger');
@@ -677,15 +706,13 @@
             document.getElementById('card-mesh-front').style.backgroundImage = `url('${card.imgF}')`;
             document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
             
-            // Quitar clase de animación anterior
             cardMesh.classList.remove('card-secret-ultra');
-            cardMesh.style.animation = ''; // Resetear animación
+            cardMesh.style.animation = '';
             
             if (isSecret && card.secret) {
                 cardMesh.classList.add('card-secret-ultra');
             }
             
-            // Resetear rotación pero mantener la capacidad de arrastre
             cardRotation = { x: 15, y: 20 }; 
             applyMeshTransforms();
             
@@ -698,7 +725,6 @@
         }
 
         function init3DControlListeners() {
-            // Remover listeners anteriores para evitar duplicados
             window.onmousemove = null;
             window.onmouseup = null;
             window.ontouchmove = null;
@@ -707,7 +733,6 @@
             stage3D.onmousedown = (e) => {
                 isDraggingCard = true;
                 previousMousePosition = { x: e.clientX, y: e.clientY };
-                // Al arrastrar, remover la animación automática para que el usuario tenga control total
                 cardMesh.classList.remove('card-secret-ultra');
                 cardMesh.style.animation = 'none';
             };
@@ -726,14 +751,12 @@
 
             window.onmouseup = () => { 
                 isDraggingCard = false;
-                // Restaurar animación si es carta secreta y no se está arrastrando
                 const isSecret = cardMesh.classList.contains('card-secret-ultra');
                 if (isSecret) {
                     cardMesh.style.animation = '';
                 }
             };
 
-            // Touch events
             stage3D.ontouchstart = (e) => {
                 e.preventDefault();
                 isDraggingCard = true;
@@ -787,7 +810,14 @@
         const sections = document.querySelectorAll('.app-section'); const flashOverlay = document.getElementById('flash-overlay');
 
         document.getElementById('btn-enter').addEventListener('click', () => {
-            executeJumpSequence(() => { heroSection.style.display = 'none'; globalNav.style.display = 'flex'; document.getElementById('catalog-section').style.display = 'block'; document.querySelector('[data-target="catalog-section"]').classList.add('active-tab'); });
+            executeJumpSequence(() => { 
+                heroSection.style.display = 'none'; 
+                globalNav.style.display = 'flex'; 
+                document.getElementById('catalog-section').style.display = 'block'; 
+                document.querySelector('[data-target="catalog-section"]').classList.add('active-tab');
+                // Forzar scroll al inicio
+                window.scrollTo(0, 0);
+            });
         });
 
         const tabButtons = document.querySelectorAll('.nav-menu button');
@@ -796,14 +826,18 @@
                 const targetId = btn.getAttribute('data-target');
                 if (isJumping || document.getElementById(targetId).style.display === 'block') return;
                 tabButtons.forEach(b => b.classList.remove('active-tab')); btn.classList.add('active-tab');
-                executeJumpSequence(() => { sections.forEach(s => s.style.display = 'none'); document.getElementById(targetId).style.display = 'block'; });
+                executeJumpSequence(() => { 
+                    sections.forEach(s => s.style.display = 'none'); 
+                    document.getElementById(targetId).style.display = 'block';
+                    window.scrollTo(0, 0);
+                });
             });
         });
 
         function executeJumpSequence(uiCallback) {
             isJumping = true; canvas.style.zIndex = "9995"; targetSpeed = 75;
             setTimeout(() => { flashOverlay.style.opacity = '1'; }, 800);
-            setTimeout(() => { uiCallback(); window.scrollTo(0, 0); }, 1000);
+            setTimeout(() => { uiCallback(); }, 1000);
             setTimeout(() => { flashOverlay.style.opacity = '0'; targetSpeed = 0.5; canvas.style.zIndex = "-1"; isJumping = false; }, 1200);
         }
 
@@ -839,3 +873,4 @@
     </script>
 </body>
 </html>
+```
