@@ -260,6 +260,28 @@
         .galaxy-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 995; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
         .modal-content { background: var(--sw-gray); border: 1px solid var(--sw-border); width: 100%; max-width: 550px; padding: 30px; position: relative; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.6rem; color: var(--text-muted); cursor: pointer; }
+
+        /* --- ESTILO PARA CARTA SECRETA (THE AYALA LORIAN) --- */
+        .card-secret-glow {
+            animation: secretPulse 1.2s ease-in-out infinite alternate;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 120px rgba(255, 215, 0, 0.4);
+        }
+
+        @keyframes secretPulse {
+            0% { filter: drop-shadow(0 0 10px gold); }
+            100% { filter: drop-shadow(0 0 40px #ffaa00) drop-shadow(0 0 80px #ff8800); }
+        }
+
+        /* Animación ultra galáctica para la carta secreta */
+        .card-secret-ultra {
+            animation: galaxySpin 3s ease-in-out infinite, secretPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes galaxySpin {
+            0% { transform: rotateY(0deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.05); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -340,9 +362,9 @@
         <div class="album-status-bar">
             <div>
                 <p style="font-weight: 700; font-size: 1.1rem; text-transform:uppercase; letter-spacing:1px;">Progreso de la Colección</p>
-                <span style="font-size: 0.9rem; color: var(--text-muted);">Completa las 7 Datacards imperiales para liberar el Volumen Secreto.</span>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Completa las 9 Datacards imperiales para liberar el Volumen Secreto.</span>
             </div>
-            <div class="sw-font" id="album-counter" style="font-size: 1.6rem;">1 / 7</div>
+            <div class="sw-font" id="album-counter" style="font-size: 1.6rem;">1 / 9</div>
         </div>
         <div class="album-grid" id="grid-datacards-container"></div>
 
@@ -448,7 +470,6 @@
         function animateHoloParticles() {
             pCtx.clearRect(0, 0, pWidth, pHeight);
             
-            // Generar partículas cerca del emisor (abajo)
             if (holoParticles.length < 40 && Math.random() > 0.4) {
                 holoParticles.push({
                     x: pWidth / 2 + (Math.random() - 0.5) * 140,
@@ -464,7 +485,7 @@
                 let p = holoParticles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.alpha -= 0.0025; // Se desvanecen al subir
+                p.alpha -= 0.0025;
 
                 if (p.y < 0 || p.alpha <= 0) {
                     holoParticles.splice(i, 1);
@@ -485,40 +506,62 @@
         }
 
         /* ==========================================
-           ESTRUCTURAS DE DATOS DE LA COLECCIÓN (ACTUALIZADA)
+           ESTRUCTURAS DE DATOS DE LA COLECCIÓN (ACTUALIZADA CON NUEVOS PERSONAJES)
            ========================================== */
         const datacardsCollection = [
             { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.jpg", imgT: "CD1T.jpg" },
             { id: 2, title: "Boba Gallardo", faction: "Cazarrecompensas", collected: true, imgF: "BGF.jpeg", imgT: "BGT.jpeg" },
             { id: 3, title: "Darth Seinbaum", faction: "Ejecutora Sith", collected: true, imgF: "DSF.jpg", imgT: "DST.jpg" },
             { id: 4, title: "Emperador Palpa-López", faction: "Emperador", collected: true, imgF: "APF.png", imgT: "APT.jpg" },
-            { id: 5, title: "Luke Peña-Walker", faction: "Piloto Jedi", collected: true, imgF: "EPWF.jpg", imgT: "EPWT.jpg" },
-            { id: 6, title: "Néstor-Wan Garza", faction: "Mentor Jedi", collected: true, imgF: "NWF.jpg", imgT: "NWT.jpg" }
+            { id: 5, title: "Luke Peña-Walker", faction: "Piloto Jedi", collected: true, imgF: "EPWF.png", imgT: "EPWT.png" },
+            { id: 6, title: "Néstor-Wan Garza", faction: "Mentor Jedi", collected: true, imgF: "NWF.png", imgT: "NWT.png" },
+            // NUEVOS PERSONAJES
+            { id: 7, title: "Margarito-Solo", faction: "Contrabandista", collected: true, imgF: "MSF.jpg", imgT: "MST.jpg" },
+            { id: 8, title: "Darth Leopoldo", faction: "Lord Sith", collected: true, imgF: "DLF.jpg", imgT: "DLT.png" },
+            // CARTA SECRETA (The Ayala Lorian) - ID 0
+            { id: 0, title: "The Ayala Lorian", faction: "★ LEGENDARIO ★", collected: false, imgF: "OMF.jpg", imgT: "OMT.png", secret: true }
         ];
 
         const baseDeComics = [
             { id: 1, title: "Vol 1: La Furia del Cacao", desc: "El origen de la receta balanceada térmicamente en San Luis Potosí.", unlocked: true, secret: false },
             { id: 2, title: "Vol 2: Asalto al Hangar", desc: "Los soldados sabotean las patrullas imperiales atraídos por la textura chewy.", unlocked: false, secret: false },
             { id: 3, title: "Vol 3: El Juicio del Lord", desc: "El imponente comandante oscuro confisca los cubos por alterar el orden.", unlocked: false, secret: false },
-            { id: 4, title: "CÓMIC SECRETO: IMPERIO DEL SABOR", desc: "¡Felicidades! Has completado el álbum de cromos galácticos de la marca. El Lord Sith declara los brownies patrimonio supremo y ordena su distribución masiva por todo el hiperespacio.", unlocked: false, secret: true }
+            { id: 4, title: "CÓMIC SECRETO: IMPERIO DEL SABOR", desc: "¡Felicidades! Has completado el álbum de cromos galácticos de la marca. El Lord Sith declara los brownies patrimonio supremo y ordena su distribución masiva por todo el hiperespacio. ¡The Ayala Lorian ha sido despertado!", unlocked: false, secret: true }
         ];
 
         function renderAlbumAndComics() {
             const cardContainer = document.getElementById('grid-datacards-container');
             cardContainer.innerHTML = ""; let totalCollected = 0;
+            // Contar todas las cartas recolectadas (incluyendo la secreta si está desbloqueada)
             datacardsCollection.forEach(card => {
                 if(card.collected) totalCollected++;
-                const box = document.createElement('div'); box.className = `datacard-card ${card.collected ? 'collected' : 'missing'}`;
+            });
+            
+            datacardsCollection.forEach(card => {
+                const box = document.createElement('div'); 
+                box.className = `datacard-card ${card.collected ? 'collected' : 'missing'}`;
                 
                 if(card.collected) {
-                    box.onclick = () => openCard3DViewer(card);
-                    box.innerHTML = `
-                        <div class="card-placeholder">
-                            <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
-                            <h4 class="comic-title">${card.title}</h4>
-                            <span class="card-faction">${card.faction}</span>
-                        </div>
-                    `;
+                    // Si es la carta secreta, agregar clase especial
+                    if(card.secret) {
+                        box.onclick = () => openCard3DViewer(card, true);
+                        box.innerHTML = `
+                            <div class="card-placeholder card-secret-glow">
+                                <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
+                                <h4 class="comic-title" style="color: var(--gold);">${card.title}</h4>
+                                <span class="card-faction">${card.faction}</span>
+                            </div>
+                        `;
+                    } else {
+                        box.onclick = () => openCard3DViewer(card, false);
+                        box.innerHTML = `
+                            <div class="card-placeholder">
+                                <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
+                                <h4 class="comic-title">${card.title}</h4>
+                                <span class="card-faction">${card.faction}</span>
+                            </div>
+                        `;
+                    }
                 } else {
                     box.innerHTML = `
                         <div class="card-placeholder">
@@ -530,8 +573,12 @@
                 }
                 cardContainer.appendChild(box);
             });
-            document.getElementById('album-counter').innerText = `${totalCollected} / 7`;
-            if (totalCollected === 7) baseDeComics.find(c => c.secret).unlocked = true;
+            document.getElementById('album-counter').innerText = `${totalCollected} / 9`;
+            // Si todas las 9 cartas están recolectadas, desbloquear cómic secreto
+            if (totalCollected === 9) {
+                const secretComic = baseDeComics.find(c => c.secret);
+                if (secretComic) secretComic.unlocked = true;
+            }
 
             const comicContainer = document.getElementById('grid-comics-container');
             comicContainer.innerHTML = "";
@@ -559,11 +606,19 @@
 
         let isDraggingCard = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let cardRotation = { x: 15, y: 20 }; // Valores de inicio cómodos
+        let cardRotation = { x: 15, y: 20 };
 
-        function openCard3DViewer(card) {
+        function openCard3DViewer(card, isSecret = false) {
             document.getElementById('card-mesh-front').style.backgroundImage = `url('${card.imgF}')`;
             document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
+            
+            // Quitar clases previas
+            cardMesh.classList.remove('card-secret-ultra');
+            
+            // Si es la carta secreta, agregar animación ultra galáctica
+            if (isSecret && card.secret) {
+                cardMesh.classList.add('card-secret-ultra');
+            }
             
             // Forzar reseteo de orientación inicial limpia
             cardRotation = { x: 15, y: 20 }; 
@@ -590,7 +645,6 @@
                 let deltaX = e.clientX - previousMousePosition.x;
                 let deltaY = e.clientY - previousMousePosition.y;
 
-                // Rotación libre sin límites en ambos ejes coordenados
                 cardRotation.y += deltaX * 0.6;
                 cardRotation.x -= deltaY * 0.6;
 
@@ -627,7 +681,8 @@
 
         function closeCardModal() {
             document.getElementById('card-3d-modal').style.display = 'none';
-            // Limpieza estricta de controladores en la ventana global
+            // Quitar animación secreta al cerrar
+            cardMesh.classList.remove('card-secret-ultra');
             window.onmousemove = null; window.onmouseup = null;
             window.ontouchmove = null; window.ontouchend = null;
         }
