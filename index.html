@@ -259,14 +259,9 @@
             100% { filter: drop-shadow(0 0 40px #ffaa00) drop-shadow(0 0 80px #ff8800); }
         }
 
+        /* ANIMACIÓN SECRETA - NO AFECTA AL ARRASTRE */
         .card-secret-ultra {
-            animation: galaxySpin 4s ease-in-out infinite, secretPulse 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes galaxySpin {
-            0% { transform: rotateY(0deg) scale(1); }
-            50% { transform: rotateY(180deg) scale(1.05); }
-            100% { transform: rotateY(360deg) scale(1); }
+            animation: secretPulse 1.5s ease-in-out infinite alternate;
         }
 
         /* --- CONTACTO Y MAPA --- */
@@ -337,9 +332,9 @@
     <div id="flash-overlay"></div>
     <canvas id="hyperspace"></canvas>
 
-    <!-- AUDIO AMBIENTAL STAR WARS (opcional, se activa con interacción) -->
-    <audio id="sw-audio" loop preload="auto" style="display:none;">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <!-- AUDIO AMBIENTAL: FOUND SOUND.mp3 -->
+    <audio id="bg-audio" loop preload="auto" style="display:none;">
+        <source src="FOUND SOUND.mp3" type="audio/mpeg">
     </audio>
 
     <nav class="navbar" id="global-nav">
@@ -481,13 +476,13 @@
 
     <script>
         // ============================================
-        // AUDIO AMBIENTAL (se activa con clic del usuario)
+        // AUDIO AMBIENTAL: FOUND SOUND.mp3
         // ============================================
-        let audioCtx;
         function playAmbientAudio() {
-            const audio = document.getElementById('sw-audio');
+            const audio = document.getElementById('bg-audio');
             if (audio) {
                 audio.volume = 0.3;
+                audio.loop = true;
                 audio.play().catch(() => {});
             }
         }
@@ -577,15 +572,15 @@
         // ESTRUCTURAS DE DATOS (ACTUALIZADA)
         // ============================================
         const datacardsCollection = [
-            { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.jpg", imgT: "CD1T.jpg", rarity: "rare" },
+            { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.jpg", imgT: "CD1T.jpg", rarity: "uncommon" },
             { id: 2, title: "Boba Gallardo", faction: "Cazarrecompensas", collected: true, imgF: "BGF.jpeg", imgT: "BGT.jpeg", rarity: "epic" },
             { id: 3, title: "Darth Seinbaum", faction: "Ejecutora Sith", collected: true, imgF: "DSF.jpg", imgT: "DST.jpg", rarity: "rare" },
             { id: 4, title: "Emperador Palpa-López", faction: "Emperador", collected: true, imgF: "APF.png", imgT: "APT.jpg", rarity: "legendary" },
             { id: 5, title: "Luke Peña-Walker", faction: "Piloto Jedi", collected: true, imgF: "EPWF.png", imgT: "EPWT.png", rarity: "epic" },
             { id: 6, title: "Néstor-Wan Garza", faction: "Mentor Jedi", collected: true, imgF: "NWF.png", imgT: "NWT.png", rarity: "rare" },
-            { id: 7, title: "Margarito-Solo", faction: "Contrabandista", collected: true, imgF: "MSF.jpg", imgT: "MST.jpg", rarity: "uncommon" },
+            { id: 7, title: "Margarito-Solo", faction: "Contrabandista", collected: true, imgF: "MSF.jpg", imgT: "MST.jpg", rarity: "rare" },
             { id: 8, title: "Darth Leopoldo", faction: "Lord Sith", collected: true, imgF: "DLF.jpg", imgT: "DLT.png", rarity: "epic" },
-            { id: 0, title: "The Ayala Lorian", faction: "★ LEGENDARIO ★", collected: true, imgF: "OMF.jpg", imgT: "OMT.png", secret: true, rarity: "legendary" }
+            { id: 0, title: "The Ayala Lorian", faction: "★ LEGENDARIO ★", collected: true, imgF: "OMF.jpg", imgT: "OMT.jpeg", secret: true, rarity: "legendary" }
         ];
 
         const baseDeComics = [
@@ -669,7 +664,7 @@
         }
 
         // ============================================
-        // VISOR 3D CON ROTACIÓN LIBRE
+        // VISOR 3D CON ROTACIÓN LIBRE (CORREGIDO)
         // ============================================
         const cardMesh = document.getElementById('card-mesh');
         const stage3D = document.getElementById('stage-3d-trigger');
@@ -682,12 +677,15 @@
             document.getElementById('card-mesh-front').style.backgroundImage = `url('${card.imgF}')`;
             document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
             
+            // Quitar clase de animación anterior
             cardMesh.classList.remove('card-secret-ultra');
+            cardMesh.style.animation = ''; // Resetear animación
             
             if (isSecret && card.secret) {
                 cardMesh.classList.add('card-secret-ultra');
             }
             
+            // Resetear rotación pero mantener la capacidad de arrastre
             cardRotation = { x: 15, y: 20 }; 
             applyMeshTransforms();
             
@@ -700,9 +698,18 @@
         }
 
         function init3DControlListeners() {
+            // Remover listeners anteriores para evitar duplicados
+            window.onmousemove = null;
+            window.onmouseup = null;
+            window.ontouchmove = null;
+            window.ontouchend = null;
+            
             stage3D.onmousedown = (e) => {
                 isDraggingCard = true;
                 previousMousePosition = { x: e.clientX, y: e.clientY };
+                // Al arrastrar, remover la animación automática para que el usuario tenga control total
+                cardMesh.classList.remove('card-secret-ultra');
+                cardMesh.style.animation = 'none';
             };
 
             window.onmousemove = (e) => {
@@ -717,12 +724,22 @@
                 previousMousePosition = { x: e.clientX, y: e.clientY };
             };
 
-            window.onmouseup = () => { isDraggingCard = false; };
+            window.onmouseup = () => { 
+                isDraggingCard = false;
+                // Restaurar animación si es carta secreta y no se está arrastrando
+                const isSecret = cardMesh.classList.contains('card-secret-ultra');
+                if (isSecret) {
+                    cardMesh.style.animation = '';
+                }
+            };
 
+            // Touch events
             stage3D.ontouchstart = (e) => {
                 e.preventDefault();
                 isDraggingCard = true;
                 previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                cardMesh.classList.remove('card-secret-ultra');
+                cardMesh.style.animation = 'none';
             };
 
             window.ontouchmove = (e) => {
@@ -738,7 +755,13 @@
                 previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
             };
 
-            window.ontouchend = () => { isDraggingCard = false; };
+            window.ontouchend = () => {
+                isDraggingCard = false;
+                const isSecret = cardMesh.classList.contains('card-secret-ultra');
+                if (isSecret) {
+                    cardMesh.style.animation = '';
+                }
+            };
         }
 
         function applyMeshTransforms() {
@@ -748,8 +771,13 @@
         function closeCardModal() {
             document.getElementById('card-3d-modal').style.display = 'none';
             cardMesh.classList.remove('card-secret-ultra');
-            window.onmousemove = null; window.onmouseup = null;
-            window.ontouchmove = null; window.ontouchend = null;
+            cardMesh.style.animation = '';
+            window.onmousemove = null;
+            window.onmouseup = null;
+            window.ontouchmove = null;
+            window.ontouchend = null;
+            stage3D.onmousedown = null;
+            stage3D.ontouchstart = null;
         }
 
         // ============================================
@@ -807,7 +835,6 @@
         
         renderAlbumAndComics();
 
-        // Pequeño efecto de partículas al cargar
         console.log('✨ The Dark Side Brownies - Hub Imperial activado');
     </script>
 </body>
