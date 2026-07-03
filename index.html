@@ -19,6 +19,11 @@
             --text-bright: #ffffff;
             --text-muted: #999999;
             --gold: #fade4b;
+            --rarity-common: #b0b0b0;
+            --rarity-uncommon: #55cc55;
+            --rarity-rare: #4488ff;
+            --rarity-epic: #aa44ff;
+            --rarity-legendary: #ff8800;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
@@ -51,7 +56,7 @@
         #flash-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; opacity: 0; z-index: 9999; pointer-events: none; transition: opacity 0.1s ease; }
 
         /* --- BARRA DE NAVEGACIÓN --- */
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid var(--sw-border); z-index: 900; display: none; flex-direction: column; align-items: center; }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.95); border-bottom: 1px solid var(--sw-border); z-index: 900; display: none; flex-direction: column; align-items: center; backdrop-filter: blur(10px); }
         .nav-top { width: 100%; max-width: 1200px; display: flex; justify-content: center; align-items: center; padding: 10px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .nav-logo-img { height: 75px; margin: 5px 0; object-fit: contain; filter: drop-shadow(0px 0px 8px rgba(0, 243, 255, 0.2)); }
         .nav-menu { display: flex; list-style: none; width: 100%; max-width: 900px; justify-content: center; }
@@ -92,7 +97,7 @@
 
         /* --- ÁLBUM Y CÓMICS --- */
         .comics-grid, .album-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .comic-card, .datacard-card { background: var(--sw-gray); border: 1px solid var(--sw-border); position: relative; transition: all 0.3s ease; }
+        .comic-card, .datacard-card { background: var(--sw-gray); border: 1px solid var(--sw-border); position: relative; transition: all 0.3s ease; border-radius: 8px; overflow: hidden; }
         .comic-card.unlocked:hover, .datacard-card.collected:hover { border-color: var(--neon-cyan); transform: scale(1.02); cursor: pointer; }
         .comic-card.locked, .datacard-card.missing { opacity: 0.35; }
         
@@ -105,6 +110,14 @@
         .lock-icon { font-size: 1.8rem; color: rgba(255,255,255,0.2); margin-bottom: 8px; }
         .card-faction { font-size: 0.75rem; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; margin-top: 2px; }
         .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* --- RAREZAS --- */
+        .rarity-common { border-left: 4px solid var(--rarity-common); }
+        .rarity-uncommon { border-left: 4px solid var(--rarity-uncommon); }
+        .rarity-rare { border-left: 4px solid var(--rarity-rare); }
+        .rarity-epic { border-left: 4px solid var(--rarity-epic); }
+        .rarity-legendary { border-left: 4px solid var(--rarity-legendary); }
+        .rarity-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 2px 10px; border-radius: 10px; display: inline-block; }
 
         /* --- VISOR HOLOGRÁFICO PANTALLA COMPLETA 3D --- */
         .galaxy-modal-fullscreen {
@@ -257,28 +270,6 @@
         .form-input { width: 100%; background: #000; border: 1px solid var(--sw-border); padding: 10px 15px; color: #ffffff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; }
         .form-input:focus { outline: none; border-color: #ffffff; }
 
-        /* --- ESTILO PARA EL MENSAJE DE STAR WARS --- */
-        .starwars-message {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-align: center;
-            background: linear-gradient(180deg, #fade4b 0%, #ffaa00 50%, #fade4b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(250, 222, 75, 0.3), 0 0 80px rgba(250, 222, 75, 0.1);
-            animation: glowPulse 2s ease-in-out infinite alternate;
-            padding: 20px;
-            line-height: 1.2;
-        }
-
-        @keyframes glowPulse {
-            0% { text-shadow: 0 0 20px rgba(250, 222, 75, 0.2); }
-            100% { text-shadow: 0 0 60px rgba(250, 222, 75, 0.5), 0 0 100px rgba(250, 222, 75, 0.2); }
-        }
-
         .galaxy-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 995; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
         .modal-content { background: var(--sw-gray); border: 1px solid var(--sw-border); width: 100%; max-width: 550px; padding: 30px; position: relative; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.6rem; color: var(--text-muted); cursor: pointer; }
@@ -304,12 +295,49 @@
             50% { transform: rotateY(180deg) scale(1.05); }
             100% { transform: rotateY(360deg) scale(1); }
         }
+
+        /* --- ESTILO PARA EL MENSAJE DE STAR WARS --- */
+        .starwars-message {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+            background: linear-gradient(180deg, #fade4b 0%, #ffaa00 50%, #fade4b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(250, 222, 75, 0.3), 0 0 80px rgba(250, 222, 75, 0.1);
+            animation: glowPulse 2s ease-in-out infinite alternate;
+            padding: 20px;
+            line-height: 1.2;
+        }
+
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 20px rgba(250, 222, 75, 0.2); }
+            100% { text-shadow: 0 0 60px rgba(250, 222, 75, 0.5), 0 0 100px rgba(250, 222, 75, 0.2); }
+        }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 3px; }
+
+        @keyframes laserScan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
     </style>
 </head>
 <body>
 
     <div id="flash-overlay"></div>
     <canvas id="hyperspace"></canvas>
+
+    <!-- AUDIO AMBIENTAL: FOUND SOUND.mp3 (se reproduce al hacer clic) -->
+    <audio id="bg-audio" loop preload="auto" style="display:none;">
+        <source src="FOUND SOUND.mp3" type="audio/mpeg">
+    </audio>
 
     <nav class="navbar" id="global-nav">
         <div class="nav-top">
@@ -409,7 +437,7 @@
                 <iframe class="map-frame" src="https://maps.google.com/maps?q=Universidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
             </div>
             <div class="console-form">
-                <div class="starwars-message">QUE LOS BROWNIERS TE ACOMPAÑEN</div>
+                <div class="starwars-message">QUE LOS BROWNIES TE ACOMPAÑEN</div>
             </div>
         </div>
     </section>
@@ -444,6 +472,38 @@
     </div>
 
     <script>
+        /* ==========================================
+           REPRODUCIR AUDIO AL INICIAR (FOUND SOUND.mp3)
+           ========================================== */
+        window.addEventListener('load', function() {
+            // Intentar reproducir el audio al cargar la página
+            const audio = document.getElementById('bg-audio');
+            if (audio) {
+                audio.volume = 0.3;
+                audio.loop = true;
+                // Intentar reproducción automática (puede ser bloqueada por el navegador)
+                audio.play().catch(function(e) {
+                    console.log('Reproducción automática bloqueada, se iniciará con clic del usuario');
+                });
+            }
+        });
+
+        // También reproducir al hacer clic en cualquier parte (por si el navegador bloquea la auto-reproducción)
+        document.addEventListener('click', function() {
+            const audio = document.getElementById('bg-audio');
+            if (audio && audio.paused) {
+                audio.play().catch(function(e) {});
+            }
+        }, { once: false });
+
+        // Para el botón "Entrar al Lado Oscuro", también aseguramos el audio
+        document.getElementById('btn-enter').addEventListener('click', function() {
+            const audio = document.getElementById('bg-audio');
+            if (audio && audio.paused) {
+                audio.play().catch(function(e) {});
+            }
+        });
+
         /* ==========================================
            MOTOR CANVAS FONDO: HIPERESPACIO 3D
            ========================================== */
@@ -523,7 +583,7 @@
         }
 
         /* ==========================================
-           ESTRUCTURAS DE DATOS DE LA COLECCIÓN (ACTUALIZADA CON NUEVOS PERSONAJES)
+           ESTRUCTURAS DE DATOS DE LA COLECCIÓN
            ========================================== */
         const datacardsCollection = [
             { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.jpg", imgT: "CD1T.jpg", rarity: "uncommon" },
@@ -614,7 +674,7 @@
         }
 
         /* ====================================================================
-           MOTOR DE ROTACIÓN COMPLETA RECONSTRUIDO (TODOS LOS EJES LIBRES)
+           MOTOR DE ROTACIÓN COMPLETA (TODOS LOS EJES LIBRES)
            ==================================================================== */
         const cardMesh = document.getElementById('card-mesh');
         const stage3D = document.getElementById('stage-3d-trigger');
@@ -628,7 +688,6 @@
             document.getElementById('card-mesh-back').style.backgroundImage = `url('${card.imgT}')`;
             
             cardMesh.classList.remove('card-secret-ultra');
-            cardMesh.style.animation = '';
             
             if (isSecret && card.secret) {
                 cardMesh.classList.add('card-secret-ultra');
