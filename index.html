@@ -113,49 +113,20 @@
         .nav-menu { display: flex; list-style: none; width: 100%; max-width: 900px; justify-content: center; flex-wrap: wrap; }
         .nav-item { border-left: 1px solid var(--sw-border); }
         .nav-item:last-child { border-right: 1px solid var(--sw-border); }
-        .nav-btn { background: transparent; border: none; color: var(--text-muted); font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 14px 18px; transition: all 0.2s ease; letter-spacing: 1px; }
+        .nav-btn { background: transparent; border: none; color: var(--text-muted); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 12px 16px; transition: all 0.2s ease; letter-spacing: 1px; }
         .nav-btn:hover, .nav-btn.active-tab { color: var(--text-bright); background: rgba(255, 255, 255, 0.03); box-shadow: inset 0 -3px 0 var(--accent-color); }
 
         /* --- SECCIONES --- */
-        .app-section { display: none; height: 100vh; width: 100vw; padding: 170px 40px 40px 40px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; overflow-y: auto; }
+        .app-section { display: none; height: 100vh; width: 100vw; padding: 160px 40px 40px 40px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; overflow-y: auto; }
         #hero-section { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; max-width: 100vw; height: 100vh; position: relative; z-index: 5; }
         .hero-title { font-size: 4.8rem; line-height: 0.9; margin-bottom: 15px; }
         .hero-slogan { font-size: 1.6rem; color: var(--text-bright); font-style: italic; margin-bottom: 40px; font-weight: 500; }
         
         .btn-sw { background: var(--gold); border: none; color: #000000; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; padding: 14px 35px; cursor: pointer; letter-spacing: 1px; border-radius: 25px; transition: all 0.3s ease; }
         .btn-sw:hover { background: #ffffff; transform: scale(1.05); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .section-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 25px; border-left: 4px solid var(--accent-color); padding-left: 15px; }
+        .section-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.6rem; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 20px; border-left: 4px solid var(--accent-color); padding-left: 15px; }
 
-        /* --- 1. COUNTER DE LA FUERZA --- */
-        .force-counter {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.85);
-            border: 1px solid var(--accent-color);
-            border-radius: 15px;
-            padding: 12px 20px;
-            z-index: 800;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 30px var(--faction-glow);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .force-counter:hover { transform: scale(1.05); }
-        .force-counter .counter-number {
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--accent-color);
-            font-family: 'Montserrat', sans-serif;
-        }
-        .force-counter .counter-label {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-        }
-
-        /* --- 2. CINTILLO DE NOTICIAS --- */
+        /* --- NUEVO: CINTILLO DE NOTICIAS --- */
         .news-ticker {
             position: fixed;
             bottom: 0;
@@ -188,7 +159,7 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* --- 3. HOLO-CRONÓMETRO --- */
+        /* --- NUEVO: RELOJ ESTELAR --- */
         .holo-clock {
             position: fixed;
             top: 80px;
@@ -217,7 +188,7 @@
             letter-spacing: 1px;
         }
 
-        /* --- 4. PARTÍCULAS FLOTANTES --- */
+        /* --- NUEVO: PARTÍCULAS FLOTANTES --- */
         #particles-container {
             position: fixed;
             top: 0; left: 0;
@@ -242,7 +213,7 @@
             100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
 
-        /* --- 5. SABER DE LUZ ANIMADO --- */
+        /* --- NUEVO: SABLE DE LUZ --- */
         .lightsaber-container {
             position: fixed;
             bottom: 80px;
@@ -291,10 +262,10 @@
             100% { box-shadow: 0 0 40px var(--faction-glow), 0 0 80px var(--faction-glow), 0 0 120px var(--faction-glow); }
         }
 
-        /* --- 6. MAPA ESTELAR --- */
+        /* --- NUEVO: MAPA ESTELAR --- */
         #starmap-container {
             width: 100%;
-            height: 480px;
+            height: 420px;
             background: radial-gradient(ellipse at center, #0a0e1a 0%, #000000 100%);
             border: 2px solid var(--accent-color);
             border-radius: 16px;
@@ -302,7 +273,7 @@
             overflow: hidden;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 0 40px var(--faction-glow);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         #starmap-container:hover { box-shadow: 0 0 80px var(--faction-glow); }
         .starmap-bg {
@@ -312,10 +283,7 @@
                 radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.4), transparent),
                 radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.3), transparent),
                 radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 10% 90%, rgba(255,255,255,0.4), transparent),
-                radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(2px 2px at 50% 50%, rgba(255,255,255,0.2), transparent);
+                radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.3), transparent);
             background-size: 100% 100%;
             pointer-events: none;
         }
@@ -326,20 +294,20 @@
         }
         .starmap-lines svg { width: 100%; height: 100%; }
         .starmap-lines line {
-            stroke: rgba(255,255,255,0.12);
+            stroke: rgba(255,255,255,0.1);
             stroke-width: 1.5;
             stroke-dasharray: 4 4;
         }
         .starmap-node {
             position: absolute;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #fff;
             text-shadow: 0 0 20px rgba(255,255,255,0.5);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -352,18 +320,16 @@
         .starmap-node:hover {
             transform: scale(1.5) !important;
             box-shadow: 0 0 60px var(--faction-glow), 0 0 120px var(--faction-glow);
-            border-color: rgba(255,255,255,0.6);
         }
         .starmap-node .node-label {
             position: absolute;
-            bottom: -32px;
-            font-size: 0.7rem;
+            bottom: -30px;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: var(--text-muted);
             white-space: nowrap;
             font-weight: 700;
-            text-shadow: 0 0 20px rgba(0,0,0,0.9);
             background: rgba(0,0,0,0.6);
             padding: 2px 12px;
             border-radius: 10px;
@@ -374,11 +340,11 @@
             0%, 100% { transform: scale(1); opacity: 0.9; }
             50% { transform: scale(1.15); opacity: 1; }
         }
-        .starmap-node:nth-child(1) { top: 22%; left: 18%; animation-delay: 0s; }
-        .starmap-node:nth-child(2) { top: 55%; left: 48%; animation-delay: 0.8s; }
-        .starmap-node:nth-child(3) { top: 28%; left: 72%; animation-delay: 1.6s; }
-        .starmap-node:nth-child(4) { top: 72%; left: 25%; animation-delay: 2.4s; }
-        .starmap-node:nth-child(5) { top: 78%; left: 68%; animation-delay: 0.4s; }
+        .starmap-node:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+        .starmap-node:nth-child(2) { top: 50%; left: 45%; animation-delay: 0.7s; }
+        .starmap-node:nth-child(3) { top: 25%; left: 75%; animation-delay: 1.4s; }
+        .starmap-node:nth-child(4) { top: 70%; left: 20%; animation-delay: 2.1s; }
+        .starmap-node:nth-child(5) { top: 75%; left: 70%; animation-delay: 0.3s; }
         .starmap-node .node-pulse-ring {
             position: absolute;
             width: 100%; height: 100%;
@@ -395,17 +361,17 @@
         }
         .starmap-info {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             border-top: 1px solid var(--sw-border);
-            margin-top: 10px;
+            margin-top: 8px;
             background: rgba(0,0,0,0.3);
             border-radius: 0 0 12px 12px;
         }
         .starmap-info strong { color: var(--text-bright); }
 
-        /* --- 7. GOOGLE MAPS --- */
+        /* --- NUEVO: GOOGLE MAPS --- */
         .google-map-container {
             width: 100%;
             height: 320px;
@@ -423,23 +389,23 @@
         }
         .google-map-container:hover { box-shadow: 0 0 60px var(--faction-glow); border-color: var(--gold); }
 
-        /* --- 8. ÁLBUM --- */
-        .album-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        /* --- ÁLBUM --- */
+        .album-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .datacard-card { background: var(--sw-gray); border: 1px solid var(--sw-border); position: relative; transition: all 0.3s ease; border-radius: 10px; overflow: hidden; }
         .datacard-card.collected:hover { border-color: var(--accent-color); transform: scale(1.03); cursor: pointer; box-shadow: 0 0 30px var(--faction-glow); }
         .datacard-card.missing { opacity: 0.4; }
-        .card-placeholder { width: 100%; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 12px; text-align: center; }
-        .card-thumbnail { width: 100%; height: 130px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 6px; }
-        .card-faction { font-size: 0.7rem; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; margin-top: 2px; }
-        .rarity-label { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 2px 10px; border-radius: 10px; display: inline-block; }
+        .card-placeholder { width: 100%; min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 12px; text-align: center; }
+        .card-thumbnail { width: 100%; height: 120px; background-size: contain; background-repeat: no-repeat; background-position: center; border-radius: 6px; }
+        .card-faction { font-size: 0.65rem; color: var(--gold); font-weight: 700; letter-spacing: 0.5px; margin-top: 2px; }
+        .rarity-label { font-size: 0.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 2px 10px; border-radius: 10px; display: inline-block; }
         .rarity-common { border-left: 4px solid #b0b0b0; }
         .rarity-uncommon { border-left: 4px solid #55cc55; }
         .rarity-rare { border-left: 4px solid #4488ff; }
         .rarity-epic { border-left: 4px solid #aa44ff; }
         .rarity-legendary { border-left: 4px solid #ff8800; }
-        .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 15px 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; flex-wrap: wrap; gap: 10px; }
+        .album-status-bar { background: #222; border: 1px solid var(--sw-border); padding: 12px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; flex-wrap: wrap; gap: 10px; }
 
-        /* --- 9. CARTAS SECRETAS --- */
+        /* --- NUEVO: CARTAS SECRETAS --- */
         .card-secret-glow {
             animation: secretPulse 1.2s ease-in-out infinite alternate;
             box-shadow: 0 0 60px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 215, 0, 0.3);
@@ -449,7 +415,7 @@
             100% { filter: drop-shadow(0 0 40px #ffaa00) drop-shadow(0 0 80px #ff8800); }
         }
 
-        /* --- 10. VISOR 3D --- */
+        /* --- VISOR 3D --- */
         .galaxy-modal-fullscreen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -483,15 +449,15 @@
             margin-bottom: 60px;
         }
         .card-3d-wrapper {
-            width: 240px;
-            height: 336px;
+            width: 220px;
+            height: 308px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.05s linear;
         }
         @keyframes holoFloat {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
         .card-face {
             position: absolute;
@@ -508,8 +474,8 @@
         .holo-projector-emitter {
             position: absolute;
             bottom: 12%; 
-            width: 200px; 
-            height: 24px;
+            width: 180px; 
+            height: 22px;
             background: linear-gradient(180deg, #333 0%, #111 100%);
             border: 2px solid rgba(0, 243, 255, 0.4);
             border-radius: 50%;
@@ -521,7 +487,7 @@
         }
         .holo-projector-emitter::after {
             content: '';
-            width: 60px; height: 8px;
+            width: 50px; height: 6px;
             background: #ffffff;
             border-radius: 50%;
             box-shadow: 0 0 25px 8px var(--neon-cyan);
@@ -534,8 +500,8 @@
         .holo-beam {
             position: absolute;
             bottom: 13%; 
-            width: 180px; 
-            height: 480px;
+            width: 160px; 
+            height: 420px;
             background: linear-gradient(to top, rgba(0, 243, 255, 0.35) 0%, rgba(0, 243, 255, 0.08) 50%, rgba(0, 243, 255, 0) 100%);
             clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
             pointer-events: none;
@@ -549,8 +515,8 @@
         #holo-particles-canvas {
             position: absolute;
             bottom: 13%;
-            width: 300px;
-            height: 400px;
+            width: 280px;
+            height: 360px;
             pointer-events: none;
             mix-blend-mode: screen;
         }
@@ -564,31 +530,32 @@
             z-index: 2200;
         }
 
-        /* --- 11. COMUNIDAD Y NEXO --- */
-        .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .feed-card { background: #0a0e12; border-left: 3px solid var(--accent-color); padding: 18px 20px; border-radius: 6px; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        /* --- NUEVO: COMUNIDAD Y NEXO --- */
+        .feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 15px; }
+        .feed-card { background: #0a0e12; border-left: 3px solid var(--accent-color); padding: 16px 18px; border-radius: 6px; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
         .feed-card:hover { box-shadow: 0 0 30px var(--faction-glow); }
-        .feed-user { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.9rem; color: var(--accent-color); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; transition: color 0.3s ease; }
-        .feed-text { font-size: 0.95rem; color: #d0d7de; font-style: italic; }
-        .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 10px; }
-        .map-hud-box { background: #050708; border: 1px solid var(--sw-border); padding: 20px; display: flex; flex-direction: column; border-radius: 12px; transition: border-color 0.3s ease; }
+        .feed-user { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; color: var(--accent-color); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; transition: color 0.3s ease; }
+        .feed-text { font-size: 0.9rem; color: #d0d7de; font-style: italic; }
+        .contact-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 25px; margin-top: 10px; }
+        .map-hud-box { background: #050708; border: 1px solid var(--sw-border); padding: 18px; display: flex; flex-direction: column; border-radius: 12px; transition: border-color 0.3s ease; }
         .map-hud-box:hover { border-color: var(--accent-color); }
-        .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 30px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 300px; transition: border-color 0.3s ease; }
+        .console-form { background: var(--sw-gray); border: 1px solid var(--sw-border); padding: 25px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 280px; transition: border-color 0.3s ease; }
         .console-form:hover { border-color: var(--accent-color); }
-        .form-group { margin-bottom: 15px; width: 100%; }
-        .form-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
-        .form-input { width: 100%; background: #000; border: 1px solid var(--sw-border); padding: 10px 15px; color: #ffffff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; border-radius: 6px; }
+        .form-group { margin-bottom: 12px; width: 100%; }
+        .form-label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; font-weight: 700; }
+        .form-input { width: 100%; background: #000; border: 1px solid var(--sw-border); padding: 8px 14px; color: #ffffff; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; border-radius: 6px; }
         .form-input:focus { outline: none; border-color: var(--accent-color); }
 
+        /* --- NUEVO: MODALES --- */
         .galaxy-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 995; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(12px); }
-        .modal-content { background: var(--sw-gray); border: 2px solid var(--accent-color); width: 100%; max-width: 550px; padding: 30px; position: relative; border-radius: 16px; box-shadow: 0 0 60px var(--faction-glow); }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--text-muted); cursor: pointer; transition: color 0.3s ease; }
+        .modal-content { background: var(--sw-gray); border: 2px solid var(--accent-color); width: 100%; max-width: 520px; padding: 25px; position: relative; border-radius: 16px; box-shadow: 0 0 60px var(--faction-glow); }
+        .close-modal { position: absolute; top: 12px; right: 18px; font-size: 1.6rem; color: var(--text-muted); cursor: pointer; transition: color 0.3s ease; }
         .close-modal:hover { color: var(--text-bright); }
 
         .starwars-message {
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: 2.2rem;
+            font-size: 2rem;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-align: center;
@@ -597,7 +564,7 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 40px rgba(250, 222, 75, 0.3), 0 0 80px rgba(250, 222, 75, 0.1);
             animation: glowPulse 2s ease-in-out infinite alternate;
-            padding: 20px;
+            padding: 15px;
             line-height: 1.2;
         }
         @keyframes glowPulse {
@@ -605,7 +572,7 @@
             100% { text-shadow: 0 0 60px rgba(250, 222, 75, 0.5), 0 0 100px rgba(250, 222, 75, 0.2); }
         }
 
-        /* --- 12. SCROLLBAR Y RESPONSIVE --- */
+        /* --- NUEVO: SCROLLBAR --- */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 3px; transition: background 0.3s ease; }
@@ -614,7 +581,7 @@
             100% { top: 100%; }
         }
 
-        /* --- 13. ANIMACIONES ADICIONALES --- */
+        /* --- NUEVO: ANIMACIONES ADICIONALES --- */
         .fade-in { animation: fadeIn 0.8s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -627,42 +594,84 @@
             8% { text-shadow: none; }
         }
 
-        .pulse-border { animation: pulseBorder 1.5s ease-in-out infinite; }
-        @keyframes pulseBorder {
-            0%, 100% { border-color: var(--accent-color); }
-            50% { border-color: transparent; }
+        /* --- NUEVO: SISTEMA DE LOGROS --- */
+        .achievement-toast {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 15px 20px;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 40px rgba(250, 222, 75, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 320px;
+        }
+        .achievement-toast.show { transform: translateX(0); }
+        .achievement-toast .ach-icon {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-right: 12px;
+        }
+        .achievement-toast .ach-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-bright);
+        }
+        .achievement-toast .ach-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
         }
 
-        /* --- RESPONSIVE --- */
+        /* --- NUEVO: CONTADOR DE VISITAS --- */
+        .visit-counter {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--sw-border);
+            border-radius: 10px;
+            padding: 8px 14px;
+            z-index: 700;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            backdrop-filter: blur(4px);
+        }
+        .visit-counter span { color: var(--accent-color); font-weight: 700; }
+
+        /* --- NUEVO: RESPONSIVE --- */
         @media (max-width: 768px) {
             .hero-title { font-size: 2.8rem; }
             .app-section { padding: 140px 15px 30px 15px; }
             .nav-top { flex-direction: column; align-items: center; }
             .faction-selector { margin-top: 5px; }
-            .nav-btn { font-size: 0.75rem; padding: 10px 12px; }
-            .starwars-message { font-size: 1.5rem; }
-            #starmap-container { height: 350px; }
-            .starmap-node { width: 38px; height: 38px; font-size: 0.9rem; }
-            .starmap-node .node-label { font-size: 0.55rem; bottom: -26px; }
+            .nav-btn { font-size: 0.7rem; padding: 8px 10px; }
+            .starwars-message { font-size: 1.4rem; }
+            #starmap-container { height: 320px; }
+            .starmap-node { width: 36px; height: 36px; font-size: 0.85rem; }
+            .starmap-node .node-label { font-size: 0.5rem; bottom: -24px; }
             .contact-layout { grid-template-columns: 1fr; }
-            .google-map-container { height: 220px; }
-            .card-3d-wrapper { width: 180px; height: 252px; }
-            .album-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-            .force-counter { bottom: 10px; right: 10px; padding: 8px 14px; }
-            .force-counter .counter-number { font-size: 1.4rem; }
+            .google-map-container { height: 200px; }
+            .card-3d-wrapper { width: 160px; height: 224px; }
+            .album-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
             .holo-clock { top: 120px; right: 10px; padding: 6px 12px; }
             .holo-clock .time-display { font-size: 1rem; }
             .lightsaber-container { bottom: 70px; left: 10px; }
             .lightsaber { height: 50px; width: 4px; }
+            .achievement-toast { bottom: 80px; right: 10px; max-width: 280px; }
         }
         @media (max-width: 480px) {
             .hero-title { font-size: 2.2rem; }
             .hero-slogan { font-size: 0.95rem; }
-            .section-title { font-size: 1.3rem; }
-            .starmap-node { width: 32px; height: 32px; font-size: 0.7rem; }
-            .starmap-node .node-label { font-size: 0.5rem; bottom: -22px; padding: 1px 8px; }
-            #starmap-container { height: 280px; }
-            .album-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+            .section-title { font-size: 1.2rem; }
+            .starmap-node { width: 30px; height: 30px; font-size: 0.7rem; }
+            .starmap-node .node-label { font-size: 0.45rem; bottom: -20px; padding: 1px 6px; }
+            #starmap-container { height: 260px; }
+            .album-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+            .feed-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -679,16 +688,10 @@
         <div class="lightsaber" id="lightsaber"></div>
     </div>
 
-    <!-- HOLO-CRONÓMETRO -->
+    <!-- RELOJ ESTELAR -->
     <div class="holo-clock" id="holo-clock">
         <div class="time-display" id="time-display">00:00:00</div>
         <div class="date-display" id="date-display">Fecha Estelar</div>
-    </div>
-
-    <!-- CONTADOR DE LA FUERZA -->
-    <div class="force-counter" id="force-counter">
-        <div class="counter-number" id="force-number">0</div>
-        <div class="counter-label">⚡ Poder de la Fuerza</div>
     </div>
 
     <!-- CINTILLO DE NOTICIAS -->
@@ -699,6 +702,23 @@
             <span><i class="fas fa-crown"></i> <span class="highlight">IMPERIO:</span> Nuevo brownie "The Vader" disponible en todas las bases</span>
             <span><i class="fas fa-star"></i> <span class="highlight">RESISTENCIA:</span> Se busca reclutar catadores de brownies para la Alianza</span>
             <span><i class="fas fa-robot"></i> <span class="highlight">HOLORED:</span> 9 Datacards disponibles para completar la colección</span>
+            <span><i class="fas fa-map-pin"></i> <span class="highlight">NEXO:</span> Universidad Politécnica de San Luis Potosí - Punto de encuentro</span>
+        </div>
+    </div>
+
+    <!-- CONTADOR DE VISITAS -->
+    <div class="visit-counter" id="visit-counter">
+        <i class="fas fa-users"></i> Visitantes: <span id="visit-count">1,337</span>
+    </div>
+
+    <!-- SISTEMA DE LOGROS -->
+    <div class="achievement-toast" id="achievement-toast">
+        <div style="display:flex;align-items:center;">
+            <span class="ach-icon"><i class="fas fa-trophy"></i></span>
+            <div>
+                <div class="ach-text" id="ach-text">¡Logro Desbloqueado!</div>
+                <div class="ach-sub" id="ach-sub">Has entrado al Lado Oscuro</div>
+            </div>
         </div>
     </div>
 
@@ -721,9 +741,9 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item"><button class="nav-btn" data-target="catalog-section"><i class="fas fa-utensils"></i> Menú</button></li>
-            <li class="nav-item"><button class="nav-btn" data-target="phygital-section"><i class="fas fa-qrcode"></i> Holocrón</button></li>
             <li class="nav-item"><button class="nav-btn" data-target="holored-section"><i class="fas fa-globe-americas"></i> Holored</button></li>
-            <li class="nav-item"><button class="nav-btn" data-target="contact-section"><i class="fas fa-satellite-dish"></i> Nexo</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="nexo-section"><i class="fas fa-satellite-dish"></i> Nexo</button></li>
+            <li class="nav-item"><button class="nav-btn" data-target="galaxy-section"><i class="fas fa-galaxy"></i> Galaxia</button></li>
         </ul>
     </nav>
 
@@ -735,60 +755,40 @@
 
     <section id="catalog-section" class="app-section">
         <h2 class="section-title"><i class="fas fa-utensils"></i> Catálogo Galáctico</h2>
-        <div class="catalog-grid">
-            <div class="product-card fade-in">
+        <div class="catalog-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
+            <div class="product-card" style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:10px;overflow:hidden;transition:border-color 0.3s ease;">
                 <div>
-                    <div class="product-img-placeholder"><i class="fa-solid fa-jedi"></i></div>
-                    <div class="product-info">
-                        <h3 class="product-name">The Vader</h3>
-                        <p class="product-desc">Chocolate amargo intenso de pura concentración Sith. Sabor denso y estructurado.</p>
+                    <div class="product-img-placeholder" style="width:100%;height:140px;background:#252525;display:flex;justify-content:center;align-items:center;font-size:2.5rem;color:rgba(255,255,255,0.1);border-bottom:1px solid var(--sw-border);"><i class="fa-solid fa-jedi"></i></div>
+                    <div class="product-info" style="padding:18px;">
+                        <h3 class="product-name" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.1rem;text-transform:uppercase;margin-bottom:6px;">The Vader</h3>
+                        <p class="product-desc" style="color:var(--text-muted);font-size:0.85rem;line-height:1.4;margin-bottom:12px;">Chocolate amargo intenso de pura concentración Sith. Sabor denso y estructurado.</p>
                     </div>
                 </div>
-                <div class="product-info" style="padding-top: 0;"><div class="product-meta"><span class="product-price"><i class="fas fa-coins"></i> $45.00</span><button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div></div>
+                <div class="product-info" style="padding:0 18px 18px 18px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;"><i class="fas fa-coins"></i> $45.00</span><button class="btn-sw" style="padding:6px 18px;font-size:0.7rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div>
             </div>
-            <div class="product-card fade-in" style="animation-delay: 0.2s;">
+            <div class="product-card" style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:10px;overflow:hidden;transition:border-color 0.3s ease;">
                 <div>
-                    <div class="product-img-placeholder"><i class="fa-solid fa-bolt"></i></div>
-                    <div class="product-info">
-                        <h3 class="product-name">The Trooper</h3>
-                        <p class="product-desc">Brownie clásico balanceado con topping de chocolate con leche y líneas concéntricas de glacé blanco.</p>
+                    <div class="product-img-placeholder" style="width:100%;height:140px;background:#252525;display:flex;justify-content:center;align-items:center;font-size:2.5rem;color:rgba(255,255,255,0.1);border-bottom:1px solid var(--sw-border);"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="product-info" style="padding:18px;">
+                        <h3 class="product-name" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.1rem;text-transform:uppercase;margin-bottom:6px;">The Trooper</h3>
+                        <p class="product-desc" style="color:var(--text-muted);font-size:0.85rem;line-height:1.4;margin-bottom:12px;">Brownie clásico balanceado con topping de chocolate con leche y líneas concéntricas de glacé blanco.</p>
                     </div>
                 </div>
-                <div class="product-info" style="padding-top: 0;"><div class="product-meta"><span class="product-price"><i class="fas fa-coins"></i> $40.00</span><button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div></div>
+                <div class="product-info" style="padding:0 18px 18px 18px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;"><i class="fas fa-coins"></i> $40.00</span><button class="btn-sw" style="padding:6px 18px;font-size:0.7rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div>
             </div>
-            <div class="product-card fade-in" style="animation-delay: 0.4s;">
+            <div class="product-card" style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:10px;overflow:hidden;transition:border-color 0.3s ease;">
                 <div>
-                    <div class="product-img-placeholder"><i class="fa-solid fa-crown"></i></div>
-                    <div class="product-info">
-                        <h3 class="product-name">The Emperor</h3>
-                        <p class="product-desc">Brownie supremo con triple capa de chocolate y un toque de poder oscuro.</p>
+                    <div class="product-img-placeholder" style="width:100%;height:140px;background:#252525;display:flex;justify-content:center;align-items:center;font-size:2.5rem;color:rgba(255,255,255,0.1);border-bottom:1px solid var(--sw-border);"><i class="fa-solid fa-crown"></i></div>
+                    <div class="product-info" style="padding:18px;">
+                        <h3 class="product-name" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.1rem;text-transform:uppercase;margin-bottom:6px;">The Emperor</h3>
+                        <p class="product-desc" style="color:var(--text-muted);font-size:0.85rem;line-height:1.4;margin-bottom:12px;">Brownie supremo con triple capa de chocolate y un toque de poder oscuro.</p>
                     </div>
                 </div>
-                <div class="product-info" style="padding-top: 0;"><div class="product-meta"><span class="product-price"><i class="fas fa-coins"></i> $55.00</span><button class="btn-sw" style="padding: 8px 20px; font-size: 0.75rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div></div>
+                <div class="product-info" style="padding:0 18px 18px 18px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;"><i class="fas fa-coins"></i> $55.00</span><button class="btn-sw" style="padding:6px 18px;font-size:0.7rem;"><i class="fas fa-cart-plus"></i> Reclamar</button></div>
             </div>
         </div>
-    </section>
-
-    <section id="phygital-section" class="app-section">
-        <h2 class="section-title"><i class="fas fa-qrcode"></i> Escáner Holocrón</h2>
-        <div class="qr-container pulse-border">
-            <p style="color: var(--text-muted); margin-bottom: 15px;"><i class="fas fa-scan"></i> Escanea el QR de tu caja para descifrar un archivo de la base de datos y ganar una Datacard.</p>
-            <div class="scanner-viewport">
-                <div class="scanner-laser" id="laser-line"></div>
-                <div class="scan-idle-placeholder" id="idle-placeholder">
-                    <i class="fa-solid fa-expand"></i>
-                    <p>Sensor fuera de línea</p>
-                </div>
-                <div id="camera-reader"></div>
-                <div class="scan-message" id="scan-result">
-                    <i class="fa-solid fa-gift" style="color: var(--neon-cyan); font-size: 2.5rem; margin-bottom: 15px;"></i>
-                    <h3 class="product-name" style="color: var(--neon-cyan);">¡RECOMPENSA DE LA ORDEN!</h3>
-                    <p style="font-size: 1rem; color: #ffffff; font-weight:700;" id="unlock-main-text"></p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top:5px;" id="unlock-sub-text"></p>
-                    <button class="btn-sw" style="margin-top: 20px; padding: 6px 20px; font-size: 0.75rem;" onclick="resetScannerContainer()"><i class="fas fa-sync"></i> Cargar Datos</button>
-                </div>
-            </div>
-            <button class="btn-sw" id="btn-start-camera" onclick="initQrCamera()"><i class="fas fa-camera"></i> Activar Escáner Óptico</button>
+        <div style="margin-top:20px;text-align:center;color:var(--text-muted);font-size:0.85rem;">
+            <i class="fas fa-shipping-fast" style="color:var(--accent-color);"></i> Envío a toda la galaxia • Pedidos disponibles en el Nexo Central
         </div>
     </section>
 
@@ -799,83 +799,116 @@
             <div class="starmap-bg"></div>
             <div class="starmap-lines">
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <line x1="18" y1="22" x2="48" y2="55" />
-                    <line x1="48" y1="55" x2="72" y2="28" />
-                    <line x1="72" y1="28" x2="25" y2="72" />
-                    <line x1="25" y1="72" x2="68" y2="78" />
-                    <line x1="18" y1="22" x2="25" y2="72" />
-                    <line x1="48" y1="55" x2="68" y2="78" />
+                    <line x1="15" y1="20" x2="45" y2="50" />
+                    <line x1="45" y1="50" x2="75" y2="25" />
+                    <line x1="75" y1="25" x2="20" y2="70" />
+                    <line x1="20" y1="70" x2="70" y2="75" />
+                    <line x1="15" y1="20" x2="20" y2="70" />
+                    <line x1="45" y1="50" x2="70" y2="75" />
                 </svg>
             </div>
-            <div class="starmap-node" onclick="showStarMessage('Nodo Imperial - Tatooine', 'Avistamiento confirmado: Flota Imperial avistada en el sector Tatooine. Se reporta actividad sospechosa en los muelles de Mos Eisley.')">
+            <div class="starmap-node" onclick="showStarMessage('Nodo Imperial - Tatooine', 'Avistamiento confirmado: Flota Imperial en el sector Tatooine. Actividad sospechosa en Mos Eisley.')">
                 <span class="node-pulse-ring"></span><span class="node-pulse-ring"></span><span class="node-pulse-ring"></span>
-                <i class="fas fa-crown" style="color: #ffcc00;"></i>
-                <span class="node-label"><i class="fas fa-crown" style="color: #ffcc00;"></i> Tatooine</span>
+                <i class="fas fa-crown" style="color:#ffcc00;"></i>
+                <span class="node-label"><i class="fas fa-crown" style="color:#ffcc00;"></i> Tatooine</span>
             </div>
-            <div class="starmap-node" onclick="showStarMessage('Nodo Rebelde - Endor', 'Avistamiento confirmado: Transmisiones rebeldes interceptadas cerca de la luna de Endor. La Alianza se está reagrupando.')">
+            <div class="starmap-node" onclick="showStarMessage('Nodo Rebelde - Endor', 'Transmisiones rebeldes interceptadas cerca de Endor. La Alianza se reagrupa.')">
                 <span class="node-pulse-ring"></span><span class="node-pulse-ring"></span><span class="node-pulse-ring"></span>
-                <i class="fas fa-star" style="color: #ffdd44;"></i>
-                <span class="node-label"><i class="fas fa-star" style="color: #ffdd44;"></i> Endor</span>
+                <i class="fas fa-star" style="color:#ffdd44;"></i>
+                <span class="node-label"><i class="fas fa-star" style="color:#ffdd44;"></i> Endor</span>
             </div>
-            <div class="starmap-node" onclick="showStarMessage('Nodo Imperial - Coruscant', 'Avistamiento confirmado: El Emperador ha emitido un decreto desde Coruscant. Se refuerzan las patrullas.')">
+            <div class="starmap-node" onclick="showStarMessage('Nodo Imperial - Coruscant', 'El Emperador ha emitido un decreto desde Coruscant. Patrullas reforzadas.')">
                 <span class="node-pulse-ring"></span><span class="node-pulse-ring"></span><span class="node-pulse-ring"></span>
-                <i class="fas fa-crown" style="color: #ffcc00;"></i>
-                <span class="node-label"><i class="fas fa-crown" style="color: #ffcc00;"></i> Coruscant</span>
+                <i class="fas fa-crown" style="color:#ffcc00;"></i>
+                <span class="node-label"><i class="fas fa-crown" style="color:#ffcc00;"></i> Coruscant</span>
             </div>
-            <div class="starmap-node" onclick="showStarMessage('Nodo Rebelde - Hoth', 'Avistamiento confirmado: Base Rebelde en Hoth detectada. Se están preparando para una ofensiva.')">
+            <div class="starmap-node" onclick="showStarMessage('Nodo Rebelde - Hoth', 'Base Rebelde en Hoth detectada. Preparando ofensiva.')">
                 <span class="node-pulse-ring"></span><span class="node-pulse-ring"></span><span class="node-pulse-ring"></span>
-                <i class="fas fa-star" style="color: #ffdd44;"></i>
-                <span class="node-label"><i class="fas fa-star" style="color: #ffdd44;"></i> Hoth</span>
+                <i class="fas fa-star" style="color:#ffdd44;"></i>
+                <span class="node-label"><i class="fas fa-star" style="color:#ffdd44;"></i> Hoth</span>
             </div>
-            <div class="starmap-node" onclick="showStarMessage('Nodo Neutral - Bespin', 'Avistamiento confirmado: Nave desconocida en Bespin. Posible contrabando de brownies galácticos.')">
+            <div class="starmap-node" onclick="showStarMessage('Nodo Neutral - Bespin', 'Nave desconocida en Bespin. Posible contrabando de brownies.')">
                 <span class="node-pulse-ring"></span><span class="node-pulse-ring"></span><span class="node-pulse-ring"></span>
-                <i class="fas fa-cloud" style="color: #88ddff;"></i>
-                <span class="node-label"><i class="fas fa-cloud" style="color: #88ddff;"></i> Bespin</span>
+                <i class="fas fa-cloud" style="color:#88ddff;"></i>
+                <span class="node-label"><i class="fas fa-cloud" style="color:#88ddff;"></i> Bespin</span>
             </div>
             <div class="starmap-info">
                 <i class="fas fa-satellite-dish"></i>
-                <strong>Mapa Estelar Interactivo</strong> — Toca un nodo para recibir transmisiones del sector
+                <strong>Mapa Estelar Interactivo</strong> — Toca un nodo para recibir transmisiones
                 <i class="fas fa-arrow-right"></i>
             </div>
         </div>
 
-        <h2 class="section-title" style="margin-top: 20px; font-size: 1.2rem;"><i class="fas fa-address-card"></i> Álbum de Datacards Oficiales</h2>
+        <h2 class="section-title" style="margin-top:15px;font-size:1.2rem;"><i class="fas fa-address-card"></i> Álbum de Datacards</h2>
         <div class="album-status-bar">
             <div>
-                <p style="font-weight: 700; font-size: 1.1rem; text-transform:uppercase; letter-spacing:1px;"><i class="fas fa-trophy"></i> Progreso de la Colección</p>
-                <span style="font-size: 0.9rem; color: var(--text-muted);">Completa las 9 Datacards imperiales para liberar el Volumen Secreto.</span>
+                <p style="font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:1px;"><i class="fas fa-trophy"></i> Progreso de la Colección</p>
+                <span style="font-size:0.85rem;color:var(--text-muted);">Completa las 9 Datacards para desbloquear el volumen secreto</span>
             </div>
-            <div class="sw-font" id="album-counter" style="font-size: 1.6rem;">1 / 9</div>
+            <div class="sw-font" id="album-counter" style="font-size:1.4rem;">1 / 9</div>
         </div>
         <div class="album-grid" id="grid-datacards-container"></div>
     </section>
 
-    <section id="contact-section" class="app-section">
-        <h2 class="section-title"><i class="fas fa-satellite-dish"></i> Señales del Sector (Comunidad)</h2>
+    <section id="nexo-section" class="app-section">
+        <h2 class="section-title"><i class="fas fa-satellite-dish"></i> Nexo Central</h2>
         <div class="feed-grid">
             <div class="feed-card"><div class="feed-user"><i class="fa-solid fa-satellite-dish"></i> @SithPotosino_44</div><p class="feed-text">"La costra crujiente de The Vader es de otro mundo. ¡Hangar de la Politécnica defendido!"</p></div>
             <div class="feed-card"><div class="feed-user"><i class="fa-solid fa-satellite-dish"></i> @TrooperGourmet</div><p class="feed-text">"Acabo de escanear mi tercer cubo y me salió la Datacard del Halcón de Chocolate. ¡Gran juego!"</p></div>
             <div class="feed-card"><div class="feed-user"><i class="fa-solid fa-satellite-dish"></i> @RebelBrownie</div><p class="feed-text">"La resistencia ha encontrado el brownie perfecto. ¡The Trooper es nuestra nueva arma secreta!"</p></div>
         </div>
 
-        <h2 class="section-title" style="margin-top: 40px;"><i class="fas fa-map-pin"></i> Coordenadas del Nexo Central</h2>
+        <h2 class="section-title" style="margin-top:30px;"><i class="fas fa-map-pin"></i> Coordenadas del Nexo</h2>
         <div class="contact-layout">
             <div class="map-hud-box">
-                <h3 class="product-name" style="color: var(--accent-color); margin-bottom: 4px;"><i class="fa-solid fa-shuttle-space"></i> Puesto de Avanzada: Borde Exterior</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;"><i class="fas fa-location-dot"></i> Universidad Politécnica: C. Urbano Villalón 500, La Ladrillera, San Luis Potosí.</p>
+                <h3 class="product-name" style="color:var(--accent-color);margin-bottom:4px;font-size:1rem;"><i class="fa-solid fa-shuttle-space"></i> Puesto de Avanzada</h3>
+                <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:12px;"><i class="fas fa-location-dot"></i> Universidad Politécnica de San Luis Potosí</p>
                 <div class="google-map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1848.3664493653338!2d-100.9698423!3d22.134726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a9f7f6d9b5f9b%3A0x4d8b6f7e5a2c5d1e!2sUniversidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD!5e0!3m2!1ses!2smx!4v1740000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14787.337829117455!2d-100.9878433!3d22.1188386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842a9f7f6d9b5f9b%3A0x4d8b6f7e5a2c5d1e!2sUniversidad%20Polit%C3%A9cnica%20de%20San%20Luis%20Potos%C3%AD!5e0!3m2!1ses!2smx!4v1740000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 8px; text-align: center;"><i class="fas fa-radio"></i> Señal de Holored activa — Transmisiones entrantes</p>
+                <p style="color:var(--text-muted);font-size:0.7rem;margin-top:8px;text-align:center;"><i class="fas fa-radio"></i> Señal de Holored activa — Transmisiones entrantes</p>
             </div>
             <div class="console-form">
                 <div class="starwars-message">QUE LOS BROWNIES TE ACOMPAÑEN</div>
-                <form onsubmit="event.preventDefault(); alert('🚀 Transmisión Cifrada Enviada al Holored.');" style="width: 100%; margin-top: 10px;">
+                <form onsubmit="event.preventDefault();alert('🚀 Transmisión enviada al Holored.');" style="width:100%;margin-top:10px;">
                     <div class="form-group"><label class="form-label"><i class="fas fa-user-astronaut"></i> Identificación</label><input type="text" class="form-input" placeholder="Ej: TK-421" required></div>
-                    <div class="form-group"><label class="form-label"><i class="fas fa-envelope"></i> Dirección Holored</label><input type="email" class="form-input" placeholder="rebelde@holored.gal" required></div>
+                    <div class="form-group"><label class="form-label"><i class="fas fa-envelope"></i> Holored</label><input type="email" class="form-input" placeholder="rebelde@holored.gal" required></div>
                     <div class="form-group"><label class="form-label"><i class="fas fa-pen"></i> Mensaje</label><textarea class="form-input" rows="3" placeholder="Transmite tu mensaje a la galaxia..." required></textarea></div>
-                    <button type="submit" class="btn-sw" style="width: 100%; border-radius:8px; padding: 12px;"><i class="fas fa-satellite"></i> Transmitir Datos</button>
+                    <button type="submit" class="btn-sw" style="width:100%;border-radius:8px;padding:10px;"><i class="fas fa-satellite"></i> Transmitir</button>
                 </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="galaxy-section" class="app-section">
+        <h2 class="section-title"><i class="fas fa-galaxy"></i> Exploración Galáctica</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:20px;">
+            <div style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent-color)';this.style.boxShadow='0 0 30px var(--faction-glow)'" onmouseout="this.style.borderColor='var(--sw-border)';this.style.boxShadow='none'">
+                <i class="fas fa-planet-ringed" style="font-size:2.5rem;color:var(--accent-color);margin-bottom:10px;"></i>
+                <h3 style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;text-transform:uppercase;">Sistema Tatooine</h3>
+                <p style="color:var(--text-muted);font-size:0.85rem;">Dos soles, un desierto y los mejores brownies del borde exterior.</p>
+                <button class="btn-sw" style="margin-top:10px;padding:6px 18px;font-size:0.7rem;" onclick="showStarMessage('🌍 Sistema Tatooine','Explorando el planeta desértico. Se han encontrado restos de una nave con una caja de brownies The Vader. ¡Descubrimiento histórico!')"><i class="fas fa-rocket"></i> Explorar</button>
+            </div>
+            <div style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent-color)';this.style.boxShadow='0 0 30px var(--faction-glow)'" onmouseout="this.style.borderColor='var(--sw-border)';this.style.boxShadow='none'">
+                <i class="fas fa-moon" style="font-size:2.5rem;color:var(--gold);margin-bottom:10px;"></i>
+                <h3 style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;text-transform:uppercase;">Luna de Endor</h3>
+                <p style="color:var(--text-muted);font-size:0.85rem;">Bosques frondosos y una base rebelde secreta. Los ewoks adoran los brownies.</p>
+                <button class="btn-sw" style="margin-top:10px;padding:6px 18px;font-size:0.7rem;" onclick="showStarMessage('🌙 Luna de Endor','La resistencia ha establecido un puesto de avanzada. Se rumorea que tienen una receta secreta de brownies con miel de Endor.')"><i class="fas fa-rocket"></i> Explorar</button>
+            </div>
+            <div style="background:var(--sw-gray);border:1px solid var(--sw-border);border-radius:12px;padding:20px;text-align:center;transition:all 0.3s ease;" onmouseover="this.style.borderColor='var(--accent-color)';this.style.boxShadow='0 0 30px var(--faction-glow)'" onmouseout="this.style.borderColor='var(--sw-border)';this.style.boxShadow='none'">
+                <i class="fas fa-city" style="font-size:2.5rem;color:var(--imperio-red);margin-bottom:10px;"></i>
+                <h3 style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:1rem;text-transform:uppercase;">Coruscant</h3>
+                <p style="color:var(--text-muted);font-size:0.85rem;">El centro del Imperio. Los mejores brownies están reservados para el Emperador.</p>
+                <button class="btn-sw" style="margin-top:10px;padding:6px 18px;font-size:0.7rem;" onclick="showStarMessage('🏙️ Coruscant','El Emperador ha ordenado la producción masiva de brownies imperiales. Se buscan catadores oficiales.')"><i class="fas fa-rocket"></i> Explorar</button>
+            </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--sw-border);border-radius:12px;padding:20px;text-align:center;">
+            <i class="fas fa-rocket" style="font-size:2rem;color:var(--accent-color);margin-bottom:10px;display:block;"></i>
+            <p style="color:var(--text-muted);font-size:0.9rem;">Próximas expediciones: <span style="color:var(--text-bright);font-weight:700;">Hoth, Bespin, Naboo</span></p>
+            <div style="display:flex;justify-content:center;gap:15px;margin-top:10px;flex-wrap:wrap;">
+                <span style="background:rgba(255,255,255,0.05);padding:4px 14px;border-radius:12px;font-size:0.75rem;color:var(--text-muted);"><i class="fas fa-snowflake" style="color:#88ddff;"></i> Hoth</span>
+                <span style="background:rgba(255,255,255,0.05);padding:4px 14px;border-radius:12px;font-size:0.75rem;color:var(--text-muted);"><i class="fas fa-cloud" style="color:#88ddff;"></i> Bespin</span>
+                <span style="background:rgba(255,255,255,0.05);padding:4px 14px;border-radius:12px;font-size:0.75rem;color:var(--text-muted);"><i class="fas fa-water" style="color:#44bbff;"></i> Naboo</span>
             </div>
         </div>
     </section>
@@ -883,11 +916,11 @@
     <div class="galaxy-modal" id="starmap-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="document.getElementById('starmap-modal').style.display='none'">×</span>
-            <h3 class="product-name" id="starmap-modal-title" style="margin-bottom: 10px; color: var(--accent-color);"></h3>
-            <p id="starmap-modal-body" style="line-height: 1.6; text-align: justify; color: var(--text-bright); font-size: 1.05rem;"></p>
-            <div style="margin-top: 20px; text-align: center; border-top: 1px solid var(--sw-border); padding-top: 15px;">
-                <i class="fa-solid fa-satellite" style="color: var(--accent-color); font-size: 1.8rem;"></i>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;"><i class="fas fa-clock"></i> Transmisión recibida en tiempo real</p>
+            <h3 class="product-name" id="starmap-modal-title" style="margin-bottom:10px;color:var(--accent-color);"></h3>
+            <p id="starmap-modal-body" style="line-height:1.6;text-align:justify;color:var(--text-bright);font-size:1rem;"></p>
+            <div style="margin-top:18px;text-align:center;border-top:1px solid var(--sw-border);padding-top:14px;">
+                <i class="fa-solid fa-satellite" style="color:var(--accent-color);font-size:1.6rem;"></i>
+                <p style="color:var(--text-muted);font-size:0.75rem;margin-top:4px;"><i class="fas fa-clock"></i> Transmisión recibida en tiempo real</p>
             </div>
         </div>
     </div>
@@ -904,8 +937,8 @@
             <div class="holo-beam"></div>
             <canvas id="holo-particles-canvas"></canvas>
             <div class="controls-hud-panel">
-                <button class="btn-sw" style="background:#ff3333; color:#fff; border-radius:0;" onclick="closeCardModal()"><i class="fas fa-times"></i> Cerrar Transmisión</button>
-                <div style="color:var(--neon-cyan); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px;"><i class="fa-solid fa-arrows-spin"></i> Arrastra libremente para orbitar la tarjeta</div>
+                <button class="btn-sw" style="background:#ff3333;color:#fff;border-radius:0;" onclick="closeCardModal()"><i class="fas fa-times"></i> Cerrar</button>
+                <div style="color:var(--neon-cyan);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;"><i class="fa-solid fa-arrows-spin"></i> Arrastra para orbitar</div>
             </div>
         </div>
     </div>
@@ -932,16 +965,14 @@
                 node.style.background = `radial-gradient(circle at 40% 35%, #fff 20%, var(--accent-color) 100%)`;
                 node.style.boxShadow = `0 0 30px var(--faction-glow), 0 0 60px var(--faction-glow)`;
             });
-            document.querySelectorAll('.section-title, .google-map-container, .qr-container, .product-card, .map-hud-box, .console-form, .force-counter, .holo-clock, .news-ticker, .lightsaber').forEach(el => {
+            document.querySelectorAll('.section-title, .google-map-container, .product-card, .map-hud-box, .console-form, .news-ticker, .holo-clock, .lightsaber').forEach(el => {
                 if (el) el.style.borderColor = 'var(--accent-color)';
             });
-            // Actualizar sable de luz
             const saber = document.getElementById('lightsaber');
             if (saber) {
                 saber.style.background = 'var(--accent-color)';
                 saber.style.boxShadow = `0 0 30px var(--faction-glow), 0 0 60px var(--faction-glow)`;
             }
-            // Actualizar partículas
             document.querySelectorAll('.particle').forEach(p => {
                 p.style.background = 'var(--accent-color)';
             });
@@ -952,12 +983,17 @@
         // ============================================================
         function showStarMessage(title, message) {
             document.getElementById('starmap-modal-title').innerText = '🛸 ' + title;
-            document.getElementById('starmap-modal-body').innerHTML = message + '<br><br><span style="color: var(--text-muted); font-size: 0.9rem;"><i class="fas fa-robot"></i> Mensaje descifrado por el Holored Central</span>';
+            document.getElementById('starmap-modal-body').innerHTML = message + '<br><br><span style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-robot"></i> Mensaje descifrado por el Holored Central</span>';
             document.getElementById('starmap-modal').style.display = 'flex';
+            // Mostrar logro al descubrir 3 nodos
+            const nodesClicked = parseInt(localStorage.getItem('nodesClicked') || '0') + 1;
+            localStorage.setItem('nodesClicked', nodesClicked);
+            if (nodesClicked === 3) showAchievement('🗺️ Cartógrafo Estelar', 'Has descubierto 3 sistemas galácticos');
+            if (nodesClicked === 5) showAchievement('🌟 Explorador Legendario', 'Has cartografiado toda la galaxia');
         }
 
         // ============================================================
-        // 3. TOGGLE SABLE DE LUZ
+        // 3. SABLE DE LUZ
         // ============================================================
         let saberOn = false;
         function toggleLightsaber() {
@@ -967,13 +1003,11 @@
                 saber.style.height = '70px';
                 saber.style.opacity = '1';
                 document.getElementById('lightsaber-container').style.transform = 'scale(1.1) rotate(-5deg)';
-                // Efecto de encendido
                 saber.style.animation = 'saberPulse 0.4s ease-in-out infinite alternate';
                 setTimeout(() => {
                     saber.style.animation = 'saberPulse 0.8s ease-in-out infinite alternate';
                 }, 500);
-                // Sumar poder a la fuerza
-                incrementForce(5);
+                showAchievement('⚔️ Caballero Jedi', 'Has activado tu sable de luz');
             } else {
                 saber.style.height = '0px';
                 saber.style.opacity = '0.3';
@@ -982,31 +1016,23 @@
         }
 
         // ============================================================
-        // 4. CONTADOR DE LA FUERZA
+        // 4. SISTEMA DE LOGROS
         // ============================================================
-        let forcePower = 0;
-        function incrementForce(amount) {
-            forcePower += amount;
-            document.getElementById('force-number').innerText = forcePower;
-            // Efecto de destello
-            const counter = document.getElementById('force-counter');
-            counter.style.transform = 'scale(1.2)';
-            counter.style.borderColor = 'var(--gold)';
-            setTimeout(() => {
-                counter.style.transform = 'scale(1)';
-                counter.style.borderColor = 'var(--accent-color)';
-            }, 300);
+        function showAchievement(title, desc) {
+            const toast = document.getElementById('achievement-toast');
+            document.getElementById('ach-text').innerText = '🏆 ' + title;
+            document.getElementById('ach-sub').innerText = desc;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         // ============================================================
-        // 5. RELOJ HOLOGRÁFICO
+        // 5. RELOJ ESTELAR
         // ============================================================
         function updateHoloClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('es-ES', { hour12: false });
-            document.getElementById('time-display').innerText = timeStr;
-            const dateStr = now.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-            document.getElementById('date-display').innerText = '📅 ' + dateStr.toUpperCase();
+            document.getElementById('time-display').innerText = now.toLocaleTimeString('es-ES', { hour12: false });
+            document.getElementById('date-display').innerText = '📅 ' + now.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase();
         }
         setInterval(updateHoloClock, 1000);
         updateHoloClock();
@@ -1016,7 +1042,7 @@
         // ============================================================
         function createParticles() {
             const container = document.getElementById('particles-container');
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 35; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.left = Math.random() * 100 + '%';
@@ -1031,23 +1057,30 @@
         createParticles();
 
         // ============================================================
-        // 7. REPRODUCIR AUDIO
+        // 7. CONTADOR DE VISITAS
+        // ============================================================
+        let visitCount = parseInt(localStorage.getItem('visitCount') || '1337');
+        visitCount++;
+        localStorage.setItem('visitCount', visitCount);
+        document.getElementById('visit-count').innerText = visitCount.toLocaleString();
+
+        // ============================================================
+        // 8. REPRODUCIR AUDIO
         // ============================================================
         window.addEventListener('load', function() {
             const audio = document.getElementById('bg-audio');
             if (audio) {
-                audio.volume = 0.25;
+                audio.volume = 0.2;
                 audio.loop = true;
                 audio.play().catch(function(e) {});
             }
-            // Mostrar elementos después de un delay
             setTimeout(() => {
                 document.getElementById('news-ticker').style.display = 'block';
                 document.getElementById('holo-clock').style.display = 'block';
                 document.getElementById('lightsaber-container').style.display = 'block';
-            }, 2000);
-            // Inicializar contador de fuerza
-            incrementForce(0);
+            }, 1500);
+            // Logro de bienvenida
+            setTimeout(() => showAchievement('🚀 Bienvenido al Hub', 'Has entrado al Lado Oscuro'), 3000);
         });
         document.addEventListener('click', function() {
             const audio = document.getElementById('bg-audio');
@@ -1057,7 +1090,7 @@
         }, { once: false });
 
         // ============================================================
-        // 8. MOTOR CANVAS HIPERESPACIO
+        // 9. MOTOR CANVAS HIPERESPACIO
         // ============================================================
         const canvas = document.getElementById('hyperspace'); const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth; let height = canvas.height = window.innerHeight;
@@ -1094,24 +1127,24 @@
         initStars(); animateStars();
 
         // ============================================================
-        // 9. PARTÍCULAS DEL PROYECTOR 3D
+        // 10. PARTÍCULAS DEL PROYECTOR 3D
         // ============================================================
         const pCanvas = document.getElementById('holo-particles-canvas');
         const pCtx = pCanvas.getContext('2d');
-        let pWidth = pCanvas.width = 300;
-        let pHeight = pCanvas.height = 400;
+        let pWidth = pCanvas.width = 280;
+        let pHeight = pCanvas.height = 360;
         let holoParticles = [];
 
         function animateHoloParticles() {
             pCtx.clearRect(0, 0, pWidth, pHeight);
-            if (holoParticles.length < 50 && Math.random() > 0.3) {
+            if (holoParticles.length < 45 && Math.random() > 0.3) {
                 holoParticles.push({
-                    x: pWidth / 2 + (Math.random() - 0.5) * 150,
+                    x: pWidth / 2 + (Math.random() - 0.5) * 140,
                     y: pHeight - 15,
-                    vx: (Math.random() - 0.5) * 1.5,
-                    vy: -(Math.random() * 2.5 + 1),
-                    radius: Math.random() * 2.5 + 0.5,
-                    alpha: Math.random() * 0.7 + 0.3
+                    vx: (Math.random() - 0.5) * 1.4,
+                    vy: -(Math.random() * 2.3 + 0.8),
+                    radius: Math.random() * 2.3 + 0.5,
+                    alpha: Math.random() * 0.6 + 0.3
                 });
             }
             for (let i = holoParticles.length - 1; i >= 0; i--) {
@@ -1139,7 +1172,7 @@
         }
 
         // ============================================================
-        // 10. DATACARDS
+        // 11. DATACARDS
         // ============================================================
         const datacardsCollection = [
             { id: 1, title: "Don Bosco Trooper", faction: "Líder de la Orden", collected: true, imgF: "CD1F.jpg", imgT: "CD1T.jpg", rarity: "uncommon" },
@@ -1169,7 +1202,7 @@
                         box.innerHTML = `
                             <div class="card-placeholder card-secret-glow">
                                 <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
-                                <h4 class="comic-title" style="color: var(--gold); font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.9rem;">${card.title}</h4>
+                                <h4 class="comic-title" style="color: var(--gold); font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem;">${card.title}</h4>
                                 <span class="card-faction">${card.faction}</span>
                                 <span class="rarity-label" style="color:#ff8800; background: rgba(255,136,0,0.15);">★ Legendaria</span>
                             </div>
@@ -1181,7 +1214,7 @@
                         box.innerHTML = `
                             <div class="card-placeholder">
                                 <div class="card-thumbnail" style="background-image: url('${card.imgF}')"></div>
-                                <h4 class="comic-title" style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem;">${card.title}</h4>
+                                <h4 class="comic-title" style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.8rem;">${card.title}</h4>
                                 <span class="card-faction">${card.faction}</span>
                                 <span class="rarity-label" style="color:${rarityColors[card.rarity] || '#fff'}; background: rgba(255,255,255,0.05);">${rarityLabels[card.rarity] || ''}</span>
                             </div>
@@ -1190,8 +1223,8 @@
                 } else {
                     box.innerHTML = `
                         <div class="card-placeholder">
-                            <i class="fa-solid fa-address-card" style="font-size:2rem; margin-top:30px; color:rgba(255,255,255,0.1)"></i>
-                            <h4 class="comic-title" style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.85rem; color: var(--text-muted);">???</h4>
+                            <i class="fa-solid fa-address-card" style="font-size:1.8rem; margin-top:25px; color:rgba(255,255,255,0.1)"></i>
+                            <h4 class="comic-title" style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 0.8rem; color: var(--text-muted);">???</h4>
                             <span class="card-faction">Desconocido</span>
                         </div>
                     `;
@@ -1202,7 +1235,7 @@
         }
 
         // ============================================================
-        // 11. VISOR 3D
+        // 12. VISOR 3D
         // ============================================================
         const cardMesh = document.getElementById('card-mesh');
         const stage3D = document.getElementById('stage-3d-trigger');
@@ -1293,14 +1326,14 @@
         }
 
         // ============================================================
-        // 12. NAVEGACIÓN SPA
+        // 13. NAVEGACIÓN SPA
         // ============================================================
         const globalNav = document.getElementById('global-nav'); const heroSection = document.getElementById('hero-section');
         const sections = document.querySelectorAll('.app-section'); const flashOverlay = document.getElementById('flash-overlay');
 
         document.getElementById('btn-enter').addEventListener('click', () => {
             executeJumpSequence(() => { heroSection.style.display = 'none'; globalNav.style.display = 'flex'; document.getElementById('catalog-section').style.display = 'block'; document.querySelector('[data-target="catalog-section"]').classList.add('active-tab'); });
-            incrementForce(10);
+            setTimeout(() => showAchievement('🍫 Catador Imperial', 'Has explorado el catálogo de brownies'), 2000);
         });
 
         const tabButtons = document.querySelectorAll('.nav-menu button');
@@ -1310,7 +1343,16 @@
                 if (isJumping || document.getElementById(targetId).style.display === 'block') return;
                 tabButtons.forEach(b => b.classList.remove('active-tab')); btn.classList.add('active-tab');
                 executeJumpSequence(() => { sections.forEach(s => s.style.display = 'none'); document.getElementById(targetId).style.display = 'block'; });
-                incrementForce(2);
+                // Logro por explorar secciones
+                const sectionNames = {
+                    'catalog-section': '🍫 Catálogo Galáctico',
+                    'holored-section': '🗺️ Mapa Estelar',
+                    'nexo-section': '📡 Nexo Central',
+                    'galaxy-section': '🌌 Exploración Galáctica'
+                };
+                if (sectionNames[targetId]) {
+                    setTimeout(() => showAchievement('📍 Explorador', `Has visitado ${sectionNames[targetId]}`), 800);
+                }
             });
         });
 
@@ -1322,42 +1364,14 @@
         }
 
         // ============================================================
-        // 13. ESCÁNER QR
-        // ============================================================
-        let html5QrScanner = null;
-        function initQrCamera() {
-            document.getElementById('idle-placeholder').style.display = 'none';
-            document.getElementById('btn-start-camera').style.display = 'none';
-            document.getElementById('laser-line').style.display = 'block';
-            html5QrScanner = new Html5Qrcode("camera-reader");
-            const qrSuccess = (txt, res) => { html5QrScanner.stop().then(() => { processRewardRandomly(); }).catch(err => console.error(err)); };
-            html5QrScanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 180 }, qrSuccess).catch(() => { alert("Hardware óptico bloqueado."); resetScannerContainer(); });
-        }
-        function processRewardRandomly() {
-            document.getElementById('laser-line').style.display = 'none';
-            const missingCards = datacardsCollection.filter(c => !c.collected); let cardName = "Frecuencia Cifrada Repetida";
-            if(missingCards.length > 0) { const luckyCard = missingCards[Math.floor(Math.random() * missingCards.length)]; luckyCard.collected = true; cardName = luckyCard.title; incrementForce(15); }
-            document.getElementById('unlock-main-text').innerText = `¡DATACARD LOCALIZADA: ${cardName.toUpperCase()}!`;
-            document.getElementById('unlock-sub-text').innerText = `Nuevo registro añadido a tu Holored. ¡El poder de la Fuerza aumenta!`;
-            document.getElementById('scan-result').classList.add('show'); renderAlbum();
-        }
-        function resetScannerContainer() { document.getElementById('scan-result').classList.remove('show'); document.getElementById('btn-start-camera').style.display = 'inline-block'; document.getElementById('idle-placeholder').style.display = 'flex'; document.getElementById('camera-reader').innerHTML = ""; }
-
-        // ============================================================
         // 14. INICIALIZACIÓN
         // ============================================================
         renderAlbum();
         setFaction('imperio');
 
-        // Generar fuerza inicial
-        setTimeout(() => {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => incrementForce(1), i * 300);
-            }
-        }, 3000);
-
-        console.log('🛸 The Dark Side Brownies - Hub Imperial v3.0');
-        console.log('⚡ ¡Que la Fuerza te acompañe!');
+        console.log('🛸 The Dark Side Brownies - Hub Imperial v4.0');
+        console.log('📡 4 secciones interactivas cargadas');
+        console.log('🏆 Sistema de logros activo');
     </script>
 </body>
 </html>
